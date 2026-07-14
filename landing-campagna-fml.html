@@ -1,0 +1,712 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Antica Trattoria Cirio — Prenota il tuo tavolo</title>
+<meta name="description" content="Antica Trattoria Cirio, Corso Moncalieri a Torino. Cucina classica preparata con cura: agnolotti fatti a mano, tajarin al coltello, guancia brasata. Prenota in 30 secondi, nessun pagamento anticipato.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Alegreya:ital,wght@0,400;0,500;0,700;1,400;1,500&family=Karla:wght@400;500;700&display=swap" rel="stylesheet">
+
+<script>
+/* ═══════════════════════════════════════════════════════════════
+   CONFIG — unico punto da modificare per clonare la landing.
+   ⚠️  I contenuti marcati [DA VERIFICARE] sono ipotesi mie:
+       vanno confermati con il ristorante prima di andare live.
+   ═══════════════════════════════════════════════════════════════ */
+const CONFIG = {
+
+  campagna: "[FML] CLASSICA FOCUS ESPERIENZA",
+
+  ristorante: {
+    nome: "Antica Trattoria Cirio",
+    indirizzo: "Corso Moncalieri, Torino",
+    indirizzoCompleto: "Corso Moncalieri 000, 10133 Torino",   // ⚠️ [DA COMPLETARE] civico + CAP
+    telefono: "+39 011 000 0000",                              // ⚠️ [DA COMPLETARE] numero reale
+    mappaUrl: "https://maps.google.com/?q=Antica+Trattoria+Cirio+Torino",
+  },
+
+  // MESSAGE MATCH — la promessa dell'annuncio, nel tono di voce del brand.
+  // Diretto, caldo, mai promozionale. "Il posto dove tornare."
+  hero: {
+    eyebrow: "Corso Moncalieri · Torino",
+    titolo: "La cucina classica,\nnella sua essenza.",
+    sottotitolo: "Agnolotti tirati a mano. Tajarin tagliati al coltello. Guancia brasata su purè. Sapori diretti, senza sovrastrutture — e il piacere di tornare.",
+    badge: "Pasta e dolci fatti in casa ogni giorno",   // ⚠️ MAI scrivere "stellati"
+    cta: "Scegli il tuo tavolo",
+    immagine: "",   // ← URL foto sala/piatto. Se vuoto, resta il fondo vinaccia.
+  },
+
+  // TRE RAGIONI per prenotare. Concrete, dai valori del brand: verità, essenza, ritorno.
+  ragioni: [
+    { titolo: "La pasta si tira a mano",
+      testo: "Agnolotti e tajarin fatti in casa, gnocchi freschi ogni mattina. Quando finiscono, finiscono." },
+    { titolo: "I sapori al centro, non i fronzoli",
+      testo: "Cucina classica costruita sulla tecnica e sul rispetto della materia prima. Le descrizioni restano essenziali: conta il gusto." },
+    { titolo: "Il posto dove si torna",
+      testo: "Ospitalità naturale, mai forzata. Ci si siede, si sta bene, e si torna — in ogni momento della vita." },
+  ],
+
+  // PROVA. Numeri veri o niente. ⚠️ [DA VERIFICARE — prendere da Google Business]
+  prova: {
+    voto: "0,0",              // ⚠️ inserire voto Google reale
+    recensioni: "000",        // ⚠️ inserire n° recensioni reale
+    citazioni: [              // ⚠️ sostituire con recensioni Google autentiche
+      "⟨recensione reale da inserire⟩",
+      "⟨recensione reale da inserire⟩",
+    ],
+  },
+
+  // ⚠️ [DA INSERIRE] Reinviare le 3 foto come ALLEGATI (l'incollato inline non salva il file).
+  //    Attese in assets/images/  →  antipasto misto · guancia brasata · gnocchi di borragine
+  foto: ["", "", ""],
+
+  // TURNI E POSTI. In produzione arrivano da Supabase, non da qui.
+  turni: [
+    { nome: "Pranzo", orari: ["12:00", "12:30", "13:00", "13:30", "14:00"] },
+    { nome: "Cena",   orari: ["19:30", "20:00", "20:30", "21:00", "21:30"] },
+  ],
+  giorniChiusura: [1],          // 0=dom, 1=lun … chiuso il lunedì [DA VERIFICARE]
+  maxPersone: 12,
+
+  // TRACCIAMENTO — il punto che oggi è rotto.
+  pixelId: "INSERISCI_PIXEL_ID",
+  endpoint: "/api/prenotazioni",     // POST → Supabase + Conversions API server-side
+  urlConferma: "/grazie",            // pushState su conferma: evento Lead pulito
+};
+</script>
+
+<style>
+:root{
+  --carta:      #EDE7DA;   /* tovaglia di carta */
+  --carta-scura:#DFD6C4;
+  --vinaccia:   #40121F;   /* il fondo di bottiglia */
+  --vinaccia-2: #59202F;
+  --ottone:     #9A7B3F;   /* il carrello del bollito, le maniglie */
+  --ottone-luce:#C9A45C;
+  --nebbia:     #B9AF9C;
+  --inchiostro: #241016;
+
+  --display: "Alegreya", Georgia, serif;
+  --testo:   "Karla", system-ui, sans-serif;
+
+  --max: 680px;
+}
+
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  font-family:var(--testo);
+  background:var(--carta);
+  color:var(--inchiostro);
+  line-height:1.55;
+  -webkit-font-smoothing:antialiased;
+  padding-bottom:84px; /* spazio per la barra sticky */
+}
+img{max-width:100%;display:block}
+:focus-visible{outline:3px solid var(--ottone);outline-offset:3px}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;scroll-behavior:auto}}
+
+.wrap{max-width:var(--max);margin:0 auto;padding:0 22px}
+
+.eyebrow{
+  font-size:11px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;
+  color:var(--ottone);
+}
+
+/* ── BARRA TELEFONO ───────────────────────────────────── */
+.topbar{
+  background:var(--inchiostro);color:var(--carta);
+  font-size:13px;text-align:center;padding:9px 16px;
+}
+.topbar a{color:var(--ottone-luce);text-decoration:none;font-weight:700}
+
+/* ── HERO ─────────────────────────────────────────────── */
+.hero{
+  background:var(--vinaccia);
+  background-image:
+    radial-gradient(120% 80% at 50% 0%, var(--vinaccia-2) 0%, transparent 60%);
+  color:var(--carta);
+  padding:56px 0 48px;
+  position:relative;
+  overflow:hidden;
+}
+.hero.has-photo::before{
+  content:"";position:absolute;inset:0;
+  background:var(--hero-photo) center/cover;
+  opacity:.34;
+}
+.hero.has-photo::after{
+  content:"";position:absolute;inset:0;
+  background:linear-gradient(180deg, rgba(64,18,31,.55), rgba(64,18,31,.92));
+}
+.hero .wrap{position:relative;z-index:1}
+
+.hero h1{
+  font-family:var(--display);
+  font-weight:500;
+  font-size:clamp(38px, 9.4vw, 56px);
+  line-height:1.08;
+  letter-spacing:-.005em;
+  margin:14px 0 18px;
+  white-space:pre-line;
+}
+.hero h1 em{font-style:italic;color:var(--ottone-luce)}
+.hero p.sub{
+  font-size:17px;color:var(--nebbia);max-width:34em;
+}
+.badge{
+  display:inline-flex;align-items:center;gap:9px;
+  margin-top:26px;padding:9px 15px;
+  border:1px solid rgba(201,164,92,.45);
+  border-radius:2px;
+  font-size:12px;letter-spacing:.09em;text-transform:uppercase;font-weight:700;
+  color:var(--ottone-luce);
+}
+.badge svg{flex:none}
+
+/* ── BOTTONI ──────────────────────────────────────────── */
+.btn{
+  display:block;width:100%;
+  background:var(--ottone);color:#1B0A10;
+  font-family:var(--testo);font-weight:700;font-size:16px;
+  letter-spacing:.04em;
+  border:none;border-radius:2px;
+  padding:17px 20px;
+  cursor:pointer;text-align:center;text-decoration:none;
+  transition:background .18s ease, transform .1s ease;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.28);
+}
+.btn:hover{background:var(--ottone-luce)}
+.btn:active{transform:translateY(1px)}
+.btn[disabled]{background:var(--carta-scura);color:#8C8375;cursor:not-allowed;box-shadow:none}
+.hero .btn{margin-top:30px}
+
+/* ── SEZIONI ──────────────────────────────────────────── */
+section{padding:54px 0}
+.rule{height:1px;background:var(--carta-scura);border:0}
+
+h2.titolo{
+  font-family:var(--display);
+  font-size:clamp(28px, 6.5vw, 36px);
+  font-weight:500;line-height:1.2;
+  margin:12px 0 30px;
+}
+
+/* Ragioni */
+.ragione{padding:22px 0;border-top:1px solid var(--carta-scura)}
+.ragione:first-of-type{border-top:none;padding-top:0}
+.ragione h3{
+  font-family:var(--display);font-size:23px;font-weight:700;
+  line-height:1.25;
+  margin-bottom:5px;
+}
+.ragione p{color:#5C4E48;font-size:16px}
+
+/* Prova */
+.prova{background:var(--inchiostro);color:var(--carta)}
+.voto{display:flex;align-items:baseline;gap:12px;margin-bottom:6px}
+.voto strong{font-family:var(--display);font-size:48px;font-weight:700;color:var(--ottone-luce);line-height:1}
+.voto span{font-size:14px;color:var(--nebbia)}
+.stelle{color:var(--ottone-luce);letter-spacing:2px;font-size:15px}
+blockquote{
+  font-family:var(--display);font-style:italic;font-size:19px;line-height:1.45;
+  border-left:2px solid var(--ottone);padding-left:18px;margin-top:26px;color:var(--carta);
+}
+
+/* Foto */
+.griglia-foto{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.griglia-foto figure:first-child{grid-column:1/-1}
+.foto-vuota{
+  aspect-ratio:3/2;background:var(--carta-scura);
+  display:flex;align-items:center;justify-content:center;
+  color:#948A78;font-size:11px;letter-spacing:.14em;text-transform:uppercase;font-weight:700;
+}
+.griglia-foto figure:first-child .foto-vuota{aspect-ratio:16/9}
+
+/* ── CARD PRENOTAZIONE (il pezzo forte) ───────────────── */
+#prenota{background:var(--carta-scura);padding-top:48px}
+.menu-card{
+  background:var(--carta);
+  border:1px solid var(--nebbia);
+  padding:28px 24px 26px;
+  box-shadow:0 18px 40px -28px rgba(36,16,22,.55);
+}
+.menu-card > .eyebrow{display:block;text-align:center}
+.menu-card h2{
+  font-family:var(--display);font-size:31px;font-weight:500;line-height:1.2;
+  text-align:center;margin:8px 0 26px;
+}
+.campo{margin-bottom:24px}
+.campo > label,.campo > .lab{
+  display:block;
+  font-size:11px;font-weight:700;letter-spacing:.15em;text-transform:uppercase;
+  color:#7A6A5E;margin-bottom:10px;
+}
+
+.chips{display:flex;gap:8px;flex-wrap:wrap}
+.chip{
+  font-family:var(--testo);font-size:14px;font-weight:500;
+  padding:11px 15px;border:1px solid var(--nebbia);background:transparent;
+  border-radius:2px;cursor:pointer;transition:.15s;
+}
+.chip:hover{border-color:var(--inchiostro)}
+.chip[aria-pressed="true"]{background:var(--inchiostro);color:var(--carta);border-color:var(--inchiostro)}
+
+input[type="date"],input[type="text"],input[type="tel"]{
+  font-family:var(--testo);font-size:16px;
+  width:100%;padding:13px 14px;
+  border:1px solid var(--nebbia);border-radius:2px;
+  background:#fff;color:var(--inchiostro);
+}
+
+/* Stepper coperti */
+.stepper{display:flex;align-items:center;gap:0;width:fit-content;border:1px solid var(--nebbia)}
+.stepper button{
+  width:46px;height:46px;font-size:20px;
+  background:transparent;border:none;cursor:pointer;color:var(--inchiostro);
+}
+.stepper button:hover{background:var(--carta-scura)}
+.stepper output{
+  min-width:64px;text-align:center;font-family:var(--display);font-size:21px;font-weight:700;
+  font-variant-numeric:lining-nums;
+  border-left:1px solid var(--nebbia);border-right:1px solid var(--nebbia);
+  height:46px;line-height:46px;
+}
+
+/* ★ SIGNATURE: gli orari impaginati come le righe di un menù,
+   con i puntini di guida e i posti dove starebbe il prezzo. */
+.turno-nome{
+  font-family:var(--display);font-size:15px;font-style:italic;
+  color:#7A6A5E;margin:18px 0 6px;
+}
+.slot{
+  display:flex;align-items:baseline;width:100%;
+  background:none;border:none;padding:11px 4px;cursor:pointer;
+  font-family:var(--testo);text-align:left;
+  border-bottom:1px solid rgba(185,175,156,.35);
+}
+.slot:hover:not([disabled]) .slot-ora{color:var(--vinaccia)}
+.slot-ora{font-family:var(--display);font-size:22px;font-weight:700;transition:.15s;font-variant-numeric:lining-nums}
+.slot-punti{
+  flex:1;margin:0 10px;
+  border-bottom:1px dotted var(--nebbia);
+  transform:translateY(-5px);
+}
+.slot-posti{font-size:12px;letter-spacing:.06em;text-transform:uppercase;font-weight:700;color:#7A6A5E}
+.slot[aria-pressed="true"]{background:var(--inchiostro);padding-left:12px;padding-right:12px}
+.slot[aria-pressed="true"] .slot-ora{color:var(--ottone-luce)}
+.slot[aria-pressed="true"] .slot-posti{color:var(--nebbia)}
+.slot[aria-pressed="true"] .slot-punti{border-color:rgba(185,175,156,.4)}
+.slot[disabled]{opacity:.38;cursor:not-allowed}
+.slot[disabled] .slot-posti{color:var(--vinaccia)}
+.slot.pochi .slot-posti{color:var(--vinaccia);}
+
+.rassicura{
+  text-align:center;font-size:13px;color:#7A6A5E;margin-top:14px;
+}
+.errore{
+  background:var(--vinaccia);color:var(--carta);
+  font-size:14px;padding:12px 14px;margin-bottom:18px;border-radius:2px;
+}
+
+/* Conferma */
+.conferma{text-align:center;padding:14px 0 6px}
+.conferma .segno{
+  width:56px;height:56px;margin:0 auto 20px;border-radius:50%;
+  border:1px solid var(--ottone);color:var(--ottone);
+  display:flex;align-items:center;justify-content:center;font-size:26px;
+}
+.conferma h2{margin-bottom:12px}
+.conferma p{color:#5C4E48;margin-bottom:8px}
+.conferma .dettaglio{
+  font-family:var(--display);font-size:23px;font-weight:500;color:var(--inchiostro);
+  font-variant-numeric:lining-nums;
+  margin:22px 0;padding:18px 0;
+  border-top:1px solid var(--carta-scura);border-bottom:1px solid var(--carta-scura);
+}
+
+/* ── INFO PRATICHE ────────────────────────────────────── */
+.info-riga{
+  display:flex;justify-content:space-between;gap:20px;
+  padding:16px 0;border-bottom:1px solid var(--carta-scura);font-size:15px;
+}
+.info-riga dt{font-weight:700;color:#7A6A5E;font-size:12px;letter-spacing:.12em;text-transform:uppercase;white-space:nowrap}
+.info-riga dd{text-align:right}
+.info-riga a{color:var(--vinaccia);font-weight:700}
+
+footer{background:var(--inchiostro);color:var(--nebbia);padding:34px 0;font-size:13px;text-align:center}
+footer .nome{font-family:var(--display);font-size:19px;color:var(--carta);margin-bottom:6px}
+
+/* ── STICKY CTA ───────────────────────────────────────── */
+.sticky{
+  position:fixed;left:0;right:0;bottom:0;z-index:50;
+  background:var(--inchiostro);
+  padding:12px 16px calc(12px + env(safe-area-inset-bottom));
+  display:flex;gap:10px;align-items:center;
+  border-top:1px solid rgba(154,123,63,.4);
+}
+.sticky .btn{flex:1;padding:15px}
+.sticky .tel{
+  flex:none;width:52px;height:52px;
+  border:1px solid rgba(201,164,92,.5);border-radius:2px;
+  display:flex;align-items:center;justify-content:center;
+  color:var(--ottone-luce);text-decoration:none;font-size:19px;
+}
+.sticky.nascosta{display:none}
+
+@media(min-width:700px){
+  .hero{padding:78px 0 66px}
+  section{padding:70px 0}
+  .menu-card{padding:40px 42px 36px}
+}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  Preferisci il telefono? <a id="tel-top" href="#">Chiamaci</a>
+</div>
+
+<!-- ══ HERO ══════════════════════════════════════════ -->
+<header class="hero" id="hero">
+  <div class="wrap">
+    <p class="eyebrow" id="hero-eyebrow"></p>
+    <h1 id="hero-titolo"></h1>
+    <p class="sub" id="hero-sub"></p>
+    <p class="badge" id="hero-badge">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2l2.9 6.3 6.9.8-5.1 4.7 1.4 6.8L12 17.3 5.9 20.6l1.4-6.8L2.2 9.1l6.9-.8z"/></svg>
+      <span></span>
+    </p>
+    <button class="btn" data-scroll id="hero-cta"></button>
+  </div>
+</header>
+
+<!-- ══ RAGIONI ═══════════════════════════════════════ -->
+<section>
+  <div class="wrap">
+    <p class="eyebrow">Perché qui</p>
+    <h2 class="titolo">Tre cose che non troverete scritte sul menù.</h2>
+    <div id="ragioni"></div>
+  </div>
+</section>
+
+<!-- ══ PROVA ═════════════════════════════════════════ -->
+<section class="prova">
+  <div class="wrap">
+    <p class="eyebrow">Cosa dicono</p>
+    <div class="voto">
+      <strong id="voto"></strong>
+      <span id="recensioni"></span>
+    </div>
+    <div class="stelle">★★★★★</div>
+    <div id="citazioni"></div>
+  </div>
+</section>
+
+<!-- ══ FOTO ══════════════════════════════════════════ -->
+<section>
+  <div class="wrap">
+    <div class="griglia-foto" id="foto">
+      <figure><div class="foto-vuota">Foto — antipasto misto</div></figure>
+      <figure><div class="foto-vuota">Foto — guancia brasata</div></figure>
+      <figure><div class="foto-vuota">Foto — gnocchi di borragine</div></figure>
+    </div>
+  </div>
+</section>
+
+<!-- ══ PRENOTAZIONE ══════════════════════════════════ -->
+<section id="prenota">
+  <div class="wrap">
+    <div class="menu-card">
+      <div id="form-prenota">
+        <p class="eyebrow">Trenta secondi</p>
+        <h2>Prenota il tuo tavolo</h2>
+
+        <div id="errore" class="errore" role="alert" hidden></div>
+
+        <div class="campo">
+          <span class="lab">Quando</span>
+          <div class="chips" id="chips-data" role="group" aria-label="Giorno"></div>
+          <div style="margin-top:8px">
+            <label for="data-libera" class="sr" style="position:absolute;left:-9999px">Altra data</label>
+            <input type="date" id="data-libera">
+          </div>
+        </div>
+
+        <div class="campo">
+          <span class="lab">In quanti siete</span>
+          <div class="stepper">
+            <button type="button" id="meno" aria-label="Una persona in meno">−</button>
+            <output id="coperti" aria-live="polite">2</output>
+            <button type="button" id="piu" aria-label="Una persona in più">+</button>
+          </div>
+        </div>
+
+        <div class="campo">
+          <span class="lab">A che ora</span>
+          <div id="slot-lista" role="group" aria-label="Orario"></div>
+        </div>
+
+        <div class="campo">
+          <label for="nome">A che nome</label>
+          <input type="text" id="nome" autocomplete="name" placeholder="Nome e cognome">
+        </div>
+
+        <div class="campo">
+          <label for="telefono">Telefono</label>
+          <input type="tel" id="telefono" autocomplete="tel" placeholder="Per confermarvi il tavolo">
+        </div>
+
+        <button class="btn" id="invia" disabled>Scegliete un orario</button>
+        <p class="rassicura">Prenotazione sicura · Nessun pagamento anticipato</p>
+      </div>
+
+      <div id="conferma" class="conferma" hidden>
+        <div class="segno">✓</div>
+        <h2>Il tavolo è vostro.</h2>
+        <p>Vi arriva un SMS di conferma tra pochi minuti.</p>
+        <div class="dettaglio" id="conferma-dettaglio"></div>
+        <p>Se cambia qualcosa, chiamateci: <a id="tel-conferma" href="#"></a></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ INFO ══════════════════════════════════════════ -->
+<section>
+  <div class="wrap">
+    <p class="eyebrow">Dove siamo</p>
+    <h2 class="titolo">A due passi dal Po.</h2>
+    <dl>
+      <div class="info-riga"><dt>Indirizzo</dt><dd id="i-indirizzo"></dd></div>
+      <div class="info-riga"><dt>Mappa</dt><dd><a id="i-mappa" href="#" target="_blank" rel="noopener">Apri in Google Maps →</a></dd></div>
+      <div class="info-riga"><dt>Orari</dt><dd>Pranzo 12:00–14:30<br>Cena 19:30–22:30<br>Lunedì chiuso</dd></div>
+      <div class="info-riga"><dt>Telefono</dt><dd><a id="i-tel" href="#"></a></dd></div>
+    </dl>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="nome" id="f-nome"></div>
+    <div id="f-indirizzo"></div>
+    <div style="margin-top:12px;font-style:italic;color:var(--nebbia);max-width:30em;margin-left:auto;margin-right:auto">
+      La cucina classica, nella sua essenza. Preparata con cura, tra sapori autentici e il piacere di tornare.
+    </div>
+  </div>
+</footer>
+
+<div class="sticky" id="sticky">
+  <a class="tel" id="tel-sticky" href="#" aria-label="Chiama il ristorante">✆</a>
+  <button class="btn" data-scroll>Prenota il tuo tavolo</button>
+</div>
+
+<script>
+/* ═══════════════════ TRACCIAMENTO ═══════════════════
+   NOTA: il pixel qui carica sul SOTTODOMINIO.
+   È esattamente il punto che oggi è rotto: senza questo,
+   Meta non riceve nessun evento Lead e non impara nulla.
+   Il pixel browser NON basta: replicare l'evento lato server
+   (Conversions API) dentro POST /api/prenotazioni. */
+!function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
+n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;
+t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}
+(window,document,'script','https://connect.facebook.net/en_US/fbevents.js');
+if (CONFIG.pixelId && CONFIG.pixelId !== "INSERISCI_PIXEL_ID") {
+  fbq('init', CONFIG.pixelId);
+  fbq('track', 'PageView');
+}
+
+/* ═══════════════════ POPOLAMENTO ═══════════════════ */
+const $ = s => document.querySelector(s);
+const R = CONFIG.ristorante;
+
+$('#hero-eyebrow').textContent = CONFIG.hero.eyebrow;
+$('#hero-titolo').textContent  = CONFIG.hero.titolo;
+$('#hero-sub').textContent     = CONFIG.hero.sottotitolo;
+$('#hero-badge span').textContent = CONFIG.hero.badge;
+$('#hero-cta').textContent     = CONFIG.hero.cta;
+if (CONFIG.hero.immagine) {
+  const h = $('#hero');
+  h.style.setProperty('--hero-photo', `url("${CONFIG.hero.immagine}")`);
+  h.classList.add('has-photo');
+}
+
+$('#ragioni').innerHTML = CONFIG.ragioni.map(r =>
+  `<div class="ragione"><h3>${r.titolo}</h3><p>${r.testo}</p></div>`).join('');
+
+$('#voto').textContent = CONFIG.prova.voto;
+$('#recensioni').textContent = `su Google · ${CONFIG.prova.recensioni} recensioni`;
+$('#citazioni').innerHTML = CONFIG.prova.citazioni.map(c => `<blockquote>${c}</blockquote>`).join('');
+
+CONFIG.foto.forEach((url, i) => {
+  if (!url) return;
+  const fig = $('#foto').children[i];
+  fig.innerHTML = `<img src="${url}" alt="">`;
+});
+
+['#tel-top','#tel-sticky','#tel-conferma','#i-tel'].forEach(sel => {
+  const el = $(sel);
+  el.href = 'tel:' + R.telefono.replace(/\s/g,'');
+  if (sel === '#tel-conferma' || sel === '#i-tel') el.textContent = R.telefono;
+});
+$('#i-indirizzo').textContent = R.indirizzoCompleto;
+$('#i-mappa').href = R.mappaUrl;
+$('#f-nome').textContent = R.nome;
+$('#f-indirizzo').textContent = R.indirizzoCompleto;
+
+document.querySelectorAll('[data-scroll]').forEach(b =>
+  b.addEventListener('click', () => $('#prenota').scrollIntoView({behavior:'smooth'})));
+
+/* ═══════════════════ STATO ═══════════════════ */
+const stato = { data:null, coperti:2, ora:null };
+
+/* ── Date: Oggi / Domani / date successive ── */
+const GG = ['Domenica','Lunedì','Martedì','Mercoledì','Giovedì','Venerdì','Sabato'];
+const MM = ['gen','feb','mar','apr','mag','giu','lug','ago','set','ott','nov','dic'];
+const iso = d => d.toISOString().slice(0,10);
+const chiuso = d => CONFIG.giorniChiusura.includes(d.getDay());
+
+function dateProposte(){
+  const out = [], oggi = new Date();
+  for (let i=0; out.length<3 && i<10; i++){
+    const d = new Date(oggi); d.setDate(oggi.getDate()+i);
+    if (chiuso(d)) continue;
+    const et = i===0 ? 'Stasera' : i===1 ? 'Domani' : `${GG[d.getDay()]} ${d.getDate()}`;
+    out.push({ iso: iso(d), etichetta: et });
+  }
+  return out;
+}
+
+$('#chips-data').innerHTML = dateProposte().map(d =>
+  `<button type="button" class="chip" role="button" aria-pressed="false" data-data="${d.iso}">${d.etichetta}</button>`
+).join('');
+
+function selezionaData(isoStr){
+  stato.data = isoStr; stato.ora = null;
+  document.querySelectorAll('#chips-data .chip').forEach(c =>
+    c.setAttribute('aria-pressed', c.dataset.data === isoStr));
+  $('#data-libera').value = isoStr;
+  disegnaSlot();
+  aggiornaCta();
+}
+document.querySelectorAll('#chips-data .chip').forEach(c =>
+  c.addEventListener('click', () => selezionaData(c.dataset.data)));
+$('#data-libera').min = iso(new Date());
+$('#data-libera').addEventListener('change', e => {
+  const d = new Date(e.target.value + 'T12:00:00');
+  if (chiuso(d)) { mostraErrore('Il lunedì siamo chiusi. Scegliete un altro giorno.'); return; }
+  nascondiErrore();
+  selezionaData(e.target.value);
+});
+
+/* ── Coperti ── */
+function setCoperti(n){
+  stato.coperti = Math.min(CONFIG.maxPersone, Math.max(1, n));
+  $('#coperti').textContent = stato.coperti;
+  stato.ora = null;
+  disegnaSlot(); aggiornaCta();
+}
+$('#meno').addEventListener('click', () => setCoperti(stato.coperti-1));
+$('#piu').addEventListener('click',  () => setCoperti(stato.coperti+1));
+
+/* ── Slot: righe di menù con i puntini e i posti al posto del prezzo ──
+   ⚠️ STUB. In produzione: GET /api/disponibilita?data=…&coperti=…
+   che legge la capienza reale da Supabase. Qui è deterministico
+   solo per far vedere il comportamento. */
+function postiLiberi(dataIso, ora){
+  let h = 0; const k = dataIso + ora;
+  for (let i=0;i<k.length;i++) h = (h*31 + k.charCodeAt(i)) % 997;
+  return h % 14;   // 0 = pieno
+}
+
+function disegnaSlot(){
+  const box = $('#slot-lista');
+  if (!stato.data){ box.innerHTML = '<p style="color:#7A6A5E;font-size:14px">Scegliete prima il giorno.</p>'; return; }
+
+  box.innerHTML = CONFIG.turni.map(t => {
+    const righe = t.orari.map(o => {
+      const posti = postiLiberi(stato.data, o);
+      const ok = posti >= stato.coperti;
+      const pochi = ok && posti <= 4;
+      const testo = !ok ? 'Completo' : pochi ? `Ultimi ${posti} posti` : `${posti} posti`;
+      return `<button type="button" class="slot ${pochi?'pochi':''}" role="button"
+                 aria-pressed="${stato.ora===o}" data-ora="${o}" ${ok?'':'disabled'}>
+                <span class="slot-ora">${o}</span>
+                <span class="slot-punti"></span>
+                <span class="slot-posti">${testo}</span>
+              </button>`;
+    }).join('');
+    return `<p class="turno-nome">${t.nome}</p>${righe}`;
+  }).join('');
+
+  box.querySelectorAll('.slot:not([disabled])').forEach(s =>
+    s.addEventListener('click', () => {
+      stato.ora = s.dataset.ora;
+      box.querySelectorAll('.slot').forEach(x => x.setAttribute('aria-pressed', x.dataset.ora === stato.ora));
+      aggiornaCta();
+    }));
+}
+disegnaSlot();
+
+/* ── CTA ── */
+function aggiornaCta(){
+  const b = $('#invia');
+  if (!stato.data)      { b.disabled = true;  b.textContent = 'Scegliete il giorno'; return; }
+  if (!stato.ora)       { b.disabled = true;  b.textContent = 'Scegliete un orario'; return; }
+  b.disabled = false;
+  b.textContent = `Prenota per ${stato.coperti} alle ${stato.ora}`;
+}
+function mostraErrore(t){ const e=$('#errore'); e.textContent=t; e.hidden=false; e.scrollIntoView({block:'center'}); }
+function nascondiErrore(){ $('#errore').hidden = true; }
+
+/* ── Invio ── */
+$('#invia').addEventListener('click', async () => {
+  const nome = $('#nome').value.trim();
+  const tel  = $('#telefono').value.trim();
+  if (nome.length < 2)  return mostraErrore('Serve un nome per il tavolo.');
+  if (tel.replace(/\D/g,'').length < 8) return mostraErrore('Serve un numero valido: vi mandiamo la conferma lì.');
+  nascondiErrore();
+
+  const b = $('#invia');
+  b.disabled = true; b.textContent = 'Un attimo…';
+
+  const payload = { ...stato, nome, telefono: tel, campagna: CONFIG.campagna,
+                    fbclid: new URLSearchParams(location.search).get('fbclid') };
+
+  try {
+    await fetch(CONFIG.endpoint, {
+      method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(payload)
+    });
+  } catch (_) { /* in demo l'endpoint non esiste: si prosegue */ }
+
+  /* EVENTO LEAD — questo è ciò che oggi non scatta */
+  if (window.fbq) fbq('track', 'Lead', {
+    content_name: CONFIG.campagna,
+    value: stato.coperti * 45,   // ← valore medio a coperto [DA VERIFICARE]
+    currency: 'EUR',
+  });
+
+  /* URL di conferma dedicato: evento pulito, misurabile, ripetibile */
+  history.pushState({}, '', CONFIG.urlConferma);
+
+  const d = new Date(stato.data + 'T12:00:00');
+  $('#conferma-dettaglio').textContent =
+    `${GG[d.getDay()]} ${d.getDate()} ${MM[d.getMonth()]} · ore ${stato.ora} · ${stato.coperti} persone`;
+  $('#form-prenota').hidden = true;
+  $('#conferma').hidden = false;
+  $('#sticky').classList.add('nascosta');
+  $('#prenota').scrollIntoView({behavior:'smooth'});
+});
+
+/* Nascondi la barra sticky quando il form è già a schermo */
+new IntersectionObserver(([e]) => {
+  if ($('#conferma').hidden === false) return;
+  $('#sticky').classList.toggle('nascosta', e.isIntersecting);
+}, {threshold:.35}).observe($('.menu-card'));
+</script>
+</body>
+</html>
