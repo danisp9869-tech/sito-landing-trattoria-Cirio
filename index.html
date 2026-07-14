@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Antica Trattoria Cirio — Prenota il tuo tavolo</title>
-<meta name="description" content="Cucina piemontese a Corso Moncalieri, Torino. Agnolotti tirati a mano, brasato al Barolo, bollito misto. Prenota in 30 secondi, nessun pagamento anticipato.">
+<meta name="description" content="Antica Trattoria Cirio, Corso Moncalieri a Torino. Cucina classica preparata con cura: agnolotti fatti a mano, tajarin al coltello, guancia brasata. Prenota in 30 secondi, nessun pagamento anticipato.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Alegreya:ital,wght@0,400;0,500;0,700;1,400;1,500&family=Karla:wght@400;500;700&display=swap" rel="stylesheet">
@@ -22,42 +22,45 @@ const CONFIG = {
   ristorante: {
     nome: "Antica Trattoria Cirio",
     indirizzo: "Corso Moncalieri, Torino",
-    indirizzoCompleto: "Corso Moncalieri 000, 10133 Torino",   // ← completare
-    telefono: "+39 011 000 0000",                              // ← completare
+    indirizzoCompleto: "Corso Moncalieri 000, 10133 Torino",   // ⚠️ [DA COMPLETARE] civico + CAP
+    telefono: "+39 011 000 0000",                              // ⚠️ [DA COMPLETARE] numero reale
     mappaUrl: "https://maps.google.com/?q=Antica+Trattoria+Cirio+Torino",
   },
 
-  // MESSAGE MATCH — deve ripetere la promessa dell'annuncio, alla lettera.
+  // MESSAGE MATCH — la promessa dell'annuncio, nel tono di voce del brand.
+  // Diretto, caldo, mai promozionale. "Il posto dove tornare."
   hero: {
     eyebrow: "Corso Moncalieri · Torino",
-    titolo: "Il Piemonte a tavola,\nsenza scorciatoie.",
-    sottotitolo: "Agnolotti tirati a mano la mattina. Brasato al Barolo. Bollito misto col carrello. Cucina piemontese fatta come si faceva, servita come si deve.",
-    badge: "Menzionata dalla Guida Michelin",   // ⚠️ MAI scrivere \"stellati\"
+    titolo: "La cucina classica,\nnella sua essenza.",
+    sottotitolo: "Agnolotti tirati a mano. Tajarin tagliati al coltello. Guancia brasata su purè. Sapori diretti, senza sovrastrutture — e il piacere di tornare.",
+    badge: "Pasta e dolci fatti in casa ogni giorno",   // ⚠️ MAI scrivere "stellati"
     cta: "Scegli il tuo tavolo",
     immagine: "",   // ← URL foto sala/piatto. Se vuoto, resta il fondo vinaccia.
   },
 
-  // TRE RAGIONI per prenotare. Concrete, verificabili, non aggettivi. [DA VERIFICARE]
+  // TRE RAGIONI per prenotare. Concrete, dai valori del brand: verità, essenza, ritorno.
   ragioni: [
-    { titolo: "La pasta si tira la mattina",
-      testo: "Agnolotti del plin fatti a mano ogni giorno. Se finiscono, finiscono." },
-    { titolo: "Il Barolo non è da vetrina",
-      testo: "Carta di vini piemontesi, molti anche al bicchiere. Ve li raccontiamo noi." },
-    { titolo: "Il tavolo resta vostro",
-      testo: "Nessun secondo turno. Una volta seduti, la serata è vostra." },
+    { titolo: "La pasta si tira a mano",
+      testo: "Agnolotti e tajarin fatti in casa, gnocchi freschi ogni mattina. Quando finiscono, finiscono." },
+    { titolo: "I sapori al centro, non i fronzoli",
+      testo: "Cucina classica costruita sulla tecnica e sul rispetto della materia prima. Le descrizioni restano essenziali: conta il gusto." },
+    { titolo: "Il posto dove si torna",
+      testo: "Ospitalità naturale, mai forzata. Ci si siede, si sta bene, e si torna — in ogni momento della vita." },
   ],
 
-  // PROVA. Numeri veri o niente. [DA VERIFICARE — prendere da Google Business]
+  // PROVA. Numeri veri o niente. ⚠️ [DA VERIFICARE — prendere da Google Business]
   prova: {
-    voto: "4,7",
-    recensioni: "480",
-    citazioni: [
-      "Il bollito misto migliore che abbia mangiato a Torino. Servizio senza fretta.",
-      "Ci siamo sentiti a casa di qualcuno, non in un ristorante.",
+    voto: "0,0",              // ⚠️ inserire voto Google reale
+    recensioni: "000",        // ⚠️ inserire n° recensioni reale
+    citazioni: [              // ⚠️ sostituire con recensioni Google autentiche
+      "⟨recensione reale da inserire⟩",
+      "⟨recensione reale da inserire⟩",
     ],
   },
 
-  foto: ["", "", ""],   // ← 3 URL: sala, piatto, dettaglio
+  // ⚠️ [DA INSERIRE] Reinviare le 3 foto come ALLEGATI (l'incollato inline non salva il file).
+  //    Attese in assets/images/  →  antipasto misto · guancia brasata · gnocchi di borragine
+  foto: ["", "", ""],
 
   // TURNI E POSTI. In produzione arrivano da Supabase, non da qui.
   turni: [
@@ -406,9 +409,9 @@ footer .nome{font-family:var(--display);font-size:19px;color:var(--carta);margin
 <section>
   <div class="wrap">
     <div class="griglia-foto" id="foto">
-      <figure><div class="foto-vuota">Foto — la sala</div></figure>
-      <figure><div class="foto-vuota">Foto — il piatto</div></figure>
-      <figure><div class="foto-vuota">Foto — la cantina</div></figure>
+      <figure><div class="foto-vuota">Foto — antipasto misto</div></figure>
+      <figure><div class="foto-vuota">Foto — guancia brasata</div></figure>
+      <figure><div class="foto-vuota">Foto — gnocchi di borragine</div></figure>
     </div>
   </div>
 </section>
@@ -489,6 +492,9 @@ footer .nome{font-family:var(--display);font-size:19px;color:var(--carta);margin
   <div class="wrap">
     <div class="nome" id="f-nome"></div>
     <div id="f-indirizzo"></div>
+    <div style="margin-top:12px;font-style:italic;color:var(--nebbia);max-width:30em;margin-left:auto;margin-right:auto">
+      La cucina classica, nella sua essenza. Preparata con cura, tra sapori autentici e il piacere di tornare.
+    </div>
   </div>
 </footer>
 
