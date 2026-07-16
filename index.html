@@ -3,758 +3,503 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Antica Trattoria Cirio — La cucina classica, nella sua essenza</title>
-<meta name="description" content="Antica Trattoria Cirio, Corso Moncalieri a Torino. Cucina classica preparata con cura: agnolotti fatti a mano, tajarin al coltello, guancia brasata. Prenota il tuo tavolo.">
+<title>Antica Trattoria Cirio — La cucina classica, vissuta come si deve</title>
+<meta name="description" content="Antica Trattoria Cirio, Corso Moncalieri a Torino. Cucina piemontese classica dal 1920: tajarin al ragù, vitello tonnato, guancia brasata. Prenota il tuo tavolo.">
+<meta property="og:title" content="Antica Trattoria Cirio — Torino">
+<meta property="og:description" content="Sapori autentici della tradizione torinese, curati nei minimi dettagli. Un'accoglienza che sa di casa.">
+<meta property="og:type" content="website">
+<meta name="theme-color" content="#241B12">
+
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Alegreya:ital,wght@0,400;0,500;0,700;0,800;1,400;1,500&family=Karla:wght@300;400;500;700&display=swap" rel="stylesheet">
-
-<script>
-/* ═══════════════════════════════════════════════════════════════
-   CONFIG — unico punto da modificare.
-   ⚠️ I valori marcati [DA COMPLETARE] / [DA VERIFICARE] sono segnaposto.
-   ═══════════════════════════════════════════════════════════════ */
-const CONFIG = {
-  campagna: "[FML] CLASSICA FOCUS ESPERIENZA",
-
-  contatti: {
-    nome: "Antica Trattoria Cirio",
-    indirizzo: "Corso Moncalieri 000, 10133 Torino TO",   // ⚠️ [DA COMPLETARE]
-    telefono: "+39 011 000 0000",                         // ⚠️ [DA COMPLETARE]
-    email:    "info@anticatrattoriacirio.it",             // ⚠️ [DA COMPLETARE / VERIFICARE]
-    mappaUrl: "https://maps.google.com/?q=Antica+Trattoria+Cirio+Torino",
-  },
-
-  // FOTOGRAFIE. ⚠️ Reinviare le foto come ALLEGATI (l'incollato in chat non salva il file).
-  //  Mettere i file in assets/images/ e indicare qui il percorso; se vuoto resta il fondo brand.
-  foto: {
-    hero:      "",   // sala o piatto iconico a tutto schermo
-    manifesto: "",   // tavolo / servizio in sala
-    sala:      "",   // dettaglio sala / muri decorati
-    cantina:   "",   // bottiglie / calici
-    piatti: [
-      { img:"", nome:"Antipasto misto" },      // la foto dell'antipasto
-      { img:"", nome:"Guancia brasata su purè" }, // la foto del brasato
-      { img:"", nome:"Gnocchi di borragine" },    // la foto degli gnocchi verdi
-    ],
-  },
-
-  // PRENOTAZIONE (in produzione turni/posti arrivano da un gestionale, non da qui)
-  turni: [
-    { nome: "Pranzo", orari: ["12:00","12:30","13:00","13:30","14:00"] },
-    { nome: "Cena",   orari: ["19:30","20:00","20:30","21:00","21:30"] },
-  ],
-  giorniChiusura: [1],   // 0=dom … chiuso il lunedì  ⚠️ [DA VERIFICARE]
-  maxPersone: 12,
-
-  // TRACCIAMENTO Meta
-  pixelId: "INSERISCI_PIXEL_ID",
-  endpoint: "/api/prenotazioni",
-  urlConferma: "/grazie",
-};
-</script>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500;1,600&display=swap" rel="stylesheet">
 
 <style>
-:root{
-  --carta:      #EFE9DC;
-  --carta-2:    #E5DCC9;
-  --carta-3:    #DAD0BB;
-  --inchiostro: #1E0E14;
-  --inchiostro-2:#2A141C;
-  --vinaccia:   #40121F;
-  --vinaccia-2: #59202F;
-  --ottone:     #9A7B3F;
-  --ottone-luce:#C6A15A;
-  --nebbia:     #B7AC97;
-  --testo:      #43302F;
-  --testo-soft: #6A544E;
+  /* ─────────────────────────────────────────────────────────────
+     Antica Trattoria Cirio — landing (design "classica elegante")
+     Palette:  fondo #F7F3EC · scuro #241B12 · bordeaux #6E2A2A · oro #C9A15A
+     ───────────────────────────────────────────────────────────── */
+  *,*::before,*::after{ box-sizing:border-box; }
+  html{ scroll-behavior:smooth; -webkit-text-size-adjust:100%; }
+  body{
+    margin:0;
+    font-family:-apple-system,'Helvetica Neue',Arial,sans-serif;
+    color:#2A2118; background:#F7F3EC; line-height:1.65; font-size:18px;
+  }
+  img{ display:block; max-width:100%; }
+  a{ color:inherit; }
+  h1,h2,h3{ margin:0; }
+  .serif{ font-family:'Playfair Display',Georgia,serif; }
+  .wrap{ max-width:1160px; margin:0 auto; padding:0 28px; }
+  .eyebrow{ font-size:12.5px; letter-spacing:.32em; text-transform:uppercase; font-weight:600; color:#6E2A2A; }
+  .rule{ width:40px; height:1px; background:#C9A15A; margin:0 auto 22px; }
+  .btn{ display:inline-block; text-decoration:none; font-weight:700; letter-spacing:.04em;
+        text-transform:uppercase; font-size:15.5px; padding:16px 34px; border-radius:3px;
+        transition:background .18s,color .18s,border-color .18s; }
+  .btn-gold{ background:#C9A15A; color:#241B12; }
+  .btn-gold:hover{ background:#e3c888; }
+  .btn-ghost{ background:transparent; color:#F7EFDD; border:1px solid rgba(247,239,221,.5); }
+  .btn-ghost:hover{ border-color:#C9A15A; color:#C9A15A; }
 
-  --display: "Alegreya", Georgia, "Times New Roman", serif;
-  --sans:    "Karla", system-ui, -apple-system, sans-serif;
+  /* Foto: <img> reale se presente in assets/images, altrimenti placeholder caldo */
+  .photo{ position:relative; width:100%; height:100%; overflow:hidden;
+          background:linear-gradient(135deg,#3a2a1c,#241B12); }
+  .photo img{ width:100%; height:100%; object-fit:cover; }
+  .photo .ph{ position:absolute; inset:0; display:flex; align-items:center; justify-content:center;
+              text-align:center; padding:20px; color:#c9b48c; font-size:14px; letter-spacing:.04em;
+              background:radial-gradient(ellipse at 50% 30%,rgba(201,161,90,.14),transparent 65%); }
+  .photo img[src]:not([src=""]){ position:relative; z-index:1; }
 
-  --wrap: 1180px;
-  --col:  620px;
-}
+  /* Header */
+  header{ position:sticky; top:0; z-index:20; background:rgba(247,243,236,.94);
+          backdrop-filter:blur(8px); -webkit-backdrop-filter:blur(8px);
+          border-bottom:1px solid rgba(42,33,24,.1); }
+  .nav{ display:flex; align-items:center; justify-content:space-between; height:74px; }
+  .brand{ font-family:'Playfair Display',Georgia,serif; font-weight:600; font-size:21px; color:#2A2118; letter-spacing:.01em; }
+  .brand small{ display:block; font-size:9.5px; letter-spacing:.26em; color:#8a7550; font-weight:500;
+                font-family:-apple-system,sans-serif; margin-top:2px; }
+  nav.links{ display:flex; align-items:center; gap:30px; }
+  nav.links a{ text-decoration:none; font-weight:600; color:#5a4a34; font-size:14px; letter-spacing:.03em; }
+  nav.links a:hover{ color:#6E2A2A; }
+  .nav-tel{ font-weight:700; color:#6E2A2A; font-size:14.5px; letter-spacing:.02em;
+            border:1px solid #C9A15A; border-radius:3px; padding:10px 20px; }
+  .nav-tel:hover{ background:#C9A15A; color:#2A2118; }
 
-*{box-sizing:border-box;margin:0;padding:0}
-html{scroll-behavior:smooth}
-body{
-  font-family:var(--sans);
-  background:var(--carta);
-  color:var(--testo);
-  line-height:1.6;
-  -webkit-font-smoothing:antialiased;
-  overflow-x:hidden;
-}
-img{max-width:100%;display:block}
-a{color:inherit}
-:focus-visible{outline:2px solid var(--ottone);outline-offset:3px}
-@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;scroll-behavior:auto}}
+  /* Hero */
+  .hero{ position:relative; min-height:92vh; display:flex; align-items:flex-end; color:#F7EFDD; }
+  .hero .bg{ position:absolute; inset:0; z-index:0; }
+  .hero .scrim{ position:absolute; inset:0; z-index:1; pointer-events:none;
+                background:linear-gradient(180deg,rgba(18,13,8,.30) 0%,rgba(18,13,8,.78) 100%); }
+  .hero .inner{ position:relative; z-index:2; width:100%; padding:130px 0 80px; }
+  .hero h1{ font-family:'Playfair Display',Georgia,serif; font-style:italic; font-weight:600;
+            font-size:clamp(40px,6.4vw,74px); line-height:1.1; margin:16px 0 20px;
+            text-shadow:0 2px 20px rgba(0,0,0,.45); }
+  .hero p.lead{ font-size:clamp(17px,2.1vw,21px); max-width:600px; color:#EAE0C7; margin-bottom:34px; }
+  .hero .eyebrow{ color:#C9A15A; }
+  .hero-cta{ display:flex; gap:16px; flex-wrap:wrap; align-items:center; }
 
-.wrap{max-width:var(--wrap);margin:0 auto;padding:0 26px}
+  /* Sezioni */
+  section.pad{ padding:110px 0; }
+  .center-narrow{ max-width:740px; margin:0 auto; text-align:center; }
+  h2.title{ font-family:'Playfair Display',Georgia,serif; font-weight:600;
+            font-size:clamp(30px,4.2vw,44px); line-height:1.2; margin:14px 0 28px; }
+  h2.title em{ font-style:italic; color:#6E2A2A; }
+  .chi p{ font-size:19px; margin:0 0 20px; color:#5a4a34; }
 
-.eyebrow{
-  font-family:var(--sans);
-  font-size:12px;font-weight:700;letter-spacing:.26em;text-transform:uppercase;
-  color:var(--ottone);
-}
-h1,h2,h3{font-family:var(--display);font-weight:500;line-height:1.12;letter-spacing:.005em;text-wrap:balance}
+  /* Pilastri (scuro) */
+  .pillars-sec{ background:#241B12; color:#F3E7CE; position:relative; }
+  .pillars-sec .glow{ position:absolute; inset:0; background:radial-gradient(ellipse at 50% 0%,rgba(201,161,90,.08),transparent 60%); }
+  .pillars-head{ text-align:center; margin-bottom:56px; }
+  .pillars-head .eyebrow{ color:#C9A15A; }
+  .pillars-head h2{ color:#F3E7CE; }
+  .pillars{ display:grid; grid-template-columns:repeat(3,1fr); gap:0; position:relative; }
+  .pillar{ padding:0 34px; text-align:center; }
+  .pillar+.pillar{ border-left:1px solid rgba(201,161,90,.25); }
+  .pillar .num{ font-family:'Playfair Display',Georgia,serif; font-style:italic; font-size:15px; color:#C9A15A; margin-bottom:14px; }
+  .pillar h3{ font-family:'Playfair Display',Georgia,serif; font-size:22px; font-weight:600; margin-bottom:12px; }
+  .pillar p{ font-size:15.5px; color:#d9c8a3; line-height:1.6; margin:0; }
 
-/* ══ reveal on scroll ══ */
-.reveal{opacity:0;transform:translateY(22px);transition:opacity .8s ease, transform .8s ease}
-.reveal.in{opacity:1;transform:none}
+  /* Cucina */
+  .cucina-grid{ display:grid; grid-template-columns:repeat(auto-fit,minmax(300px,1fr)); gap:30px; }
+  .dish{ background:#fff; border-radius:4px; overflow:hidden; border:1px solid rgba(42,33,24,.1);
+         box-shadow:0 18px 40px -24px rgba(42,33,24,.35); }
+  .dish .frame{ aspect-ratio:4/3; }
+  .dish .body{ padding:26px 28px; }
+  .dish h3{ font-family:'Playfair Display',Georgia,serif; font-size:22px; font-weight:600; margin-bottom:8px; }
+  .dish p{ font-size:15.5px; color:#5a4a34; margin:0; }
+  .memories{ background:#241B12; color:#F3E7CE; border-radius:4px; padding:36px 32px;
+             display:flex; flex-direction:column; justify-content:center; }
+  .memories .kicker{ font-family:'Playfair Display',Georgia,serif; font-style:italic; color:#C9A15A; font-size:15px; margin-bottom:10px; }
+  .memories h3{ font-family:'Playfair Display',Georgia,serif; font-size:23px; font-weight:600; margin-bottom:16px; }
+  .memories ul{ list-style:none; padding:0; margin:0; }
+  .memories li{ padding:10px 0; border-bottom:1px solid rgba(201,161,90,.2); font-size:15.5px; color:#e7d9ba; }
+  .memories li:last-child{ border-bottom:none; }
 
-/* ═══════════ TOP BAR ═══════════ */
-.topbar{
-  background:var(--inchiostro);color:var(--carta);
-  font-size:13px;letter-spacing:.02em;
-}
-.topbar .wrap{display:flex;justify-content:space-between;align-items:center;gap:16px;min-height:44px;padding-top:8px;padding-bottom:8px}
-.topbar a{color:var(--carta);text-decoration:none;opacity:.86;display:inline-flex;align-items:center;gap:7px}
-.topbar a:hover{opacity:1;color:var(--ottone-luce)}
-.topbar .right{display:flex;gap:22px}
-.topbar svg{opacity:.7}
-@media(max-width:760px){.topbar .addr{display:none}.topbar .wrap{justify-content:center}.topbar .right{gap:18px}}
+  /* Esperienza (bordeaux) */
+  .exp-sec{ background:#6E2A2A; color:#F3E7CE; }
+  .exp-head{ text-align:center; max-width:760px; margin:0 auto 50px; }
+  .exp-head .eyebrow{ color:#e9c98f; }
+  .exp-head h2{ color:#F3E7CE; }
+  .exp-head p{ font-size:18px; color:#f0dfc4; margin:0; }
+  .team{ display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:24px; }
+  .member{ padding:28px; border-radius:4px; background:rgba(255,255,255,.07); border:1px solid rgba(201,161,90,.25); text-align:center; }
+  .member .role{ font-size:11.5px; letter-spacing:.2em; text-transform:uppercase; color:#e9c98f; margin-bottom:12px; }
+  .member h3{ font-family:'Playfair Display',Georgia,serif; font-size:20px; font-weight:600; color:#fff; margin-bottom:6px; }
+  .member p{ font-size:15px; color:#f0dfc4; line-height:1.55; margin:0; }
 
-/* ═══════════ HEADER / NAV ═══════════ */
-.nav{
-  position:sticky;top:0;z-index:60;
-  background:rgba(30,14,20,.0);
-  transition:background .35s ease, box-shadow .35s ease;
-}
-.nav.solid{background:var(--inchiostro);box-shadow:0 8px 30px -18px rgba(0,0,0,.6)}
-.nav .wrap{display:flex;align-items:center;justify-content:space-between;gap:20px;min-height:78px}
-.brand{display:flex;flex-direction:column;line-height:1;text-decoration:none;color:var(--carta)}
-.brand .b1{font-family:var(--display);font-style:italic;font-size:26px;font-weight:500}
-.brand .b2{font-family:var(--sans);font-size:9.5px;letter-spacing:.32em;text-transform:uppercase;color:var(--ottone-luce);margin-top:5px}
-.menu{display:flex;align-items:center;gap:26px}
-.menu a{
-  color:var(--carta);text-decoration:none;font-size:13px;font-weight:500;
-  letter-spacing:.13em;text-transform:uppercase;opacity:.9;position:relative;padding:6px 0;
-}
-.menu a::after{content:"";position:absolute;left:0;bottom:0;height:1px;width:0;background:var(--ottone-luce);transition:width .25s ease}
-.menu a:hover{opacity:1}
-.menu a:hover::after{width:100%}
-.nav .btn-nav{
-  border:1px solid var(--ottone);color:var(--ottone-luce);
-  padding:12px 20px;font-size:12px;letter-spacing:.16em;text-transform:uppercase;font-weight:700;
-  text-decoration:none;transition:.25s;white-space:nowrap;
-}
-.nav .btn-nav:hover{background:var(--ottone);color:var(--inchiostro)}
-.hamburger{display:none;background:none;border:none;color:var(--carta);cursor:pointer;padding:8px}
-.hamburger svg{display:block}
-@media(max-width:940px){
-  .menu, .nav .btn-nav{display:none}
-  .hamburger{display:block}
-}
+  /* Recensioni */
+  .reviews-sec{ background:#EFE7D8; }
+  .reviews-sec .wrap{ text-align:center; }
+  .rating{ display:inline-flex; align-items:center; gap:12px; background:#fff; border:1px solid rgba(42,33,24,.12);
+           border-radius:44px; padding:12px 24px; font-weight:700; color:#6E2A2A; }
+  .reviews{ display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:24px; margin-top:40px; text-align:left; }
+  .review{ background:#fff; border-radius:4px; padding:30px 28px; border:1px solid rgba(42,33,24,.1); }
+  .review .stars{ color:#C9A15A; font-size:20px; letter-spacing:3px; }
+  .review blockquote{ font-family:'Playfair Display',Georgia,serif; font-style:italic; font-size:19px;
+                      line-height:1.5; color:#2A2118; margin:14px 0 16px; }
+  .review cite{ font-style:normal; font-size:13px; color:#8a7550; letter-spacing:.02em; }
 
-/* mobile drawer */
-.drawer{
-  position:fixed;inset:0;z-index:80;background:var(--inchiostro);
-  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;
-  transform:translateY(-100%);transition:transform .4s cubic-bezier(.5,0,.2,1);
-}
-.drawer.open{transform:none}
-.drawer a{color:var(--carta);text-decoration:none;font-family:var(--display);font-size:26px;padding:12px}
-.drawer .btn{margin-top:18px;width:auto;padding:15px 34px}
-.drawer .close{position:absolute;top:22px;right:24px;background:none;border:none;color:var(--carta);font-size:30px;cursor:pointer}
+  /* Dove siamo */
+  .info-grid{ display:grid; grid-template-columns:1.1fr .9fr; gap:44px; align-items:stretch; }
+  .info h3.sub{ font-size:14px; letter-spacing:.14em; text-transform:uppercase; color:#6E2A2A; margin:26px 0 8px; }
+  .info .big{ font-family:'Playfair Display',Georgia,serif; font-size:24px; color:#2A2118; }
+  .info .big a{ text-decoration:none; color:#6E2A2A; }
+  .info .big a:hover{ color:#4d1d1d; }
+  table.hours{ width:100%; border-collapse:collapse; margin-top:6px; }
+  table.hours td{ padding:10px 0; border-bottom:1px solid rgba(42,33,24,.12); font-size:16px; color:#5a4a34; }
+  table.hours tr:last-child td{ border-bottom:none; }
+  table.hours td.val{ color:#2A2118; text-align:right; }
+  .book-card{ background:#241B12; color:#F3E7CE; border-radius:4px; padding:40px 34px; text-align:center;
+              display:flex; flex-direction:column; justify-content:center; border:1px solid rgba(201,161,90,.3); }
+  .book-card h3{ font-family:'Playfair Display',Georgia,serif; font-size:27px; font-weight:600; margin-bottom:10px; }
+  .book-card p{ color:#e7d9ba; margin-bottom:26px; }
+  .book-card .btn{ display:block; }
+  .book-card .btn-gold{ margin-bottom:14px; }
 
-/* ═══════════ BUTTONS ═══════════ */
-.btn{
-  display:inline-flex;align-items:center;justify-content:center;gap:10px;
-  background:var(--ottone);color:#1B0A10;
-  font-family:var(--sans);font-weight:700;font-size:14px;letter-spacing:.14em;text-transform:uppercase;
-  border:none;padding:16px 30px;cursor:pointer;text-decoration:none;
-  transition:background .2s ease, transform .1s ease;
-}
-.btn:hover{background:var(--ottone-luce)}
-.btn:active{transform:translateY(1px)}
-.btn.ghost{background:transparent;color:var(--carta);border:1px solid rgba(238,231,218,.55)}
-.btn.ghost:hover{background:var(--carta);color:var(--inchiostro);border-color:var(--carta)}
-.btn.block{display:flex;width:100%}
-.btn[disabled]{background:var(--carta-3);color:#8C8375;cursor:not-allowed}
+  /* Form prenotazione */
+  .prenota-sec{ background:#EFE7D8; }
+  .prenota-sec .wrap{ max-width:640px; text-align:center; }
+  form.book{ background:#fff; border:1px solid rgba(42,33,24,.1); border-radius:4px; padding:36px 32px;
+             display:flex; flex-direction:column; gap:16px; text-align:left;
+             box-shadow:0 18px 40px -24px rgba(42,33,24,.35); }
+  .row2{ display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+  .row3{ display:grid; grid-template-columns:1fr 1fr 1fr; gap:16px; }
+  .field{ display:flex; flex-direction:column; gap:6px; }
+  .field label{ font-size:13px; letter-spacing:.06em; color:#5a4a34; }
+  .field input,.field textarea{ padding:12px 14px; border:1px solid rgba(42,33,24,.18); border-radius:4px;
+                                font-size:15px; font-family:inherit; background:#F7F3EC; color:#2A2118; }
+  .field textarea{ resize:vertical; }
+  .field input:focus,.field textarea:focus{ outline:none; border-color:#C9A15A; box-shadow:0 0 0 3px rgba(201,161,90,.18); }
+  button.submit{ margin-top:6px; background:#C9A15A; color:#241B12; font-weight:700; border:none; padding:16px;
+                 border-radius:3px; font-size:15px; letter-spacing:.03em; text-transform:uppercase; cursor:pointer;
+                 transition:background .18s; }
+  button.submit:hover{ background:#e3c888; }
+  .form-note{ font-size:13.5px; color:#8a7550; text-align:center; margin:4px 0 0; }
+  .form-note a{ color:#6E2A2A; text-decoration:none; }
+  .form-note a:hover{ text-decoration:underline; }
 
-/* ═══════════ HERO ═══════════ */
-.hero{
-  position:relative;min-height:88vh;display:flex;align-items:center;justify-content:center;text-align:center;
-  color:var(--carta);overflow:hidden;
-  background:
-    radial-gradient(120% 90% at 50% -10%, var(--vinaccia-2) 0%, var(--vinaccia) 45%, #300A14 100%);
-  margin-top:-78px;padding:140px 0 90px;
-}
-.hero.has-photo{background:#1B0A10}
-.hero .bg{position:absolute;inset:0;background:var(--hero-photo) center/cover;opacity:.5}
-.hero .veil{position:absolute;inset:0;background:linear-gradient(180deg,rgba(27,10,16,.55),rgba(27,10,16,.82))}
-.hero .inner{position:relative;z-index:2;max-width:820px;padding:0 24px}
-.hero .eyebrow{color:var(--ottone-luce)}
-.hero h1{
-  font-size:clamp(44px,8.2vw,88px);font-weight:500;line-height:1.02;margin:20px 0 8px;
-  letter-spacing:.01em;
-}
-.hero h1 em{font-style:italic;color:var(--ottone-luce)}
-.orn{display:flex;align-items:center;justify-content:center;gap:14px;color:var(--ottone-luce);margin:26px 0 22px}
-.orn .line{height:1px;width:54px;background:linear-gradient(90deg,transparent,var(--ottone))}
-.orn .star{font-size:13px;letter-spacing:.5em}
-.hero p.lead{font-size:clamp(16px,2vw,19px);color:#E6D9CE;max-width:34em;margin:0 auto 34px;font-family:var(--display);font-style:italic}
-.hero .cta-row{display:flex;gap:14px;justify-content:center;flex-wrap:wrap}
-.scrollcue{position:absolute;bottom:22px;left:50%;transform:translateX(-50%);z-index:2;color:var(--ottone-luce);opacity:.8;font-size:12px;letter-spacing:.2em;text-transform:uppercase}
+  /* Final CTA */
+  .final{ position:relative; color:#F7EFDD; text-align:center; }
+  .final .bg{ position:absolute; inset:0; z-index:0; }
+  .final .scrim{ position:absolute; inset:0; z-index:1; pointer-events:none;
+                 background:linear-gradient(180deg,rgba(18,13,8,.30),rgba(18,13,8,.78)); }
+  .final .inner{ position:relative; z-index:2; max-width:740px; margin:0 auto; padding:110px 28px; }
+  .final h2{ font-family:'Playfair Display',Georgia,serif; font-style:italic; font-weight:600;
+             font-size:clamp(30px,4.4vw,48px); line-height:1.18; margin-bottom:18px; text-shadow:0 2px 16px rgba(0,0,0,.45); }
+  .final p{ font-size:19px; color:#EAE0C7; margin-bottom:32px; }
 
-/* ═══════════ SPLIT SECTIONS ═══════════ */
-section{padding:clamp(64px,9vw,120px) 0}
-.split{display:grid;grid-template-columns:1fr 1fr;gap:clamp(30px,5vw,74px);align-items:center}
-.split.rev .media{order:2}
-.split .copy .eyebrow{display:block;margin-bottom:16px}
-.split .copy h2{font-size:clamp(30px,4.4vw,50px);margin-bottom:22px}
-.split .copy p{color:var(--testo-soft);font-size:17px;margin-bottom:16px;max-width:34em}
-.split .copy p em{font-style:italic;color:var(--testo)}
-.split .copy .u{border-bottom:1px solid var(--ottone);padding-bottom:1px}
-.feats{list-style:none;margin:26px 0 30px;display:flex;flex-direction:column;gap:13px}
-.feats li{display:flex;gap:12px;align-items:flex-start;font-size:16px;color:var(--testo)}
-.feats li::before{content:"✳";color:var(--ottone);font-size:15px;line-height:1.5;flex:none}
-.link-a{display:inline-flex;align-items:center;gap:9px;font-weight:700;font-size:13px;letter-spacing:.16em;text-transform:uppercase;color:var(--vinaccia);text-decoration:none;border-bottom:1px solid var(--ottone);padding-bottom:6px}
-.link-a:hover{color:var(--ottone)}
+  /* Footer */
+  footer{ background:#1A130C; color:#a8926e; padding:50px 0; font-size:14.5px; }
+  footer .wrap{ display:flex; flex-wrap:wrap; gap:20px; justify-content:space-between; align-items:center; }
+  footer strong{ color:#F3E7CE; font-family:'Playfair Display',Georgia,serif; font-size:18px; font-weight:600; }
+  footer a{ color:#C9A15A; text-decoration:none; }
+  footer a:hover{ text-decoration:underline; }
 
-/* media frames + placeholders */
-.frame{position:relative;overflow:hidden;box-shadow:0 30px 60px -40px rgba(30,8,16,.6)}
-.frame img{width:100%;height:100%;object-fit:cover;aspect-ratio:4/5}
-.ph{
-  aspect-ratio:4/5;background:
-    linear-gradient(160deg,var(--vinaccia) 0%, var(--vinaccia-2) 55%, var(--inchiostro) 100%);
-  display:flex;align-items:center;justify-content:center;padding:24px;
-  border:1px solid rgba(198,161,90,.28);
-}
-.ph .ph-in{border:1px solid rgba(198,161,90,.4);padding:26px 22px;text-align:center;color:var(--nebbia)}
-.ph .ph-in .k{font-family:var(--sans);font-size:10px;letter-spacing:.24em;text-transform:uppercase;color:var(--ottone-luce);display:block;margin-bottom:10px}
-.ph .ph-in .t{font-family:var(--display);font-style:italic;font-size:20px;color:var(--carta)}
+  /* Sticky mobile CTA */
+  .sticky-cta{ display:none; position:fixed; left:0; right:0; bottom:0; z-index:30; padding:12px 16px;
+               background:rgba(26,19,12,.96); backdrop-filter:blur(6px); -webkit-backdrop-filter:blur(6px); }
+  .sticky-cta a{ display:block; text-align:center; background:#C9A15A; color:#241B12; font-weight:700;
+                 text-decoration:none; padding:16px 30px; border-radius:3px; font-size:15.5px;
+                 letter-spacing:.03em; text-transform:uppercase; }
 
-/* ═══════════ MENU / PIATTI ═══════════ */
-.piatti{background:var(--inchiostro);color:var(--carta)}
-.piatti .head{text-align:center;max-width:640px;margin:0 auto clamp(40px,6vw,66px)}
-.piatti .head .eyebrow{color:var(--ottone-luce)}
-.piatti .head h2{font-size:clamp(32px,5vw,54px);color:var(--carta);margin:16px 0 14px}
-.piatti .head p{color:var(--nebbia);font-family:var(--display);font-style:italic;font-size:18px}
-.piatti .cols{display:grid;grid-template-columns:1fr 1fr;gap:16px 60px}
-.corso{font-family:var(--display);font-style:italic;font-size:15px;color:var(--ottone-luce);letter-spacing:.04em;margin:26px 0 10px;padding-bottom:8px;border-bottom:1px solid rgba(198,161,90,.28)}
-.corso:first-child{margin-top:0}
-.dish{display:flex;align-items:baseline;gap:10px;padding:11px 0}
-.dish .n{font-family:var(--display);font-size:18px;font-weight:500;color:var(--carta)}
-.dish .n small{display:block;font-family:var(--sans);font-size:12.5px;color:var(--nebbia);font-weight:400;margin-top:3px;letter-spacing:.02em}
-.dish .dots{flex:1;border-bottom:1px dotted rgba(183,172,151,.5);transform:translateY(-5px);min-width:18px}
-.dish .p{font-family:var(--display);font-size:18px;font-weight:700;color:var(--ottone-luce);font-variant-numeric:lining-nums}
-.piatti .foot{text-align:center;margin-top:clamp(36px,5vw,56px);color:var(--nebbia);font-size:14px}
-.piatti .foot .btn{margin-top:22px}
-.gallery{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:clamp(40px,5vw,60px)}
-.gallery .frame img,.gallery .ph{aspect-ratio:1/1}
-
-/* ═══════════ PRENOTA ═══════════ */
-.prenota{background:var(--carta-2)}
-.prenota .grid{display:grid;grid-template-columns:1fr 1.05fr;gap:clamp(30px,5vw,70px);align-items:center}
-.prenota .intro .eyebrow{display:block;margin-bottom:16px}
-.prenota .intro h2{font-size:clamp(32px,4.6vw,52px);margin-bottom:20px}
-.prenota .intro p{color:var(--testo-soft);font-size:17px;margin-bottom:14px;max-width:32em}
-.assur{list-style:none;margin-top:24px;display:flex;flex-direction:column;gap:12px}
-.assur li{display:flex;gap:11px;align-items:center;font-size:15px;color:var(--testo)}
-.assur li svg{color:var(--ottone);flex:none}
-
-.card{
-  background:var(--carta);border:1px solid var(--carta-3);
-  padding:clamp(24px,4vw,40px);box-shadow:0 34px 70px -46px rgba(30,8,16,.5);
-}
-.card h3{font-family:var(--display);font-size:26px;font-weight:500;text-align:center;margin-bottom:6px}
-.card .sub{text-align:center;color:var(--testo-soft);font-size:13px;margin-bottom:26px}
-.errore{background:var(--vinaccia);color:var(--carta);font-size:14px;padding:12px 14px;margin-bottom:18px}
-.campo{margin-bottom:22px}
-.campo .lab{display:block;font-size:11px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--testo-soft);margin-bottom:10px}
-.chips{display:flex;gap:8px;flex-wrap:wrap}
-.chip{font-family:var(--sans);font-size:14px;font-weight:500;padding:11px 15px;border:1px solid var(--carta-3);background:transparent;cursor:pointer;transition:.15s}
-.chip:hover{border-color:var(--inchiostro)}
-.chip[aria-pressed="true"]{background:var(--inchiostro);color:var(--carta);border-color:var(--inchiostro)}
-input[type="date"],input[type="text"],input[type="tel"]{
-  font-family:var(--sans);font-size:16px;width:100%;padding:13px 14px;
-  border:1px solid var(--carta-3);background:#fff;color:var(--inchiostro);
-}
-.stepper{display:flex;align-items:center;width:fit-content;border:1px solid var(--carta-3)}
-.stepper button{width:46px;height:46px;font-size:20px;background:transparent;border:none;cursor:pointer;color:var(--inchiostro)}
-.stepper button:hover{background:var(--carta-2)}
-.stepper output{min-width:64px;text-align:center;font-family:var(--display);font-size:21px;font-weight:700;height:46px;line-height:46px;border-left:1px solid var(--carta-3);border-right:1px solid var(--carta-3)}
-.turno-nome{font-family:var(--display);font-style:italic;font-size:15px;color:var(--testo-soft);margin:16px 0 4px}
-.slot{display:flex;align-items:baseline;width:100%;background:none;border:none;padding:11px 4px;cursor:pointer;font-family:var(--sans);text-align:left;border-bottom:1px solid rgba(183,172,151,.4)}
-.slot:hover:not([disabled]) .slot-ora{color:var(--vinaccia)}
-.slot-ora{font-family:var(--display);font-size:21px;font-weight:700;transition:.15s;font-variant-numeric:lining-nums}
-.slot-dots{flex:1;margin:0 10px;border-bottom:1px dotted var(--carta-3);transform:translateY(-5px)}
-.slot-posti{font-size:12px;letter-spacing:.05em;text-transform:uppercase;font-weight:700;color:var(--testo-soft)}
-.slot[aria-pressed="true"]{background:var(--inchiostro);padding-left:12px;padding-right:12px}
-.slot[aria-pressed="true"] .slot-ora{color:var(--ottone-luce)}
-.slot[aria-pressed="true"] .slot-posti{color:var(--nebbia)}
-.slot[disabled]{opacity:.4;cursor:not-allowed}
-.slot.pochi .slot-posti{color:var(--vinaccia)}
-.rassicura{text-align:center;font-size:13px;color:var(--testo-soft);margin-top:14px}
-.conferma{text-align:center;padding:10px 0}
-.conferma .segno{width:56px;height:56px;margin:0 auto 20px;border-radius:50%;border:1px solid var(--ottone);color:var(--ottone);display:flex;align-items:center;justify-content:center;font-size:26px}
-.conferma .dettaglio{font-family:var(--display);font-size:22px;color:var(--inchiostro);margin:22px 0;padding:18px 0;border-top:1px solid var(--carta-3);border-bottom:1px solid var(--carta-3);font-variant-numeric:lining-nums}
-.conferma p{color:var(--testo-soft);margin-bottom:8px}
-
-/* ═══════════ FOOTER ═══════════ */
-footer{background:var(--inchiostro);color:var(--nebbia)}
-.foot-grid{display:grid;grid-template-columns:1.2fr 1fr 1fr;gap:44px;padding:clamp(56px,7vw,86px) 0 40px}
-footer h4{font-family:var(--display);font-size:15px;letter-spacing:.04em;color:var(--ottone-luce);text-transform:none;margin-bottom:22px;font-weight:500}
-footer .brand-f .b1{font-family:var(--display);font-style:italic;font-size:30px;color:var(--carta);line-height:1}
-footer .brand-f .b2{font-size:10px;letter-spacing:.3em;text-transform:uppercase;color:var(--ottone-luce);margin:8px 0 18px}
-footer .tag{font-family:var(--display);font-style:italic;color:var(--nebbia);max-width:26em;font-size:15px}
-.foot-row{display:flex;gap:11px;align-items:flex-start;margin-bottom:14px;font-size:14.5px;color:var(--carta);text-decoration:none}
-.foot-row svg{color:var(--ottone);flex:none;margin-top:3px}
-a.foot-row:hover{color:var(--ottone-luce)}
-.foot-list{list-style:none;display:flex;flex-direction:column;gap:12px}
-.foot-list a{color:var(--carta);text-decoration:none;font-size:14.5px}
-.foot-list a:hover{color:var(--ottone-luce)}
-.orari-box{border:1px solid rgba(198,161,90,.35);padding:20px 22px}
-.orari-box .r{display:flex;justify-content:space-between;gap:16px;padding:8px 0;font-size:14px;color:var(--carta);border-bottom:1px solid rgba(183,172,151,.16)}
-.orari-box .r:last-child{border:0}
-.orari-box .d{color:var(--nebbia)}
-.socials{display:flex;gap:12px;margin-top:20px}
-.socials a{width:40px;height:40px;border:1px solid rgba(198,161,90,.4);display:flex;align-items:center;justify-content:center;color:var(--ottone-luce);text-decoration:none;transition:.2s}
-.socials a:hover{background:var(--ottone);color:var(--inchiostro)}
-.subfoot{border-top:1px solid rgba(183,172,151,.16);padding:20px 0;text-align:center;font-size:12.5px;color:var(--nebbia)}
-
-/* sticky mobile CTA */
-.sticky{position:fixed;left:0;right:0;bottom:0;z-index:55;background:var(--inchiostro);
-  padding:12px 16px calc(12px + env(safe-area-inset-bottom));display:none;gap:10px;align-items:center;
-  border-top:1px solid rgba(198,161,90,.4)}
-.sticky .btn{flex:1}
-.sticky .tel{flex:none;width:52px;height:52px;border:1px solid rgba(198,161,90,.5);display:flex;align-items:center;justify-content:center;color:var(--ottone-luce);text-decoration:none;font-size:19px}
-@media(max-width:760px){.sticky{display:flex}body{padding-bottom:80px}}
-
-@media(max-width:860px){
-  .split{grid-template-columns:1fr;gap:34px}
-  .split.rev .media{order:0}
-  .piatti .cols{grid-template-columns:1fr;gap:4px 0}
-  .prenota .grid{grid-template-columns:1fr;gap:40px}
-  .foot-grid{grid-template-columns:1fr;gap:38px}
-  .gallery{grid-template-columns:1fr}
-  .frame img,.ph{aspect-ratio:16/10}
-}
+  @media (max-width:640px){
+    body{ padding-bottom:76px; }
+    .sticky-cta{ display:block; }
+    .nav-txt{ display:none; }
+    .info-grid{ grid-template-columns:1fr; }
+    .pillars{ grid-template-columns:1fr; gap:34px; }
+    .pillar+.pillar{ border-left:none; border-top:1px solid rgba(201,161,90,.25); padding-top:34px; }
+    .hero{ min-height:82vh; }
+    .row3{ grid-template-columns:1fr; }
+    section.pad{ padding:72px 0; }
+  }
 </style>
 </head>
 <body id="top">
 
-<!-- ══ TOP BAR ══ -->
-<div class="topbar">
-  <div class="wrap">
-    <a class="addr" id="tb-addr" href="#" target="_blank" rel="noopener">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 21s-7-5.5-7-11a7 7 0 0114 0c0 5.5-7 11-7 11z"/><circle cx="12" cy="10" r="2.5"/></svg>
-      <span></span>
-    </a>
-    <div class="right">
-      <a id="tb-tel" href="#"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.9v3a2 2 0 01-2.2 2 19.8 19.8 0 01-8.6-3.1 19.5 19.5 0 01-6-6A19.8 19.8 0 012.1 4.2 2 2 0 014.1 2h3a2 2 0 012 1.7c.1.9.4 1.8.7 2.7a2 2 0 01-.5 2.1L8.1 9.8a16 16 0 006 6l1.3-1.3a2 2 0 012.1-.4c.9.3 1.8.6 2.7.7a2 2 0 011.7 2z"/></svg><span></span></a>
-      <a id="tb-mail" href="#"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg><span></span></a>
+<header>
+  <div class="wrap nav">
+    <div class="brand">Antica Trattoria Cirio
+      <small>TORINO · CORSO MONCALIERI · MDCCCXX</small>
     </div>
-  </div>
-</div>
-
-<!-- ══ NAV ══ -->
-<div class="nav" id="nav">
-  <div class="wrap">
-    <a class="brand" href="#top"><span class="b1">Antica Trattoria Cirio</span><span class="b2">Alle radici del gusto</span></a>
-    <nav class="menu">
-      <a href="#manifesto">Il Manifesto</a>
-      <a href="#piatti">Menù</a>
-      <a href="#sala">La Sala</a>
-      <a href="#cantina">La Cantina</a>
-      <a href="#contatti">Contatti</a>
+    <nav class="links">
+      <a href="#cucina" class="nav-txt">Cucina</a>
+      <a href="#dove" class="nav-txt">Dove siamo</a>
+      <a href="tel:+390112764475" class="nav-tel">☎&nbsp;<span class="nav-txt">011 276 4475</span></a>
     </nav>
-    <a class="btn-nav" href="#prenota">Prenota un tavolo</a>
-    <button class="hamburger" id="open-drawer" aria-label="Apri il menu">
-      <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
-    </button>
   </div>
-</div>
-
-<!-- ══ HERO ══ -->
-<header class="hero" id="hero">
-  <div class="bg" id="hero-bg"></div>
-  <div class="veil" id="hero-veil" hidden></div>
-  <div class="inner">
-    <p class="eyebrow">Corso Moncalieri · Torino</p>
-    <h1>Benvenuti<br><em>da Cirio</em></h1>
-    <div class="orn"><span class="line"></span><span class="star">✦</span><span class="line"></span></div>
-    <p class="lead">La cucina classica, nella sua essenza. Preparata con cura, tra sapori autentici e il piacere di tornare.</p>
-    <div class="cta-row">
-      <a class="btn" href="#prenota">Prenota il tuo tavolo</a>
-      <a class="btn ghost" href="#piatti">Scopri il menù</a>
-    </div>
-  </div>
-  <div class="scrollcue">Scorri ↓</div>
 </header>
 
-<!-- ══ MANIFESTO ══ -->
-<section id="manifesto">
+<!-- HERO -->
+<section class="hero">
+  <div class="bg">
+    <div class="photo">
+      <img src="assets/images/hero.jpg" alt="Sala dell'Antica Trattoria Cirio" onerror="this.style.display='none'">
+      <div class="ph">Foto sala elegante / tavolo apparecchiato, luce calda</div>
+    </div>
+  </div>
+  <div class="scrim"></div>
+  <div class="wrap inner">
+    <div class="eyebrow">Dal 1920 · Cucina piemontese</div>
+    <h1>La cucina classica,<br>vissuta come si deve.</h1>
+    <p class="lead">Sapori autentici della tradizione torinese, curati nei minimi dettagli. Un'accoglienza che sa di casa, in una sala che sa di festa.</p>
+    <div class="hero-cta">
+      <a href="#prenota" class="btn btn-gold">Prenota il tuo tavolo</a>
+      <a href="#cucina" class="btn btn-ghost">La nostra cucina</a>
+    </div>
+  </div>
+</section>
+
+<!-- CHI SIAMO -->
+<section class="pad">
+  <div class="wrap center-narrow chi">
+    <div class="rule"></div>
+    <div class="eyebrow">Chi siamo</div>
+    <h2 class="title">Il nome dice trattoria.<br>Noi diciamo <em>tradizione</em>.</h2>
+    <p>Cirio nasce da un'idea precisa: dare valore alla cucina nella sua forma più autentica. Una cucina classica, costruita sulla tecnica, sulla conoscenza e sul rispetto della materia prima.</p>
+    <p>Non cerchiamo di stupirti con piatti complicati o impiattamenti da laboratorio. Facciamo il contrario: togliamo il superfluo e lasciamo parlare il sapore. Perché la vera difficoltà, in cucina, non è aggiungere. È saper togliere.</p>
+    <p>Il ragù che riposa a fuoco basso per ore. I tajarin tirati a mano ogni mattina. Gesti semplici solo all'apparenza, che chiedono tempo e mestiere. È questa la nostra idea di essenza: non economia, ma cura.</p>
+  </div>
+</section>
+
+<!-- PILASTRI -->
+<section class="pad pillars-sec">
+  <div class="glow"></div>
   <div class="wrap">
-    <div class="split reveal">
-      <div class="media"><div class="frame" data-foto="manifesto">
-        <div class="ph"><div class="ph-in"><span class="k">Foto</span><span class="t">Il servizio in sala</span></div></div>
-      </div></div>
-      <div class="copy">
-        <span class="eyebrow">Antica Trattoria Cirio</span>
-        <h2>Una cucina classica, senza sovrastrutture.</h2>
-        <p>Crediamo nel valore dei <span class="u">sapori diretti</span>, quelli per cui non servono spiegazioni perché arrivano subito. Una cucina costruita sulla tecnica, sulla conoscenza e sul <em>rispetto della materia prima</em>.</p>
-        <p>Cirio è lo spirito dell'oste di un tempo: qui l'ospitalità è naturale e ci si sente accolti senza bisogno di essere altro che se stessi.</p>
-        <ul class="feats">
-          <li>Agnolotti e tajarin tirati a mano, gnocchi freschi ogni mattina</li>
-          <li>Carta di vini piemontesi, molti anche al bicchiere</li>
-          <li>Pane e dolci fatti in casa, ogni giorno</li>
+    <div class="pillars-head">
+      <div class="eyebrow">Ciò in cui crediamo</div>
+      <h2 class="title" style="margin-bottom:0">Tre cose non le tocchiamo mai.</h2>
+    </div>
+    <div class="pillars">
+      <div class="pillar">
+        <div class="num">I.</div>
+        <h3>La verità in cucina</h3>
+        <p>Ogni piatto nasce da gesti reali e riconoscibili. Nulla è costruito per stupire, tutto è pensato per essere vero.</p>
+      </div>
+      <div class="pillar">
+        <div class="num">II.</div>
+        <h3>L'ospitalità autentica</h3>
+        <p>Tutto è costruito intorno all'ospite. L'accoglienza è naturale, il servizio attento, la relazione spontanea.</p>
+      </div>
+      <div class="pillar">
+        <div class="num">III.</div>
+        <h3>Il ritorno</h3>
+        <p>Chi torna sa cosa aspettarsi: qualità, servizio, atmosfera. È questa coerenza a costruire fiducia nel tempo.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CUCINA -->
+<section id="cucina" class="pad">
+  <div class="wrap">
+    <div class="center-narrow" style="max-width:700px;margin-bottom:56px">
+      <div class="eyebrow">La nostra cucina</div>
+      <h2 class="title" style="margin-bottom:18px">Piatti che altrove <em>non trovi più</em>.</h2>
+      <p style="font-size:18px;color:#5a4a34;margin:0">La tradizione vera richiede tempo, e per questo molti l'hanno lasciata andare. Noi l'abbiamo tenuta viva, un piatto dopo l'altro.</p>
+    </div>
+    <div class="cucina-grid">
+      <article class="dish">
+        <div class="frame">
+          <div class="photo">
+            <img src="assets/images/risotto.jpg" alt="Risotto al pomodoro arrosto" onerror="this.style.display='none'">
+            <div class="ph">Risotto al pomodoro arrosto</div>
+          </div>
+        </div>
+        <div class="body">
+          <h3>Risotto al pomodoro arrosto</h3>
+          <p>Con stracciatella di burrata Moris e scorza di limone. Semplice, esatto, di stagione.</p>
+        </div>
+      </article>
+      <article class="dish">
+        <div class="frame">
+          <div class="photo">
+            <img src="assets/images/carni.jpg" alt="Le carni della tradizione" onerror="this.style.display='none'">
+            <div class="ph">Le carni della tradizione</div>
+          </div>
+        </div>
+        <div class="body">
+          <h3>Le carni della tradizione</h3>
+          <p>Cotture lente e tagli scelti, serviti come una volta. La materia prima, prima di tutto.</p>
+        </div>
+      </article>
+      <aside class="memories">
+        <div class="kicker">La carta dei ricordi</div>
+        <h3>Quelli che quasi nessuno fa più</h3>
+        <ul>
+          <li>Vitello tonnato, come lo faceva la nonna</li>
+          <li>Rane fritte</li>
+          <li>Tonno di coniglio</li>
+          <li>Guancia brasata, tenera da un cucchiaio</li>
+          <li>Tajarin al ragù, dopo ore di cottura</li>
         </ul>
-        <a class="link-a" href="#piatti">Scopri i nostri piatti →</a>
+      </aside>
+    </div>
+  </div>
+</section>
+
+<!-- ESPERIENZA -->
+<section class="pad exp-sec">
+  <div class="wrap">
+    <div class="exp-head">
+      <div class="eyebrow">L'esperienza</div>
+      <h2 class="title" style="margin-bottom:18px">Al centro non c'è il piatto.<br>Ci sei tu.</h2>
+      <p>Puoi mangiare bene in tanti posti. Ma quante volte, quando esci, ti senti come a casa? Da Cirio non si viene una volta sola. Si torna.</p>
+    </div>
+    <div class="team">
+      <div class="member">
+        <div class="role">La sala</div>
+        <h3>Elisa</h3>
+        <p>Apre la sala con una grazia discreta. Ordine e accoglienza in ogni gesto, senza mai occupare troppo spazio.</p>
+      </div>
+      <div class="member">
+        <div class="role">L'accoglienza</div>
+        <h3>Mariella</h3>
+        <p>Oltre trent'anni di esperienza. Ricorda cosa avevi mangiato la volta prima, e trasforma ogni ritorno in un gesto di attenzione.</p>
+      </div>
+      <div class="member">
+        <div class="role">La cucina</div>
+        <h3>Kevin</h3>
+        <p>Guida la brigata con un obiettivo chiaro: arrivare all'essenza, lasciare un'impronta fatta di sapori veri.</p>
       </div>
     </div>
   </div>
 </section>
 
-<!-- ══ PIATTI / MENU ══ -->
-<section class="piatti" id="piatti">
+<!-- RECENSIONI -->
+<section class="pad reviews-sec">
   <div class="wrap">
-    <div class="head reveal">
-      <span class="eyebrow">La nostra tavola</span>
-      <h2>Alcuni piatti, raccontati dai sapori</h2>
-      <p>Le descrizioni sono volutamente essenziali: ciò che conta è la qualità delle materie prime e la tecnica con cui vengono lavorate.</p>
-    </div>
-
-    <div class="cols reveal">
-      <div>
-        <p class="corso">I nostri primi</p>
-        <div class="dish"><span class="n">Agnolotti fatti a mano<small>al sugo d'arrosto</small></span><span class="dots"></span><span class="p">16</span></div>
-        <div class="dish"><span class="n">Tajarin tagliati al coltello<small>al ragù</small></span><span class="dots"></span><span class="p">14</span></div>
-        <div class="dish"><span class="n">Gnocchi di borragine<small>fonduta leggera di caprino</small></span><span class="dots"></span><span class="p">14</span></div>
-        <div class="dish"><span class="n">Risotto al pomodoro arrosto<small>stracciatella di burrata e limone</small></span><span class="dots"></span><span class="p">15</span></div>
+    <div class="eyebrow">Non lo diciamo noi</div>
+    <h2 class="title" style="margin-bottom:26px">Le parole di chi è già stato a tavola.</h2>
+    <div class="rating">★ 4,3 / 5 &nbsp;·&nbsp; oltre 600 recensioni</div>
+    <div class="reviews">
+      <div class="review">
+        <div class="stars">★★★★★</div>
+        <blockquote>«I piatti della tradizione, dimenticati dagli altri ristoranti. E la cordialità di altri tempi.»</blockquote>
+        <cite>Recensione su TripAdvisor</cite>
       </div>
-      <div>
-        <p class="corso">I secondi</p>
-        <div class="dish"><span class="n">Guancia brasata<small>su purè di patate</small></span><span class="dots"></span><span class="p">20</span></div>
-        <div class="dish"><span class="n">Tagliata di Fassone<small>salsa bernese e cipollotto</small></span><span class="dots"></span><span class="p">20</span></div>
-        <div class="dish"><span class="n">Quaglia al mattone<small>purè di piselli e cicorietta</small></span><span class="dots"></span><span class="p">16</span></div>
-        <p class="corso">Per iniziare</p>
-        <div class="dish"><span class="n">Carne cruda di Fassone<small>insalatina di pesche e sedano</small></span><span class="dots"></span><span class="p">15</span></div>
+      <div class="review">
+        <div class="stars">★★★★★</div>
+        <blockquote>«Sembra di essere a casa. Cucina autentica e servizio che ti fa sentire atteso.»</blockquote>
+        <cite>Recensione su TripAdvisor</cite>
       </div>
-    </div>
-
-    <div class="gallery reveal" id="gallery"></div>
-
-    <div class="foot reveal">
-      Coperto 3 € a persona · menù alla carta soggetto a stagionalità
-      <br><a class="btn" href="#prenota">Prenota il tuo tavolo</a>
-    </div>
-  </div>
-</section>
-
-<!-- ══ SALA ══ -->
-<section id="sala">
-  <div class="wrap">
-    <div class="split rev reveal">
-      <div class="media"><div class="frame" data-foto="sala">
-        <div class="ph"><div class="ph-in"><span class="k">Foto</span><span class="t">La sala e i suoi muri</span></div></div>
-      </div></div>
-      <div class="copy">
-        <span class="eyebrow">Il posto dove si torna</span>
-        <h2>Spazi curati, accoglienza sincera.</h2>
-        <p>Al centro non c'è mai solo la cucina: c'è <span class="u">l'esperienza e chi la vive</span>, i suoi tempi, il suo desiderio di stare bene. Una tavola come spazio di relazione.</p>
-        <p>Chi torna sa cosa aspettarsi: la stessa attenzione, la stessa cura, <em>quel sapore che si riconosce</em>. Un luogo in cui ci si può affidare, ogni volta.</p>
-        <ul class="feats">
-          <li>Luce calda e ritmo lento, senza secondo turno di fretta</li>
-          <li>Un'accoglienza che ti riconosce e ti ricorda</li>
-          <li>Gli amici a quattro zampe sono i benvenuti</li>
-        </ul>
-        <a class="link-a" href="#prenota">Prenota la tua serata →</a>
+      <div class="review">
+        <div class="stars">★★★★★</div>
+        <blockquote>«Porzioni generose e piatti veri. Il posto giusto per la vera cucina piemontese a Torino.»</blockquote>
+        <cite>Recensione su Google</cite>
       </div>
     </div>
   </div>
 </section>
 
-<!-- ══ CANTINA ══ -->
-<section id="cantina" style="background:var(--carta-2)">
+<!-- DOVE SIAMO -->
+<section id="dove" class="pad">
   <div class="wrap">
-    <div class="split reveal">
-      <div class="media"><div class="frame" data-foto="cantina">
-        <div class="ph"><div class="ph-in"><span class="k">Foto</span><span class="t">Calici e bottiglie</span></div></div>
-      </div></div>
-      <div class="copy">
-        <span class="eyebrow">Storie da bere</span>
-        <h2>Il vino, complice del sapore.</h2>
-        <p>Il vino da Cirio non è solo un abbinamento: è <span class="u">un'estensione del piatto</span>. Selezioniamo con cura anche vini sfusi, proprio per stare bene sui nostri piatti — ve li raccontiamo noi.</p>
-        <p>E per chiudere, un <em>Barolo Chinato</em> o un Moscato d'Asti: il finale che il momento merita.</p>
-        <a class="link-a" href="#prenota">Prenota e fatti consigliare →</a>
+    <div class="info-grid">
+      <div class="info">
+        <div class="eyebrow">Dove siamo</div>
+        <h2 class="title" style="margin:14px 0 24px">In Corso Moncalieri, sul fiume.</h2>
+        <div class="big">Corso Moncalieri 216<br>10133 Torino</div>
+        <h3 class="sub">Telefono</h3>
+        <div class="big"><a href="tel:+390112764475">011 276 4475</a></div>
+        <h3 class="sub">Orari</h3>
+        <table class="hours">
+          <tr><td>Lunedì</td><td class="val">19:30 – 22:30</td></tr>
+          <tr><td>Martedì</td><td class="val">Chiuso</td></tr>
+          <tr><td>Mercoledì – Venerdì</td><td class="val">19:30 – 22:30</td></tr>
+          <tr><td>Sabato e Domenica</td><td class="val">12:30 – 14:00 &nbsp;·&nbsp; 19:30 – 22:30</td></tr>
+        </table>
+      </div>
+      <div class="book-card">
+        <h3>Prenota il tuo tavolo</h3>
+        <p>A pranzo o a cena. Un tavolo da Cirio si trova con una telefonata.</p>
+        <a href="tel:+390112764475" class="btn btn-gold">☎&nbsp;Chiama ora</a>
+        <a href="https://maps.google.com/?q=Antica+Trattoria+Cirio+Corso+Moncalieri+216+Torino" target="_blank" rel="noopener" class="btn btn-ghost">Apri la mappa</a>
       </div>
     </div>
   </div>
 </section>
 
-<!-- ══ PRENOTA ══ -->
-<section class="prenota" id="prenota">
+<!-- FORM PRENOTAZIONE -->
+<section id="prenota" class="pad prenota-sec">
   <div class="wrap">
-    <div class="grid">
-      <div class="intro reveal">
-        <span class="eyebrow">Trenta secondi</span>
-        <h2>Prenota il tuo tavolo.</h2>
-        <p>Scegli il giorno, l'orario e in quanti siete. Vi confermiamo il tavolo con un messaggio.</p>
-        <ul class="assur">
-          <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg> Prenotazione sicura, nessun pagamento anticipato</li>
-          <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg> Preferisci il telefono? <a id="intro-tel" href="#" style="color:var(--vinaccia);font-weight:700">Chiamaci</a></li>
-        </ul>
-      </div>
-
-      <div class="card reveal">
-        <div id="form-prenota">
-          <h3>Il tuo tavolo, in pochi tocchi</h3>
-          <p class="sub">Corso Moncalieri · Torino</p>
-          <div id="errore" class="errore" role="alert" hidden></div>
-
-          <div class="campo">
-            <span class="lab">Quando</span>
-            <div class="chips" id="chips-data" role="group" aria-label="Giorno"></div>
-            <div style="margin-top:8px">
-              <label for="data-libera" style="position:absolute;left:-9999px">Altra data</label>
-              <input type="date" id="data-libera">
-            </div>
-          </div>
-
-          <div class="campo">
-            <span class="lab">In quanti siete</span>
-            <div class="stepper">
-              <button type="button" id="meno" aria-label="Una persona in meno">−</button>
-              <output id="coperti" aria-live="polite">2</output>
-              <button type="button" id="piu" aria-label="Una persona in più">+</button>
-            </div>
-          </div>
-
-          <div class="campo">
-            <span class="lab">A che ora</span>
-            <div id="slot-lista" role="group" aria-label="Orario"></div>
-          </div>
-
-          <div class="campo">
-            <label class="lab" for="nome">A che nome</label>
-            <input type="text" id="nome" autocomplete="name" placeholder="Nome e cognome">
-          </div>
-          <div class="campo">
-            <label class="lab" for="telefono">Telefono</label>
-            <input type="tel" id="telefono" autocomplete="tel" placeholder="Per confermarvi il tavolo">
-          </div>
-
-          <button class="btn block" id="invia" disabled>Scegliete un orario</button>
-          <p class="rassicura">Prenotazione sicura · Nessun pagamento anticipato</p>
+    <div class="rule"></div>
+    <div class="eyebrow">Prenotazione</div>
+    <h2 class="title" style="font-size:clamp(28px,4vw,40px);margin:14px 0 30px">Prenota il tuo tavolo</h2>
+    <form class="book" id="booking-form">
+      <div class="row2">
+        <div class="field">
+          <label for="f-nome">Nome</label>
+          <input id="f-nome" type="text" required placeholder="Il tuo nome">
         </div>
-
-        <div id="conferma" class="conferma" hidden>
-          <div class="segno">✓</div>
-          <h3>Il tavolo è vostro.</h3>
-          <p>Vi arriva un messaggio di conferma tra pochi minuti.</p>
-          <div class="dettaglio" id="conferma-dettaglio"></div>
-          <p>Se cambia qualcosa, chiamateci: <a id="conf-tel" href="#" style="color:var(--vinaccia);font-weight:700"></a></p>
+        <div class="field">
+          <label for="f-tel">Telefono</label>
+          <input id="f-tel" type="tel" required placeholder="011 000 0000">
         </div>
       </div>
-    </div>
+      <div class="row3">
+        <div class="field">
+          <label for="f-data">Data</label>
+          <input id="f-data" type="date" required>
+        </div>
+        <div class="field">
+          <label for="f-ora">Ora</label>
+          <input id="f-ora" type="time" required>
+        </div>
+        <div class="field">
+          <label for="f-pers">Persone</label>
+          <input id="f-pers" type="number" min="1" value="2">
+        </div>
+      </div>
+      <div class="field">
+        <label for="f-note">Note (opzionale)</label>
+        <textarea id="f-note" rows="2" placeholder="Allergie, occasioni speciali…"></textarea>
+      </div>
+      <button type="submit" class="submit">Invia richiesta</button>
+      <p class="form-note">Confermeremo la disponibilità via telefono entro poche ore. Per urgenze, chiama il <a href="tel:+390112764475">011 276 4475</a>.</p>
+    </form>
   </div>
 </section>
 
-<!-- ══ FOOTER ══ -->
-<footer id="contatti">
-  <div class="wrap">
-    <div class="foot-grid">
-      <div class="brand-f">
-        <div class="b1">Antica Trattoria Cirio</div>
-        <div class="b2">Alle radici del gusto</div>
-        <p class="tag">La cucina classica, nella sua essenza. Preparata con cura, tra sapori autentici e il piacere di tornare.</p>
-        <div class="socials">
-          <a href="#" aria-label="Instagram"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg></a>
-          <a href="#" aria-label="Facebook"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M14 9h3V6h-3c-2 0-3 1-3 3v2H8v3h3v7h3v-7h2.5l.5-3H14V9z"/></svg></a>
-        </div>
-      </div>
-
-      <div>
-        <h4>Contatti</h4>
-        <a class="foot-row" id="f-addr" href="#" target="_blank" rel="noopener">
-          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 21s-7-5.5-7-11a7 7 0 0114 0c0 5.5-7 11-7 11z"/><circle cx="12" cy="10" r="2.5"/></svg>
-          <span></span>
-        </a>
-        <a class="foot-row" id="f-tel" href="#"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.9v3a2 2 0 01-2.2 2 19.8 19.8 0 01-8.6-3.1 19.5 19.5 0 01-6-6A19.8 19.8 0 012.1 4.2 2 2 0 014.1 2h3a2 2 0 012 1.7c.1.9.4 1.8.7 2.7a2 2 0 01-.5 2.1L8.1 9.8a16 16 0 006 6l1.3-1.3a2 2 0 012.1-.4c.9.3 1.8.6 2.7.7a2 2 0 011.7 2z"/></svg><span></span></a>
-        <a class="foot-row" id="f-mail" href="#"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg><span></span></a>
-        <a class="foot-row" id="f-map" href="#" target="_blank" rel="noopener"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="3 6 9 3 15 6 21 3 21 18 15 21 9 18 3 21"/></svg><span>Apri in Google Maps</span></a>
-      </div>
-
-      <div>
-        <h4>Orari</h4>
-        <div class="orari-box">
-          <div class="r"><span>Pranzo</span><span>12:00 – 14:30</span></div>
-          <div class="r"><span>Cena</span><span>19:30 – 22:30</span></div>
-          <div class="r"><span class="d">Lunedì</span><span class="d">Chiuso</span></div>
-        </div>
-        <a class="btn block" href="#prenota" style="margin-top:18px">Prenota un tavolo</a>
-      </div>
+<!-- FINAL CTA -->
+<section class="final">
+  <div class="bg">
+    <div class="photo">
+      <img src="assets/images/atmosfera.jpg" alt="Atmosfera serale da Cirio" onerror="this.style.display='none'">
+      <div class="ph">Foto atmosfera serale / dettaglio tavola con candela</div>
     </div>
   </div>
-  <div class="subfoot">© <span id="anno"></span> Antica Trattoria Cirio · Corso Moncalieri, Torino</div>
+  <div class="scrim"></div>
+  <div class="inner">
+    <div class="rule"></div>
+    <h2>Un rifugio al ritmo di sapori autentici.</h2>
+    <p>Vieni a scoprire perché, da Cirio, si torna.</p>
+    <a href="#prenota" class="btn btn-gold">Prenota il tuo tavolo</a>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div>
+      <strong>Antica Trattoria Cirio</strong><br>
+      Corso Moncalieri 216, 10133 Torino &nbsp;·&nbsp; <a href="tel:+390112764475">011 276 4475</a>
+    </div>
+    <div>Cucina piemontese classica, nella sua essenza.</div>
+  </div>
 </footer>
 
-<!-- ══ MOBILE DRAWER ══ -->
-<div class="drawer" id="drawer">
-  <button class="close" id="close-drawer" aria-label="Chiudi">×</button>
-  <a href="#manifesto">Il Manifesto</a>
-  <a href="#piatti">Menù</a>
-  <a href="#sala">La Sala</a>
-  <a href="#cantina">La Cantina</a>
-  <a href="#contatti">Contatti</a>
-  <a class="btn" href="#prenota">Prenota un tavolo</a>
-</div>
-
-<!-- ══ STICKY MOBILE CTA ══ -->
-<div class="sticky">
-  <a class="tel" id="st-tel" href="#" aria-label="Chiama">✆</a>
-  <a class="btn" href="#prenota">Prenota il tuo tavolo</a>
+<!-- Sticky CTA mobile -->
+<div class="sticky-cta">
+  <a href="tel:+390112764475">☎&nbsp;Prenota: 011 276 4475</a>
 </div>
 
 <script>
-/* ═══════════ TRACCIAMENTO META ═══════════ */
-if (CONFIG.pixelId && CONFIG.pixelId !== "INSERISCI_PIXEL_ID") {
-  !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
-  n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
-  n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;
-  t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}
-  (window,document,'script','https://connect.facebook.net/en_US/fbevents.js');
-  fbq('init', CONFIG.pixelId); fbq('track', 'PageView');
-}
-
-const $ = s => document.querySelector(s);
-const $$ = s => document.querySelectorAll(s);
-const C = CONFIG.contatti;
-
-/* ── contatti ── */
-const telHref = 'tel:' + C.telefono.replace(/\s/g,'');
-[['#tb-tel',C.telefono],['#f-tel',C.telefono],['#st-tel',null],['#intro-tel',null],['#conf-tel',C.telefono]]
-  .forEach(([sel,txt])=>{const e=$(sel); if(!e)return; e.href=telHref; if(txt) e.querySelector('span')? e.querySelector('span').textContent=txt : e.textContent=txt;});
-$('#tb-tel span').textContent = C.telefono;
-$('#f-tel span').textContent = C.telefono;
-$('#conf-tel').textContent = C.telefono;
-$('#tb-addr span').textContent = C.indirizzo;
-$('#tb-addr').href = C.mappaUrl;
-$('#f-addr span').textContent = C.indirizzo;
-$('#f-addr').href = C.mappaUrl;
-$('#f-map').href = C.mappaUrl;
-const mailHref='mailto:'+C.email;
-$('#tb-mail').href=mailHref; $('#tb-mail span').textContent=C.email;
-$('#f-mail').href=mailHref; $('#f-mail span').textContent=C.email;
-$('#anno').textContent = new Date().getFullYear();
-
-/* ── foto: hero + sezioni + gallery ── */
-if (CONFIG.foto.hero) {
-  $('#hero').classList.add('has-photo');
-  $('#hero-bg').style.setProperty('--hero-photo', `url("${CONFIG.foto.hero}")`);
-  $('#hero-veil').hidden = false;
-}
-[['manifesto',CONFIG.foto.manifesto],['sala',CONFIG.foto.sala],['cantina',CONFIG.foto.cantina]].forEach(([k,url])=>{
-  if(!url) return;
-  const f=document.querySelector(`.frame[data-foto="${k}"]`);
-  if(f) f.innerHTML=`<img src="${url}" alt="">`;
-});
-$('#gallery').innerHTML = CONFIG.foto.piatti.map(p => p.img
-  ? `<figure class="frame"><img src="${p.img}" alt="${p.nome}"></figure>`
-  : `<div class="ph"><div class="ph-in"><span class="k">Foto</span><span class="t">${p.nome}</span></div></div>`
-).join('');
-
-/* ── nav: solid on scroll + drawer ── */
-const nav=$('#nav');
-const onScroll=()=>nav.classList.toggle('solid', window.scrollY>60);
-onScroll(); window.addEventListener('scroll',onScroll,{passive:true});
-$('#open-drawer').addEventListener('click',()=>$('#drawer').classList.add('open'));
-$('#close-drawer').addEventListener('click',()=>$('#drawer').classList.remove('open'));
-$$('#drawer a').forEach(a=>a.addEventListener('click',()=>$('#drawer').classList.remove('open')));
-
-/* ── reveal on scroll ── */
-const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target);}}),{threshold:.14});
-$$('.reveal').forEach(el=>io.observe(el));
-
-/* ═══════════ PRENOTAZIONE ═══════════ */
-const stato={data:null,coperti:2,ora:null};
-const GG=['Domenica','Lunedì','Martedì','Mercoledì','Giovedì','Venerdì','Sabato'];
-const MM=['gen','feb','mar','apr','mag','giu','lug','ago','set','ott','nov','dic'];
-const iso=d=>d.toISOString().slice(0,10);
-const chiuso=d=>CONFIG.giorniChiusura.includes(d.getDay());
-
-function dateProposte(){
-  const out=[],oggi=new Date();
-  for(let i=0;out.length<3&&i<10;i++){
-    const d=new Date(oggi);d.setDate(oggi.getDate()+i);
-    if(chiuso(d))continue;
-    const et=i===0?'Oggi':i===1?'Domani':`${GG[d.getDay()]} ${d.getDate()}`;
-    out.push({iso:iso(d),etichetta:et});
-  }
-  return out;
-}
-$('#chips-data').innerHTML=dateProposte().map(d=>
-  `<button type="button" class="chip" aria-pressed="false" data-data="${d.iso}">${d.etichetta}</button>`).join('');
-
-function selezionaData(isoStr){
-  stato.data=isoStr;stato.ora=null;
-  $$('#chips-data .chip').forEach(c=>c.setAttribute('aria-pressed',c.dataset.data===isoStr));
-  $('#data-libera').value=isoStr;disegnaSlot();aggiornaCta();
-}
-$$('#chips-data .chip').forEach(c=>c.addEventListener('click',()=>selezionaData(c.dataset.data)));
-$('#data-libera').min=iso(new Date());
-$('#data-libera').addEventListener('change',e=>{
-  const d=new Date(e.target.value+'T12:00:00');
-  if(chiuso(d)){mostraErrore('Il lunedì siamo chiusi. Scegliete un altro giorno.');return;}
-  nascondiErrore();selezionaData(e.target.value);
-});
-
-function setCoperti(n){
-  stato.coperti=Math.min(CONFIG.maxPersone,Math.max(1,n));
-  $('#coperti').textContent=stato.coperti;stato.ora=null;disegnaSlot();aggiornaCta();
-}
-$('#meno').addEventListener('click',()=>setCoperti(stato.coperti-1));
-$('#piu').addEventListener('click',()=>setCoperti(stato.coperti+1));
-
-function postiLiberi(dataIso,ora){let h=0;const k=dataIso+ora;for(let i=0;i<k.length;i++)h=(h*31+k.charCodeAt(i))%997;return h%14;}
-function disegnaSlot(){
-  const box=$('#slot-lista');
-  if(!stato.data){box.innerHTML='<p style="color:var(--testo-soft);font-size:14px">Scegliete prima il giorno.</p>';return;}
-  box.innerHTML=CONFIG.turni.map(t=>{
-    const righe=t.orari.map(o=>{
-      const posti=postiLiberi(stato.data,o);const ok=posti>=stato.coperti;const pochi=ok&&posti<=4;
-      const testo=!ok?'Completo':pochi?`Ultimi ${posti}`:`${posti} posti`;
-      return `<button type="button" class="slot ${pochi?'pochi':''}" aria-pressed="${stato.ora===o}" data-ora="${o}" ${ok?'':'disabled'}>
-        <span class="slot-ora">${o}</span><span class="slot-dots"></span><span class="slot-posti">${testo}</span></button>`;
-    }).join('');
-    return `<p class="turno-nome">${t.nome}</p>${righe}`;
-  }).join('');
-  box.querySelectorAll('.slot:not([disabled])').forEach(s=>s.addEventListener('click',()=>{
-    stato.ora=s.dataset.ora;
-    box.querySelectorAll('.slot').forEach(x=>x.setAttribute('aria-pressed',x.dataset.ora===stato.ora));
-    aggiornaCta();
-  }));
-}
-disegnaSlot();
-
-function aggiornaCta(){
-  const b=$('#invia');
-  if(!stato.data){b.disabled=true;b.textContent='Scegliete il giorno';return;}
-  if(!stato.ora){b.disabled=true;b.textContent='Scegliete un orario';return;}
-  b.disabled=false;b.textContent=`Prenota per ${stato.coperti} alle ${stato.ora}`;
-}
-function mostraErrore(t){const e=$('#errore');e.textContent=t;e.hidden=false;e.scrollIntoView({block:'center'});}
-function nascondiErrore(){$('#errore').hidden=true;}
-
-$('#invia').addEventListener('click',async()=>{
-  const nome=$('#nome').value.trim();const tel=$('#telefono').value.trim();
-  if(nome.length<2)return mostraErrore('Serve un nome per il tavolo.');
-  if(tel.replace(/\D/g,'').length<8)return mostraErrore('Serve un numero valido: vi mandiamo la conferma lì.');
-  nascondiErrore();
-  const b=$('#invia');b.disabled=true;b.textContent='Un attimo…';
-  const payload={...stato,nome,telefono:tel,campagna:CONFIG.campagna,fbclid:new URLSearchParams(location.search).get('fbclid')};
-  try{await fetch(CONFIG.endpoint,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});}catch(_){}
-  if(window.fbq)fbq('track','Lead',{content_name:CONFIG.campagna,value:stato.coperti*45,currency:'EUR'});
-  try{history.pushState({},'',CONFIG.urlConferma);}catch(_){}
-  const d=new Date(stato.data+'T12:00:00');
-  $('#conferma-dettaglio').textContent=`${GG[d.getDay()]} ${d.getDate()} ${MM[d.getMonth()]} · ore ${stato.ora} · ${stato.coperti} persone`;
-  $('#form-prenota').hidden=true;$('#conferma').hidden=false;
-  $('#prenota').scrollIntoView({behavior:'smooth'});
-});
+  document.getElementById('booking-form').addEventListener('submit', function(e){
+    e.preventDefault();
+    alert('Grazie! Ti contatteremo a breve per confermare la prenotazione.');
+    this.reset();
+  });
 </script>
+
 </body>
 </html>
