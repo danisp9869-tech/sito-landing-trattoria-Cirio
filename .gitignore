@@ -1,0 +1,7 @@
+# Segreti del deploy (mai committare)
+deploy/.env
+
+# File di sistema
+.DS_Store
+Thumbs.db
+*.log

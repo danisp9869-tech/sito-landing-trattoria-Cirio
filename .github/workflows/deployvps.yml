@@ -1,0 +1,71 @@
+name: Deploy landing su VPS (Nginx + SSL via SSH)
+
+# Pubblica il sito su un VPS con Nginx via SSH+rsync ad ogni push su main.
+# Al PRIMO deploy crea anche il virtual server Nginx e il certificato SSL
+# (Let's Encrypt) in automatico, tramite deploy/provision-server.sh.
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:   # avvio manuale dalla tab "Actions"
+
+# Evita deploy sovrapposti sullo stesso server
+concurrency:
+  group: deploy-vps
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout del repository
+        uses: actions/checkout@v4
+
+      - name: Prepara la chiave SSH e il known_hosts
+        env:
+          VPS_SSH_KEY: ${{ secrets.VPS_SSH_KEY }}
+          VPS_HOST: ${{ secrets.VPS_HOST }}
+          VPS_PORT: ${{ secrets.VPS_PORT }}
+        run: |
+          mkdir -p ~/.ssh
+          chmod 700 ~/.ssh
+          printf '%s\n' "$VPS_SSH_KEY" > ~/.ssh/deploy_key
+          chmod 600 ~/.ssh/deploy_key
+          # Se non è impostata la porta, usa la 22 di default
+          ssh-keyscan -p "${VPS_PORT:-22}" -H "$VPS_HOST" >> ~/.ssh/known_hosts 2>/dev/null
+
+      - name: Sincronizza i file del sito (rsync)
+        env:
+          VPS_HOST: ${{ secrets.VPS_HOST }}
+          VPS_USER: ${{ secrets.VPS_USER }}
+          VPS_PORT: ${{ secrets.VPS_PORT }}
+          VPS_TARGET_DIR: ${{ secrets.VPS_TARGET_DIR }}
+        run: |
+          # --delete: rimuove sul server i file non più presenti nel repo
+          # gli --exclude tengono fuori tutto ciò che non fa parte del sito
+          rsync -avz --delete \
+            -e "ssh -i ~/.ssh/deploy_key -p ${VPS_PORT:-22}" \
+            --exclude='.git' \
+            --exclude='.github' \
+            --exclude='.gitattributes' \
+            --exclude='README.md' \
+            --exclude='deploy' \
+            ./ "$VPS_USER@$VPS_HOST:$VPS_TARGET_DIR/"
+
+      - name: Provisioning Nginx + certificato SSL (idempotente)
+        env:
+          VPS_HOST: ${{ secrets.VPS_HOST }}
+          VPS_USER: ${{ secrets.VPS_USER }}
+          VPS_PORT: ${{ secrets.VPS_PORT }}
+          VPS_TARGET_DIR: ${{ secrets.VPS_TARGET_DIR }}
+          VPS_DOMAIN: ${{ secrets.VPS_DOMAIN }}
+          VPS_EMAIL: ${{ secrets.VPS_EMAIL }}
+          VPS_INCLUDE_WWW: ${{ secrets.VPS_INCLUDE_WWW }}
+        run: |
+          PORT="${VPS_PORT:-22}"
+          # Copia lo script di provisioning e il template Nginx sul server
+          scp -i ~/.ssh/deploy_key -P "$PORT" \
+            deploy/provision-server.sh deploy/nginx-site.conf.template \
+            "$VPS_USER@$VPS_HOST:/tmp/"
+          # Esegue il provisioning: crea vhost + SSL solo se non già presenti
+          ssh -i ~/.ssh/deploy_key -p "$PORT" "$VPS_USER@$VPS_HOST" \
+            "DOMAIN='$VPS_DOMAIN' EMAIL='$VPS_EMAIL' WEBROOT='$VPS_TARGET_DIR' INCLUDE_WWW='${VPS_INCLUDE_WWW:-true}' TEMPLATE=/tmp/nginx-site.conf.template bash /tmp/provision-server.sh"
