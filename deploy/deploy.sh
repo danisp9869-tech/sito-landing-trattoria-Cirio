@@ -41,7 +41,13 @@ fi
 
 SSH_BASE=(ssh -i "$SSH_KEY" -p "$PORT")
 
-echo "==> [1/3] rsync dei contenuti su $VPS_HOST:$VPS_TARGET_DIR"
+echo "==> [1/4] preparo la cartella web sul server"
+# La cartella (es. /var/www/cirio) è di root: la creo e la assegno all'utente
+# di deploy così l'rsync può scriverci senza sudo.
+"${SSH_BASE[@]}" "$VPS_USER@$VPS_HOST" \
+  "sudo mkdir -p '$VPS_TARGET_DIR' && sudo chown -R '$VPS_USER' '$VPS_TARGET_DIR'"
+
+echo "==> [2/4] rsync dei contenuti su $VPS_HOST:$VPS_TARGET_DIR"
 rsync -avz --delete \
   -e "ssh -i $SSH_KEY -p $PORT" \
   --exclude='.git' \
@@ -51,13 +57,13 @@ rsync -avz --delete \
   --exclude='deploy' \
   "$REPO_DIR/" "$VPS_USER@$VPS_HOST:$VPS_TARGET_DIR/"
 
-echo "==> [2/3] copio lo script di provisioning sul server"
+echo "==> [3/4] copio lo script di provisioning sul server"
 scp -i "$SSH_KEY" -P "$PORT" \
   "$SCRIPT_DIR/provision-server.sh" \
   "$SCRIPT_DIR/nginx-site.conf.template" \
   "$VPS_USER@$VPS_HOST:/tmp/"
 
-echo "==> [3/3] provisioning Nginx + SSL (idempotente)"
+echo "==> [4/4] provisioning Nginx + SSL (idempotente)"
 "${SSH_BASE[@]}" "$VPS_USER@$VPS_HOST" \
   "DOMAIN='$VPS_DOMAIN' EMAIL='$EMAIL' WEBROOT='$VPS_TARGET_DIR' INCLUDE_WWW='$INCLUDE_WWW' TEMPLATE=/tmp/nginx-site.conf.template bash /tmp/provision-server.sh"
 
