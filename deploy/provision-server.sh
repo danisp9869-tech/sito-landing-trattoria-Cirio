@@ -55,10 +55,16 @@ fi
 $SUDO mkdir -p "$WEBROOT"
 
 # server_name: dominio (+ www se richiesto e non è già un www.)
-SERVER_NAMES="$DOMAIN"
+# Aggiungi "www." SOLO a un dominio apex (un solo punto, es. esempio.it) e
+# mai a un sottodominio (es. prenotazioni.esempio.it): il "www." di un
+# sottodominio non esiste nel DNS e farebbe fallire l'intera richiesta certbot.
+WWW_OK=false
 if [ "$INCLUDE_WWW" = "true" ] && [[ "$DOMAIN" != www.* ]]; then
-  SERVER_NAMES="$DOMAIN www.$DOMAIN"
+  dots="${DOMAIN//[^.]/}"
+  if [ "${#dots}" -eq 1 ]; then WWW_OK=true; fi
 fi
+SERVER_NAMES="$DOMAIN"
+if $WWW_OK; then SERVER_NAMES="$DOMAIN www.$DOMAIN"; fi
 
 SITE_AVAILABLE="/etc/nginx/sites-available/$DOMAIN.conf"
 SITE_ENABLED="/etc/nginx/sites-enabled/$DOMAIN.conf"
@@ -94,16 +100,28 @@ else
     log "ATTENZIONE: EMAIL non impostata → salto la richiesta SSL. Il sito resta in HTTP."
   else
     log "Richiedo il certificato SSL Let's Encrypt per '$SERVER_NAMES'…"
-    CERT_ARGS=(--nginx -d "$DOMAIN")
-    if [ "$SERVER_NAMES" != "$DOMAIN" ]; then CERT_ARGS+=(-d "www.$DOMAIN"); fi
     # --redirect: certbot aggiunge il blocco 443 e forza HTTPS.
-    # Se www non risolve nel DNS, la richiesta con www fallirebbe: in quel
-    # caso rilancia con INCLUDE_WWW=false.
-    if $SUDO certbot "${CERT_ARGS[@]}" --non-interactive --agree-tos -m "$EMAIL" --redirect; then
+    certbot_run(){
+      $SUDO certbot --nginx "$@" --non-interactive --agree-tos -m "$EMAIL" --redirect
+    }
+    ok=false
+    if $WWW_OK; then
+      if certbot_run -d "$DOMAIN" -d "www.$DOMAIN"; then
+        ok=true
+      else
+        # www potrebbe non risolvere nel DNS: ritenta col solo dominio,
+        # così un certificato valido viene comunque emesso.
+        log "certbot con www ha fallito → ritento senza www…"
+        certbot_run -d "$DOMAIN" && ok=true
+      fi
+    else
+      certbot_run -d "$DOMAIN" && ok=true
+    fi
+    if $ok; then
       $SUDO systemctl reload nginx
       log "SSL attivo."
     else
-      log "ATTENZIONE: certbot ha fallito (DNS non pronto o www assente?). Sito attivo in HTTP; riprova al prossimo deploy."
+      log "ATTENZIONE: certbot ha fallito. Verifica che '$DOMAIN' punti (record A) all'IP del VPS e che le porte 80/443 siano aperte, poi rilancia il deploy."
     fi
   fi
 fi
