@@ -103,6 +103,18 @@
   .pillar p{ font-size:15.5px; color:#d9c8a3; line-height:1.6; margin:0; }
 
   /* Cucina */
+  .feature-dish{ display:grid; grid-template-columns:1fr 1fr; gap:56px; align-items:center; margin-bottom:72px; }
+  .feature-photo{ aspect-ratio:4/5; border-radius:4px; overflow:hidden;
+                  box-shadow:0 24px 50px -28px rgba(42,33,24,.5); }
+  .feature-text .eyebrow{ color:#6E2A2A; }
+  .feature-text .feature-title{ font-family:'Playfair Display',Georgia,serif; font-weight:600;
+                                font-size:clamp(26px,3.4vw,36px); line-height:1.2; margin:14px 0 20px; }
+  .feature-text p{ font-size:18px; color:#5a4a34; margin:0 0 18px; }
+  .feature-text p:last-child{ margin-bottom:0; }
+  @media (max-width:820px){
+    .feature-dish{ grid-template-columns:1fr; gap:28px; margin-bottom:52px; }
+    .feature-photo{ order:-1; max-width:460px; width:100%; margin:0 auto; }
+  }
   .cucina-grid{ display:grid; grid-template-columns:repeat(auto-fit,minmax(300px,1fr)); gap:30px; }
   .dish{ background:#fff; border-radius:4px; overflow:hidden; border:1px solid rgba(42,33,24,.1);
          box-shadow:0 18px 40px -24px rgba(42,33,24,.35); }
@@ -328,6 +340,20 @@
       <div class="eyebrow">La nostra cucina</div>
       <h2 class="title" style="margin-bottom:18px">Piatti che altrove <em>non trovi più</em>.</h2>
       <p style="font-size:18px;color:#5a4a34;margin:0">La tradizione vera richiede tempo, e per questo molti l'hanno lasciata andare. Noi l'abbiamo tenuta viva, un piatto dopo l'altro.</p>
+    </div>
+    <div class="feature-dish">
+      <div class="feature-text">
+        <div class="eyebrow">Il più richiesto</div>
+        <h3 class="feature-title">L'antipasto misto piemontese</h3>
+        <p>È il piatto che apre quasi ogni tavolo, e quello che ci chiedono più di tutti. L'antipasto misto è la nostra dichiarazione d'intenti: la tradizione piemontese rispettata e portata avanti, un assaggio alla volta.</p>
+        <p>Vitello tonnato, carne cruda battuta al coltello, insalata russa, tomino con bagnetto verde, lingua in salsa. Ogni elemento curato nei minimi dettagli, per raccontare tutta la tradizione in un solo piatto.</p>
+      </div>
+      <div class="feature-photo">
+        <div class="photo">
+          <img src="assets/images/antipasto.jpg" alt="Antipasto misto piemontese" onerror="this.style.display='none'">
+          <div class="ph">Antipasto misto piemontese</div>
+        </div>
+      </div>
     </div>
     <div class="cucina-grid">
       <article class="dish">
