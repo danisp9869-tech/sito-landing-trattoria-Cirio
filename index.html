@@ -49,6 +49,9 @@
               text-align:center; padding:20px; color:#c9b48c; font-size:14px; letter-spacing:.04em;
               background:radial-gradient(ellipse at 50% 30%,rgba(201,161,90,.14),transparent 65%); }
   .photo img[src]:not([src=""]){ position:relative; z-index:1; }
+  /* Sugli sfondi full-bleed (hero e chiusura) non mostrare la didascalia
+     segnaposto ai visitatori: se la foto manca resta solo il fondo scuro. */
+  .hero .ph, .final .ph{ display:none; }
 
   /* Header */
   header{ position:sticky; top:0; z-index:20; background:rgba(247,243,236,.94);
@@ -70,7 +73,7 @@
   .hero .bg{ position:absolute; inset:0; z-index:0; }
   .hero .scrim{ position:absolute; inset:0; z-index:1; pointer-events:none;
                 background:linear-gradient(180deg,rgba(18,13,8,.30) 0%,rgba(18,13,8,.78) 100%); }
-  .hero .inner{ position:relative; z-index:2; width:100%; padding:130px 0 80px; }
+  .hero .inner{ position:relative; z-index:2; width:100%; padding:130px 28px 80px; }
   .hero h1{ font-family:'Playfair Display',Georgia,serif; font-style:italic; font-weight:600;
             font-size:clamp(40px,6.4vw,74px); line-height:1.1; margin:16px 0 20px;
             text-shadow:0 2px 20px rgba(0,0,0,.45); }
@@ -221,14 +224,25 @@
 
   @media (max-width:640px){
     body{ padding-bottom:76px; }
+    .wrap{ padding:0 22px; }
     .sticky-cta{ display:block; }
+    .nav{ height:64px; }
+    .brand{ font-size:18px; }
+    .brand small{ font-size:8.5px; letter-spacing:.2em; }
     .nav-txt{ display:none; }
     .info-grid{ grid-template-columns:1fr; }
     .pillars{ grid-template-columns:1fr; gap:34px; }
     .pillar+.pillar{ border-left:none; border-top:1px solid rgba(201,161,90,.25); padding-top:34px; }
-    .hero{ min-height:82vh; }
+    .hero{ min-height:78vh; }
+    .hero .inner{ padding:104px 22px 60px; }
+    .hero h1{ font-size:34px; line-height:1.14; }
+    .hero p.lead{ font-size:16.5px; }
+    .hero-cta{ gap:12px; }
+    .hero-cta .btn{ flex:1 1 100%; text-align:center; }
+    h2.title{ font-size:30px; }
     .row3{ grid-template-columns:1fr; }
-    section.pad{ padding:72px 0; }
+    section.pad{ padding:64px 0; }
+    footer .wrap{ flex-direction:column; align-items:flex-start; gap:14px; }
   }
 </style>
 </head>
