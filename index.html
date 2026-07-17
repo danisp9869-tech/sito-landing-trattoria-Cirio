@@ -186,6 +186,16 @@
   .info .big{ font-family:'Playfair Display',Georgia,serif; font-size:24px; color:#2A2118; }
   .info .big a{ text-decoration:none; color:#6E2A2A; }
   .info .big a:hover{ color:#4d1d1d; }
+  .hours-line{ display:flex; justify-content:space-between; align-items:baseline; gap:16px;
+               border-top:1px solid rgba(42,33,24,.12); padding-top:12px; margin-top:8px; }
+  .hours-line .days{ font-size:16px; color:#5a4a34; }
+  .hours-line .times{ font-size:16px; color:#2A2118; text-align:right; }
+  .hours-line .times .t{ white-space:nowrap; }
+  @media (max-width:640px){
+    .hours-line{ flex-direction:column; gap:6px; }
+    .hours-line .times{ display:flex; flex-direction:column; gap:4px; text-align:left; font-weight:600; }
+    .hours-line .times .sep{ display:none; }
+  }
   table.hours{ width:100%; border-collapse:collapse; margin-top:6px; }
   table.hours td{ padding:10px 0; border-bottom:1px solid rgba(42,33,24,.12); font-size:16px; color:#5a4a34; }
   table.hours tr:last-child td{ border-bottom:none; }
@@ -488,9 +498,10 @@
       <h3 class="sub">Telefono</h3>
       <div class="big"><a href="tel:+390112764475">011 276 4475</a></div>
       <h3 class="sub">Orari</h3>
-      <table class="hours">
-        <tr><td>Lunedì – Domenica</td><td class="val">12:30 – 15:00 &nbsp;·&nbsp; 19:30 – 22:30</td></tr>
-      </table>
+      <div class="hours-line">
+        <span class="days">Lunedì – Domenica</span>
+        <span class="times"><span class="t">12:30 – 15:00</span><span class="sep">&nbsp;·&nbsp;</span><span class="t">19:30 – 22:30</span></span>
+      </div>
     </div>
   </div>
 </section>
