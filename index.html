@@ -44,6 +44,7 @@
   /* Foto: <img> reale se presente in assets/images, altrimenti placeholder caldo */
   .photo{ position:relative; width:100%; height:100%; overflow:hidden;
           background:linear-gradient(135deg,#3a2a1c,#241B12); }
+  .photo picture{ display:block; width:100%; height:100%; }
   .photo img{ width:100%; height:100%; object-fit:cover; }
   .photo .ph{ position:absolute; inset:0; display:flex; align-items:center; justify-content:center;
               text-align:center; padding:20px; color:#c9b48c; font-size:14px; letter-spacing:.04em;
@@ -290,7 +291,10 @@
 <section class="hero">
   <div class="bg">
     <div class="photo">
-      <img src="assets/images/hero.jpg" alt="Sala dell'Antica Trattoria Cirio" onerror="this.style.display='none'">
+      <picture>
+        <source media="(max-width:640px)" srcset="assets/images/hero-mobile.jpg">
+        <img src="assets/images/hero.jpg" alt="Antipasto misto piemontese all'Antica Trattoria Cirio" onerror="this.style.display='none'">
+      </picture>
       <div class="ph">Foto sala elegante / tavolo apparecchiato, luce calda</div>
     </div>
   </div>
