@@ -10,6 +10,24 @@
 <meta property="og:type" content="website">
 <meta name="theme-color" content="#241B12">
 
+<!-- Meta Pixel Code -->
+<script>
+!function(f,b,e,v,n,t,s)
+{if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+n.queue=[];t=b.createElement(e);t.async=!0;
+t.src=v;s=b.getElementsByTagName(e)[0];
+s.parentNode.insertBefore(t,s)}(window, document,'script',
+'https://connect.facebook.net/en_US/fbevents.js');
+fbq('init', '1011565005220041');
+fbq('track', 'PageView');
+</script>
+<noscript><img height="1" width="1" style="display:none"
+src="https://www.facebook.com/tr?id=1011565005220041&ev=PageView&noscript=1"
+/></noscript>
+<!-- End Meta Pixel Code -->
+
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500;1,600&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Cinzel:wght@400;500;600&display=swap" rel="stylesheet">
@@ -757,6 +775,46 @@
   document.getElementById('menuPrev').addEventListener('click', function(){ scrollByCard(-1); });
   document.getElementById('menuNext').addEventListener('click', function(){ scrollByCard(1); });
   render();
+})();
+</script>
+
+<!-- Meta Pixel: eventi funnel prenotazione -->
+<script>
+(function(){
+  function fire(ev, data){ if(typeof window.fbq==='function'){ data?window.fbq('track',ev,data):window.fbq('track',ev); } }
+
+  // InitiateCheckout: prima interazione reale col modulo di prenotazione.
+  // Il form è un iframe cross-origin (Lasagna): non possiamo leggerne l'interno,
+  // ma quando l'utente clicca DENTRO l'iframe la finestra perde il focus e
+  // document.activeElement diventa l'iframe — segnale affidabile di "ha iniziato".
+  var started=false;
+  function initiate(){
+    if(started) return; started=true;
+    fire('InitiateCheckout');
+  }
+  var iframe=document.querySelector('.booking-embed iframe');
+  if(iframe){
+    window.addEventListener('blur', function(){
+      if(document.activeElement===iframe) initiate();
+    });
+  }
+
+  // Conversione (prenotazione completata): best-effort.
+  // Scatta SOLO se il widget Lasagna invia un messaggio di conferma alla pagina.
+  // Se Lasagna non lo invia, questo evento non parte: in quel caso la
+  // conversione va configurata dentro Lasagna con lo stesso Pixel ID.
+  var converted=false;
+  window.addEventListener('message', function(e){
+    if(!e || typeof e.origin!=='string' || e.origin.indexOf('lasagna.marketing')===-1) return;
+    var d=e.data;
+    var s=(typeof d==='string')?d:(function(){try{return JSON.stringify(d);}catch(_){return '';}})();
+    if(!s) return;
+    if(/success|confirm|complete|thank|prenotat|booked|reserv|schedul/i.test(s) && !converted){
+      converted=true;
+      fire('Schedule');   // prenotazione confermata
+      fire('Purchase', {value:0, currency:'EUR'});
+    }
+  });
 })();
 </script>
 
