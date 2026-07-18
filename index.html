@@ -12,7 +12,7 @@
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500;1,600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500;1,600&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Cinzel:wght@400;500;600&display=swap" rel="stylesheet">
 
 <style>
   /* ─────────────────────────────────────────────────────────────
@@ -153,7 +153,47 @@
   }
 
   /* Menu (banda scura con link al PDF) */
-  .menu-sec{ background:#241B12; }
+  /* Menu sfogliabile in orizzontale */
+  .menu-sec{ background:#241B12; overflow:hidden; }
+  .menu-head{ display:flex; justify-content:space-between; align-items:flex-end; gap:20px; }
+  .menu-title{ margin:12px 0 0; }
+  .lang-toggle{ display:inline-flex; border:1px solid rgba(201,161,90,.5); border-radius:999px; overflow:hidden; flex:0 0 auto; }
+  .lang-toggle button{ appearance:none; border:0; background:transparent; color:#e7d9ba; cursor:pointer;
+                       font:600 13px/1 -apple-system,sans-serif; letter-spacing:.08em; padding:9px 16px; transition:background .15s,color .15s; }
+  .lang-toggle button.active{ background:#C9A15A; color:#241B12; }
+  .menu-hint{ color:#b79f79; font-size:13px; letter-spacing:.06em; margin:14px 0 0; }
+  .menu-scroller{ position:relative; margin:20px 0 0; }
+  .menu-track{ display:flex; align-items:flex-start; gap:22px; overflow-x:auto; scroll-snap-type:x mandatory;
+               padding:6px max(28px,calc((100vw - 1160px)/2 + 28px)) 22px; -webkit-overflow-scrolling:touch;
+               scrollbar-width:none; }
+  .menu-track::-webkit-scrollbar{ display:none; }
+  .menu-card{ flex:0 0 350px; max-width:88vw; scroll-snap-align:start; background:#F7F1E4;
+              border:1px solid #e4d7bf; border-radius:10px; padding:30px 28px 26px;
+              box-shadow:0 24px 50px -30px rgba(0,0,0,.6); display:flex; flex-direction:column; }
+  .menu-card > h3{ font-family:'Cinzel',serif; font-weight:600; font-size:16px; letter-spacing:.12em;
+                   text-transform:uppercase; color:#6E2A2A; text-align:center; margin:0 0 4px; }
+  .menu-card .cat-price{ text-align:center; font-family:'Cormorant Garamond',serif; font-style:italic;
+                         color:#8a7550; font-size:15px; margin:0 0 16px; }
+  .menu-card .cat-rule{ width:34px; height:1px; background:#C9A15A; margin:0 auto 16px; }
+  .menu-dish{ padding:9px 0; border-bottom:1px solid rgba(42,33,24,.10); }
+  .menu-dish:last-child{ border-bottom:0; }
+  .menu-dish .row{ display:flex; justify-content:space-between; align-items:baseline; gap:12px; }
+  .menu-dish .n{ font-family:'Cormorant Garamond',serif; font-weight:600; font-size:19px; line-height:1.2; color:#2A2118; }
+  .menu-dish .p{ font-family:'Cormorant Garamond',serif; font-weight:600; font-size:18px; color:#6E2A2A; flex:0 0 auto; }
+  .menu-dish .d{ font-family:'Cormorant Garamond',serif; font-style:italic; font-size:15px; line-height:1.35; color:#6b5c45; margin-top:2px; }
+  .menu-arrow{ position:absolute; top:50%; transform:translateY(-50%); z-index:3; width:44px; height:44px;
+               border-radius:50%; border:1px solid rgba(201,161,90,.5); background:rgba(20,14,8,.72);
+               color:#F3E7CE; font-size:24px; line-height:1; cursor:pointer; backdrop-filter:blur(4px);
+               display:flex; align-items:center; justify-content:center; transition:background .15s; }
+  .menu-arrow:hover{ background:#6E2A2A; }
+  .menu-arrow.prev{ left:14px; } .menu-arrow.next{ right:14px; }
+  .menu-foot{ color:#b79f79; font-size:13px; margin:20px 0 0; }
+  @media (max-width:640px){
+    .menu-head{ align-items:center; }
+    .menu-arrow{ display:none; }
+    .menu-track{ padding:6px 22px 22px; gap:16px; }
+    .menu-card{ flex-basis:300px; }
+  }
 
   /* Esperienza (bordeaux) */
   .exp-sec{ background:#6E2A2A; color:#F3E7CE; }
@@ -454,12 +494,26 @@
 
 <!-- MENU -->
 <section id="menu" class="pad menu-sec">
-  <div class="wrap" style="text-align:center">
-    <div class="rule"></div>
-    <div class="eyebrow" style="color:#C9A15A">Il menu</div>
-    <h2 class="title" style="color:#F3E7CE;margin:14px 0 14px">Tutti i nostri piatti, in un unico posto.</h2>
-    <p style="color:#e7d9ba;max-width:600px;margin:0 auto 30px;font-size:18px">Antipasti, primi fatti a mano, secondi della tradizione e i grandi classici piemontesi. Sfoglia il menu completo, in italiano e in inglese.</p>
-    <a href="assets/menu-cirio.pdf" target="_blank" rel="noopener" class="btn btn-gold">Vedi il nostro menu</a>
+  <div class="wrap">
+    <div class="menu-head">
+      <div class="menu-head-txt">
+        <div class="eyebrow" style="color:#C9A15A">Il menu</div>
+        <h2 class="title menu-title" style="color:#F3E7CE">La nostra carta</h2>
+      </div>
+      <div class="lang-toggle" role="group" aria-label="Lingua del menu">
+        <button type="button" data-lang="it" class="active">IT</button>
+        <button type="button" data-lang="en">EN</button>
+      </div>
+    </div>
+    <p class="menu-hint" id="menuHint">Scorri per sfogliare la carta →</p>
+  </div>
+  <div class="menu-scroller">
+    <button class="menu-arrow prev" id="menuPrev" aria-label="Scorri indietro" type="button">‹</button>
+    <div class="menu-track" id="menuTrack"></div>
+    <button class="menu-arrow next" id="menuNext" aria-label="Scorri avanti" type="button">›</button>
+  </div>
+  <div class="wrap">
+    <p class="menu-foot" id="menuFoot">Coperto 3 € a persona · Comunica eventuali intolleranze al personale di sala.</p>
   </div>
 </section>
 
@@ -576,6 +630,111 @@
 <div class="sticky-cta">
   <a href="#prenota">Prenota un tavolo</a>
 </div>
+
+<script>
+(function(){
+  // Dati del menu (dal PDF ufficiale), bilingue IT/EN.
+  var UI = {
+    it:{ hint:"Scorri per sfogliare la carta →", foot:"Coperto 3 € a persona · Comunica eventuali intolleranze al personale di sala.", title:"La nostra carta" },
+    en:{ hint:"Scroll to browse the menu →", foot:"Cover charge €3 per person · Please inform the staff of any allergies.", title:"Our menu" }
+  };
+  var MENU = [
+    { cat:{it:"Da condividere nell'attesa",en:"To share while waiting"}, items:[
+      {n:{it:"Salame cotto fatto a mano, dalla Salumeria Almondo Barö",en:"Handmade cooked salami, from the Almondo Barö delicatessen"},p:"8"},
+      {n:{it:"La giardiniera",en:"La giardiniera: vegetables in sour tomato sauce"},p:"8"}
+    ]},
+    { cat:{it:"Per iniziare",en:"Starters"}, items:[
+      {n:{it:"Insalata Russa",en:"Russian salad"},d:{it:"Carote, piselli, patate, tonno e maionese fatta in casa",en:"Carrots, peas, potatoes, tuna and homemade mayonnaise"},p:"12"},
+      {n:{it:"Pomodori cuore di bue e datterini con mozzarella di bufala Moris",en:"Ox-heart & datterini tomatoes with Moris buffalo mozzarella"},p:"14"},
+      {n:{it:"Prosciutto Crudo “Il Nero Chiappella” di Cavour e melone bio",en:"Prosciutto Crudo “Il Nero Chiappella” by Cavour and organic melon"},p:"14"},
+      {n:{it:"Tonno di coniglio grigio, ravanello, cipolla e carote in agro",en:"Grey rabbit tuna, radish, onion and carrots in sour"},p:"16"},
+      {n:{it:"Carne cruda di Fassone con insalatina di pesche e sedano",en:"Raw Fassone meat with peach and celery salad"},p:"15"},
+      {n:{it:"Lumache alla parigina con crema di fave",en:"Parisian snails with broad bean cream"},p:"14"},
+      {n:{it:"Flan di zucchine, crema di zucchine e menta, zucchine fritte",en:"Zucchini flan, zucchini & mint cream, fried zucchini"},p:"12"},
+      {n:{it:"Insalatina tiepida di gamberi e calamari, olio e limone",en:"Warm shrimp & squid salad with oil and lemon"},p:"16"}
+    ]},
+    { cat:{it:"Antipasto misto",en:"Mixed appetizer (5 tastings)"}, items:[
+      {n:{it:"Antipasto misto piemontese",en:"Piedmontese mixed appetizer"},d:{it:"Insalata russa, flan di zucchine, tomino al bagnetto verde, vitello tonnato, la battuta al coltello",en:"Russian salad, zucchini flan, tomino cheese with green sauce, veal with tuna sauce, chopped with a knife"},p:"18"}
+    ]},
+    { cat:{it:"I nostri primi",en:"Pasta"}, items:[
+      {n:{it:"Cirio agnolotti fatti a mano al sugo d'arrosto",en:"Handmade Cirio agnolotti with roast sauce"},p:"16"},
+      {n:{it:"Tajarin tagliati al coltello al ragù",en:"Knife-cut tajarin with meat sauce"},p:"14"},
+      {n:{it:"Fusillone al pesto di limone e basilico",en:"Fusillone with lemon and basil pesto"},p:"12"},
+      {n:{it:"Gnocchi freschi di borragine e fonduta leggera di caprino",en:"Borage gnocchi with light goat cheese fondue"},p:"14"},
+      {n:{it:"Risotto al pomodoro arrosto, stracciatella di burrata Moris e scorza di limone",en:"Risotto with roasted tomato, Moris burrata stracciatella and lemon zest"},p:"15"},
+      {n:{it:"Spaghetti aglio, olio e peperoncino con bottarga di muggine",en:"Spaghetti with garlic, oil, chilli and mullet roe"},p:"16"}
+    ]},
+    { cat:{it:"I secondi piatti",en:"Second courses"}, items:[
+      {n:{it:"Rane fritte",en:"Fried frogs"},p:"18"},
+      {n:{it:"Il carpione: cotolettina, uovo e zucchine",en:"Carpione: cutlet, egg and zucchini"},p:"16"},
+      {n:{it:"Tagliata di sottofiletto di Fassone con salsa bernese e cipollotto",en:"Sliced Fassone sirloin with Béarnaise sauce and spring onion"},p:"20"},
+      {n:{it:"Quaglia al mattone con purè di piselli e cicorietta",en:"Brick quail with pea purée and chicory"},p:"16"},
+      {n:{it:"Cervella fritte e chips di fiori di zucca",en:"Fried brains and zucchini flower chips"},p:"18"},
+      {n:{it:"Guancia brasata su purè di patate",en:"Braised cheek on mashed potatoes"},p:"20"},
+      {n:{it:"Merluzzo e gazpacho",en:"Cod and gazpacho"},p:"18"}
+    ]},
+    { cat:{it:"Dall'orto",en:"Side dishes"}, price:{it:"6 cad.",en:"6 each"}, items:[
+      {n:{it:"Insalatina verde bio in idroponica",en:"Green salad from organic hydroponic farming"}},
+      {n:{it:"Patate arroste al rosmarino",en:"Roasted potatoes with rosemary"}},
+      {n:{it:"Purè di piselli",en:"Mashed peas"}},
+      {n:{it:"Verdura del giorno spadellata",en:"Sautéed vegetables of the day"}}
+    ]},
+    { cat:{it:"Formaggi",en:"Trio of cheeses"}, price:{it:"12",en:"12"}, items:[
+      {n:{it:"Tris di formaggi Az. Agricola Corbusier",en:"Trio of cheeses from Az. Agricola Corbusier"},d:{it:"Erborinato, capra stagionato e toma vaccina",en:"Blue cheese, aged goat, cow's Toma"}}
+    ]},
+    { cat:{it:"I vizi di Cirio",en:"Desserts"}, price:{it:"7",en:"7"}, items:[
+      {n:{it:"Île flottante con crema Chantilly",en:"Île flottante with Chantilly cream"}},
+      {n:{it:"Pesche ripiene alla langarola",en:"Stuffed peaches, Langhe style"}},
+      {n:{it:"Crostata alla marmellata di albicocche e rosmarino",en:"Apricot and rosemary jam tart"}},
+      {n:{it:"Tarte Tatin con gelato alla crema",en:"Tarte Tatin with cream ice cream"}},
+      {n:{it:"Coppa di fragole bio e panna",en:"Organic strawberry and cream cup"}},
+      {n:{it:"Gelato alla crema affogato al caffè",en:"Cream ice cream drowned in coffee"}},
+      {n:{it:"Il finale secondo Elisa: tisane botaniche infuse a freddo",en:"Elisa's finale: cold-infused botanical herbal teas"},p:"4"}
+    ]},
+    { cat:{it:"Il consiglio di Cirio",en:"Cirio's pairing"}, items:[
+      {n:{it:"Moscato d'Asti “Chiaro di luna”, Daffara & Grasso",en:"Moscato d'Asti “Chiaro di luna”, Daffara & Grasso"},p:"5"},
+      {n:{it:"Moscato passito, Sant'Anna dei Bricchetti",en:"Moscato passito, Sant'Anna dei Bricchetti"},p:"9"},
+      {n:{it:"Dus dus da uve dolcetto stramature, Cortino",en:"Dus dus from over-ripe dolcetto grapes, Cortino"},p:"8"},
+      {n:{it:"Barolo Chinato, Cascina Boschetti Gomba",en:"Barolo Chinato, Cascina Boschetti Gomba"},p:"9"}
+    ]}
+  ];
+  var lang="it";
+  var track=document.getElementById('menuTrack');
+  function esc(s){ return String(s).replace(/[&<>]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;'}[c];}); }
+  function render(){
+    track.innerHTML = MENU.map(function(c){
+      var head='<h3>'+esc(c.cat[lang])+'</h3>';
+      if(c.price) head+='<p class="cat-price">'+esc(c.price[lang])+' &euro;</p>';
+      head+='<div class="cat-rule"></div>';
+      var dishes=c.items.map(function(it){
+        var price = it.p ? '<span class="p">'+esc(it.p)+' &euro;</span>' : '';
+        var desc = it.d ? '<div class="d">'+esc(it.d[lang])+'</div>' : '';
+        return '<div class="menu-dish"><div class="row"><span class="n">'+esc(it.n[lang])+'</span>'+price+'</div>'+desc+'</div>';
+      }).join('');
+      return '<div class="menu-card">'+head+dishes+'</div>';
+    }).join('');
+  }
+  function setLang(l){
+    lang=l; render();
+    document.getElementById('menuHint').textContent=UI[l].hint;
+    document.getElementById('menuFoot').textContent=UI[l].foot;
+    var t=document.querySelector('.menu-title'); if(t) t.textContent=UI[l].title;
+    var btns=document.querySelectorAll('.lang-toggle button');
+    btns.forEach(function(b){ b.classList.toggle('active', b.getAttribute('data-lang')===l); });
+  }
+  document.querySelectorAll('.lang-toggle button').forEach(function(b){
+    b.addEventListener('click', function(){ setLang(b.getAttribute('data-lang')); });
+  });
+  function scrollByCard(dir){
+    var card=track.querySelector('.menu-card');
+    var step=card ? card.getBoundingClientRect().width+22 : 360;
+    track.scrollBy({left:dir*step, behavior:'smooth'});
+  }
+  document.getElementById('menuPrev').addEventListener('click', function(){ scrollByCard(-1); });
+  document.getElementById('menuNext').addEventListener('click', function(){ scrollByCard(1); });
+  render();
+})();
+</script>
 
 </body>
 </html>
