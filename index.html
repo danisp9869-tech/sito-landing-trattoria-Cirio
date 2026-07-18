@@ -315,7 +315,8 @@
   @media (max-width:640px){
     body{ padding-bottom:76px; }
     .wrap{ padding:0 22px; }
-    .sticky-cta{ display:block; }
+    .sticky-cta{ display:block; transform:translateY(130%); transition:transform .28s ease; will-change:transform; }
+    .sticky-cta.show{ transform:translateY(0); }
     .nav{ height:64px; }
     .brand{ font-size:18px; }
     .brand small{ font-size:8.5px; letter-spacing:.2em; }
@@ -638,6 +639,20 @@
 <div class="sticky-cta">
   <a href="#prenota">Prenota un tavolo</a>
 </div>
+<script>
+(function(){
+  var bar=document.querySelector('.sticky-cta');
+  if(!bar) return;
+  function update(){
+    // Compare quando si scorre oltre l'hero (mezza schermata): in cima resta pulito.
+    if(window.scrollY > window.innerHeight*0.55) bar.classList.add('show');
+    else bar.classList.remove('show');
+  }
+  window.addEventListener('scroll', update, {passive:true});
+  window.addEventListener('resize', update);
+  update();
+})();
+</script>
 
 <script>
 (function(){
