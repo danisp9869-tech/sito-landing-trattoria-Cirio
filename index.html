@@ -188,12 +188,17 @@
   .menu-arrow:hover{ background:#6E2A2A; }
   .menu-arrow.prev{ left:14px; } .menu-arrow.next{ right:14px; }
   .menu-foot{ color:#b79f79; font-size:13px; margin:20px 0 0; }
+  .menu-swipe{ display:flex; justify-content:center; margin-top:16px; }
+  .menu-swipe svg{ width:48px; height:12px; color:#C9A15A; animation:swipe-nudge 1.9s ease-in-out infinite; }
+  @keyframes swipe-nudge{ 0%,100%{ transform:translateX(-6px); opacity:.45 } 50%{ transform:translateX(6px); opacity:1 } }
+  @media (prefers-reduced-motion:reduce){ .menu-swipe svg{ animation:none; opacity:.8; } }
   @media (max-width:640px){
     .menu-head{ align-items:center; }
     .menu-arrow{ display:none; }
-    .menu-track{ padding:6px 22px 22px; gap:16px; }
-    .menu-card{ flex-basis:300px; }
+    .menu-track{ padding:6px 16px 22px; gap:16px; scroll-padding-left:16px; }
+    .menu-card{ flex-basis:calc(100vw - 32px); max-width:none; }
   }
+  @media (min-width:641px){ .menu-swipe{ display:none; } }
 
   /* Esperienza (bordeaux) */
   .exp-sec{ background:#6E2A2A; color:#F3E7CE; }
@@ -511,6 +516,9 @@
     <button class="menu-arrow prev" id="menuPrev" aria-label="Scorri indietro" type="button">‹</button>
     <div class="menu-track" id="menuTrack"></div>
     <button class="menu-arrow next" id="menuNext" aria-label="Scorri avanti" type="button">›</button>
+  </div>
+  <div class="menu-swipe" aria-hidden="true">
+    <svg viewBox="0 0 48 12" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="M2 6h42M38 2l6 4-6 4"/></svg>
   </div>
   <div class="wrap">
     <p class="menu-foot" id="menuFoot">Coperto 3 € a persona · Comunica eventuali intolleranze al personale di sala.</p>
