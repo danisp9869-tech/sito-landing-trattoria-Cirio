@@ -1678,6 +1678,19 @@ const CONFIG = {
   }
 
   /* ── Orario (con logica capienza) ── */
+  // Orario già trascorso? Vale SOLO per la data odierna: se il giorno scelto è
+  // oggi, gli slot precedenti all'ora attuale non sono selezionabili. Per i
+  // giorni futuri restituisce sempre false (tutti gli orari disponibili).
+  function isSlotPassato(date, slot){
+    if(!date) return false;
+    const now = new Date();
+    if(!isSameDay(date, now)) return false;
+    const parts = String(slot).split(':');
+    const slotMin = parseInt(parts[0],10)*60 + parseInt(parts[1],10);
+    const nowMin = now.getHours()*60 + now.getMinutes();
+    return slotMin < nowMin;
+  }
+
   function renderTimeGrid(){
     els.timeGrid.innerHTML = '';
     const dataKey = state.date ? keyData(state.date) : null;
@@ -1689,13 +1702,17 @@ const CONFIG = {
       btn.setAttribute('role', 'option');
 
       const disponibili = dataKey ? getDisponibilita(dataKey, slot) : P.capienzaCoperti;
-      const ok = disponibili >= persone;
+      const passato = isSlotPassato(state.date, slot);   // orario già trascorso (solo per oggi)
+      const ok = (disponibili >= persone) && !passato;
 
       let statoHtml = '';
-      if(disponibili <= 0){
+      if(passato){
+        // Orario già passato rispetto all'ora attuale → non selezionabile
+        statoHtml = '<span class="time-status full">Passato</span>';
+      } else if(disponibili <= 0){
         // Fascia completamente piena
         statoHtml = '<span class="time-status full">Completo</span>';
-      } else if(!ok){
+      } else if(disponibili < persone){
         // Ci sono posti ma non abbastanza per questa prenotazione
         statoHtml = '<span class="time-status full">Solo '+disponibili+' '+(disponibili===1?'posto':'posti')+'</span>';
       } else if(disponibili <= P.sogliaUltimiPosti){
@@ -1818,6 +1835,11 @@ const CONFIG = {
     if(els.btnConferma.disabled || state.sending) return;
 
     const dataKey = keyData(state.date);
+    // Orario nel frattempo trascorso (oggi)? Rimanda alla scelta orario.
+    if(isSlotPassato(state.date, state.time)){
+      alert('Questo orario è appena passato. Scegli un altro orario.');
+      goToStep(3); renderTimeGrid(); return;
+    }
     // Doppio controllo capienza al momento dell'invio (anti-race lato demo)
     if(!isFasciaDisponibile(dataKey, state.time, state.people)){
       alert('Spiacenti, questa fascia oraria si è appena riempita. Scegli un altro orario.');
