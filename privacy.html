@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Informativa sulla Privacy</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+
+<!-- ═══════════════════════════════════════════════════════════════════════
+     INFORMATIVA PRIVACY (GDPR - Reg. UE 2016/679)
+     ───────────────────────────────────────────────────────────────────────
+     Modifica solo il blocco DATI qui sotto per ogni cliente: deve combaciare
+     con i dati del ristorante inseriti nel CONFIG della landing (index.html).
+     ⚠️ Questo è un fac-simile: fallo verificare da un legale/DPO prima dell'uso
+        in produzione, e adatta finalità, destinatari e tempi di conservazione
+        alla situazione reale del ristorante.
+     ═══════════════════════════════════════════════════════════════════════ -->
+<script>
+const DATI = {
+  ristorante:  "Antica Trattoria Cirio",           // nome del titolare / ristorante (⚠️ aggiornare con l'esatta ragione sociale quando disponibile)
+  indirizzo:   "Corso Moncalieri 216/F, 10133 Torino",  // sede
+  email:       "info@trattoriacirio.it",            // email di contatto per la privacy
+  telefono:    "011 276 4475",                      // telefono
+  conservazioneMesi: 24,                            // mesi di conservazione dei dati
+  aggiornamento: "luglio 2026",                     // data ultimo aggiornamento
+};
+</script>
+
+<style>
+:root{
+  --cream:#faf8f4; --warm-white:#ffffff; --ink:#1a1612; --ink-light:#4a4540;
+  --gold:#b8933a; --gold-pale:#fdf6e3; --gray-200:#e8e4de; --gray-400:#a09890;
+  --radius-md:16px;
+  --font-display:'Playfair Display',Georgia,serif;
+  --font-body:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;
+}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+html{-webkit-text-size-adjust:100%;scroll-behavior:smooth}
+body{
+  font-family:var(--font-body);background:var(--cream);color:var(--ink);
+  line-height:1.65;font-size:15px;
+  padding-left:max(20px, env(safe-area-inset-left,0px));
+  padding-right:max(20px, env(safe-area-inset-right,0px));
+}
+.wrap{max-width:760px;margin:0 auto;padding:48px 0 64px}
+
+.back-link{
+  display:inline-flex;align-items:center;gap:6px;text-decoration:none;
+  color:var(--gold);font-size:13px;font-weight:600;margin-bottom:28px;
+  text-transform:uppercase;letter-spacing:.5px;
+}
+.back-link:hover{text-decoration:underline}
+.back-link svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round}
+
+.doc-eyebrow{font-size:10px;font-weight:600;letter-spacing:3px;text-transform:uppercase;color:var(--gold);margin-bottom:12px}
+h1{font-family:var(--font-display);font-size:clamp(26px,6vw,38px);font-weight:700;line-height:1.15;margin-bottom:10px}
+.doc-sub{color:var(--ink-light);font-size:14px;margin-bottom:8px}
+.doc-updated{color:var(--gray-400);font-size:13px;margin-bottom:36px}
+
+.card{
+  background:var(--warm-white);border:1px solid var(--gray-200);
+  border-radius:var(--radius-md);padding:clamp(22px,5vw,40px);
+  box-shadow:0 4px 20px rgba(26,22,18,.06);
+}
+h2{
+  font-family:var(--font-display);font-size:clamp(18px,4vw,22px);font-weight:600;
+  color:var(--ink);margin:32px 0 12px;padding-top:4px;
+}
+h2:first-of-type{margin-top:0}
+h2 .num{color:var(--gold);margin-right:8px}
+p{margin-bottom:12px;color:var(--ink-light)}
+ul{margin:0 0 12px 22px;color:var(--ink-light)}
+li{margin-bottom:7px}
+strong{color:var(--ink);font-weight:600}
+a{color:var(--gold)}
+.data-box{
+  background:var(--gold-pale);border:1px solid rgba(184,147,58,.25);
+  border-radius:10px;padding:16px 20px;margin:8px 0 4px;
+}
+.data-box p{margin-bottom:4px;color:var(--ink)}
+.data-box p:last-child{margin-bottom:0}
+.rights-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:10px;margin:8px 0 12px}
+.right-item{background:var(--cream);border:1px solid var(--gray-200);border-radius:10px;padding:12px 14px;font-size:14px}
+.right-item strong{display:block;color:var(--gold);font-size:13px;margin-bottom:2px}
+.foot-note{margin-top:32px;font-size:12px;color:var(--gray-400);text-align:center}
+.disclaimer{
+  margin-top:20px;padding:14px 18px;border-left:3px solid var(--gold);
+  background:var(--gold-pale);border-radius:0 8px 8px 0;font-size:13px;color:var(--ink-light);
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <a class="back-link" href="index.html">
+    <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>
+    Torna alla prenotazione
+  </a>
+
+  <div class="doc-eyebrow" id="restaurantEyebrow"></div>
+  <h1>Informativa sulla Privacy</h1>
+  <p class="doc-sub">Resa ai sensi degli artt. 13 e 14 del Regolamento (UE) 2016/679 (“GDPR”) e del D.lgs. 196/2003 e s.m.i.</p>
+  <p class="doc-updated" id="docUpdated"></p>
+
+  <div class="card">
+
+    <h2><span class="num">1.</span>Titolare del trattamento</h2>
+    <p>Il Titolare del trattamento dei dati personali è:</p>
+    <div class="data-box">
+      <p><strong id="tName"></strong></p>
+      <p id="tAddr"></p>
+      <p id="tEmailLine">Email: <a id="tEmail"></a></p>
+      <p id="tPhone"></p>
+    </div>
+
+    <h2><span class="num">2.</span>Dati personali trattati</h2>
+    <p>Attraverso il modulo di prenotazione online raccogliamo i seguenti dati, da te forniti volontariamente:</p>
+    <ul>
+      <li><strong>Dati di contatto:</strong> nome e cognome, numero di telefono, indirizzo email;</li>
+      <li><strong>Dati della prenotazione:</strong> data, orario e numero di persone;</li>
+      <li><strong>Eventuali richieste speciali</strong> da te indicate (es. allergie, esigenze particolari). Ti invitiamo a non inserire in questo campo dati non necessari.</li>
+    </ul>
+
+    <h2><span class="num">3.</span>Finalità e base giuridica</h2>
+    <p>I tuoi dati sono trattati per le seguenti finalità:</p>
+    <ul>
+      <li><strong>Gestione della prenotazione</strong> del tavolo e delle comunicazioni ad essa collegate (conferma, modifica, annullamento). Base giuridica: esecuzione di misure precontrattuali e del servizio da te richiesto — <em>art. 6, par. 1, lett. b) GDPR</em>;</li>
+      <li>Trattamento effettuato anche sulla base del <strong>consenso</strong> da te prestato spuntando l'apposita casella nel modulo — <em>art. 6, par. 1, lett. a) GDPR</em>;</li>
+      <li>Adempimento di eventuali <strong>obblighi di legge</strong> — <em>art. 6, par. 1, lett. c) GDPR</em>.</li>
+    </ul>
+
+    <h2><span class="num">4.</span>Modalità del trattamento</h2>
+    <p>I dati sono trattati con strumenti informatici e/o telematici, e in alcuni casi cartacei, con logiche strettamente correlate alle finalità indicate e mediante misure di sicurezza tecniche e organizzative adeguate a prevenire la perdita, l'uso illecito o non corretto e gli accessi non autorizzati.</p>
+
+    <h2><span class="num">5.</span>Destinatari dei dati</h2>
+    <p>I dati possono essere trattati da personale autorizzato del ristorante e da fornitori di servizi tecnologici che operano quali <strong>Responsabili del trattamento</strong> ai sensi dell'art. 28 GDPR (ad esempio fornitori di servizi cloud e di archiviazione dati, come Google, per la raccolta e la gestione delle prenotazioni). I tuoi dati <strong>non sono oggetto di diffusione</strong> e non vengono venduti o ceduti a terzi per finalità di marketing.</p>
+
+    <h2><span class="num">6.</span>Trasferimento dei dati extra-UE</h2>
+    <p>Alcuni fornitori di servizi (es. Google) potrebbero trattare i dati anche al di fuori dello Spazio Economico Europeo. Tali trasferimenti avvengono nel rispetto del Capo V del GDPR, sulla base di <strong>decisioni di adeguatezza</strong> della Commissione Europea o di adeguate garanzie quali le <strong>Clausole Contrattuali Standard</strong>.</p>
+
+    <h2><span class="num">7.</span>Periodo di conservazione</h2>
+    <p>I dati sono conservati per il tempo strettamente necessario a gestire la prenotazione e i conseguenti adempimenti, e comunque per un periodo non superiore a <strong id="tKeep"></strong> dalla raccolta, salvo diversi obblighi di legge o necessità di accertamento e difesa di un diritto.</p>
+
+    <h2><span class="num">8.</span>Conferimento dei dati</h2>
+    <p>Il conferimento dei dati contrassegnati come obbligatori nel modulo è necessario per dar seguito alla tua prenotazione: l'eventuale rifiuto comporta l'impossibilità di completare e gestire la prenotazione. Il conferimento delle “richieste speciali” è invece facoltativo.</p>
+
+    <h2><span class="num">9.</span>I tuoi diritti</h2>
+    <p>In qualità di interessato, puoi esercitare in qualsiasi momento i diritti previsti dagli artt. 15-22 del GDPR:</p>
+    <div class="rights-grid">
+      <div class="right-item"><strong>Accesso</strong>Sapere quali dati trattiamo</div>
+      <div class="right-item"><strong>Rettifica</strong>Correggere dati inesatti</div>
+      <div class="right-item"><strong>Cancellazione</strong>“Diritto all'oblio”</div>
+      <div class="right-item"><strong>Limitazione</strong>Limitare il trattamento</div>
+      <div class="right-item"><strong>Portabilità</strong>Ricevere i tuoi dati</div>
+      <div class="right-item"><strong>Opposizione</strong>Opporti al trattamento</div>
+      <div class="right-item"><strong>Revoca consenso</strong>In ogni momento, senza pregiudicare la liceità del trattamento pregresso</div>
+      <div class="right-item"><strong>Reclamo</strong>Al Garante Privacy</div>
+    </div>
+    <p>Per esercitare i tuoi diritti puoi <span id="contattoDiritti"></span>. Hai inoltre il diritto di proporre reclamo all'Autorità di controllo — il <strong>Garante per la protezione dei dati personali</strong> (<a href="https://www.garanteprivacy.it" target="_blank" rel="noopener">www.garanteprivacy.it</a>).</p>
+
+    <h2><span class="num">10.</span>Modifiche a questa informativa</h2>
+    <p>La presente informativa può essere aggiornata nel tempo. Ti invitiamo a consultarla periodicamente; la versione vigente è quella pubblicata su questa pagina.</p>
+
+    <div class="disclaimer">
+      <strong>Nota.</strong> Questo documento è un modello di base. Verifica che finalità, destinatari,
+      tempi di conservazione e riferimenti normativi corrispondano al trattamento effettivamente svolto
+      dal ristorante; in caso di dubbi rivolgiti a un professionista o a un DPO.
+    </div>
+
+  </div>
+
+  <p class="foot-note">Powered by <strong>Food Media Lab</strong></p>
+</div>
+
+<script>
+(function(){
+  const mesi = DATI.conservazioneMesi;
+  const keepTxt = (mesi % 12 === 0) ? (mesi/12) + (mesi===12?' anno':' anni') : mesi + ' mesi';
+  document.title = 'Informativa sulla Privacy · ' + DATI.ristorante;
+  document.getElementById('restaurantEyebrow').textContent = DATI.ristorante;
+  document.getElementById('docUpdated').textContent = 'Ultimo aggiornamento: ' + DATI.aggiornamento;
+  document.getElementById('tName').textContent = DATI.ristorante;
+  document.getElementById('tAddr').textContent = DATI.indirizzo;
+  document.getElementById('tPhone').textContent = 'Tel: ' + DATI.telefono;
+
+  // Gestione contatti: se l'email non è ancora disponibile, si usa il telefono.
+  const telLink = '<a href="tel:' + DATI.telefono.replace(/\s/g,'') + '">' + DATI.telefono + '</a>';
+  if(DATI.email){
+    const em1 = document.getElementById('tEmail');
+    em1.textContent = DATI.email; em1.href = 'mailto:' + DATI.email;
+    document.getElementById('contattoDiritti').innerHTML =
+      'scrivere a <a href="mailto:' + DATI.email + '">' + DATI.email + '</a> o contattare il Titolare al numero ' + telLink;
+  } else {
+    // Nessuna email: nascondo la riga email e rimando al telefono
+    document.getElementById('tEmailLine').style.display = 'none';
+    document.getElementById('contattoDiritti').innerHTML =
+      'contattare il Titolare ai recapiti sopra indicati, al numero ' + telLink;
+  }
+  document.getElementById('tKeep').textContent = keepTxt;
+})();
+</script>
+</body>
+</html>

@@ -30,7 +30,7 @@ src="https://www.facebook.com/tr?id=1011565005220041&ev=PageView&noscript=1"
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500;1,600&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Cinzel:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500;1,600&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Cinzel:wght@400;500;600&family=Inter:wght@300;400;500;600&family=League+Spartan:wght@700;800&display=swap" rel="stylesheet">
 
 <style>
   /* ─────────────────────────────────────────────────────────────
@@ -356,6 +356,275 @@ src="https://www.facebook.com/tr?id=1011565005220041&ev=PageView&noscript=1"
     section.pad{ padding:64px 0; }
     footer .wrap{ flex-direction:column; align-items:flex-start; gap:14px; }
   }
+
+  /* ═══ Widget di prenotazione (da Landig-Page-trattoria-Cirio) ═══ */
+:root{
+  /* Questi valori vengono sovrascritti da CONFIG.colori all'avvio (applicaColori) */
+  --cream:#faf8f4;
+  --warm-white:#ffffff;
+  --ink:#1a1612;
+  --ink-light:#4a4540;
+  --gold:#b8933a;
+  --gold-light:#e8d5a3;
+  --gold-pale:#fdf6e3;
+  --cta-bg:#b8933a;
+  --cta-text:#1a1612;
+  --gray-100:#f4f2ee;
+  --gray-200:#e8e4de;
+  --gray-300:#ccc8c0;
+  --gray-400:#a09890;
+  --gray-500:#706860;
+  --shadow-sm:0 1px 4px rgba(26,22,18,.06);
+  --shadow-md:0 4px 20px rgba(26,22,18,.10);
+  --shadow-lg:0 12px 48px rgba(26,22,18,.14);
+  --radius-sm:8px;
+  --radius-md:16px;
+  --radius-lg:24px;
+  --font-display:'Playfair Display',Georgia,serif;
+  --font-body:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;
+}
+
+.booking-card{
+  width:100%;background:var(--warm-white);border-radius:var(--radius-lg);
+  box-shadow:var(--shadow-lg);overflow:hidden;
+  border:1px solid rgba(184,147,58,.12);
+  scroll-margin-top:20px;
+}
+.booking-header{
+  display:flex;align-items:center;justify-content:center;position:relative;
+  padding:18px 20px;background:var(--warm-white);border-bottom:1px solid var(--gray-200);
+}
+.booking-back{
+  position:absolute;left:16px;top:50%;transform:translateY(-50%);
+  background:none;border:none;cursor:pointer;padding:6px;color:var(--gold);
+  display:flex;align-items:center;justify-content:center;border-radius:8px;transition:background .15s;
+}
+.booking-back:hover{background:var(--gold-pale)}
+.booking-back:focus-visible{outline:2px solid var(--gold);outline-offset:1px}
+.booking-back svg{width:20px;height:20px;stroke:var(--gold);fill:none;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round}
+.booking-back.hidden{visibility:hidden;pointer-events:none}
+.booking-header-inner{display:flex;flex-direction:column;align-items:center;gap:2px}
+.booking-brand{
+  font-family:'League Spartan',sans-serif;font-size:11px;font-weight:800;
+  letter-spacing:3px;text-transform:uppercase;color:var(--gold);line-height:1;
+}
+.booking-title{font-size:16px;font-weight:600;color:var(--ink);letter-spacing:.2px}
+.booking-progress{width:80px;height:3px;background:var(--gray-200);border-radius:999px;display:none;overflow:hidden}
+.booking-progress-fill{height:100%;background:var(--gold);border-radius:999px;width:0%;transition:width .3s ease}
+.booking-wizard.summary-mode .booking-header-inner{display:none}
+.booking-wizard.summary-mode .booking-progress{display:block}
+
+/* ── Wizard frame ── */
+.wizard-frame{background:var(--gray-100);padding:16px;min-height:460px;display:flex;flex-direction:column}
+.wizard-toolbar{margin-bottom:14px;min-height:72px;flex-shrink:0}
+.wizard-content{flex:1;min-height:340px;display:flex;flex-direction:column}
+.wizard-content .step-panel.active{animation:fadeIn .22s ease;width:100%}
+.booking-wizard.success-mode .wizard-toolbar{display:none;margin:0;min-height:0}
+.booking-wizard.success-mode .wizard-content{min-height:0;justify-content:flex-start}
+@keyframes fadeIn{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}
+
+/* ── Step tabs ── */
+.step-tabs{display:flex;gap:8px}
+.step-tab{
+  flex:1;background:var(--warm-white);border-radius:var(--radius-sm);padding:12px 8px;
+  text-align:center;border:1px solid transparent;transition:border-color .2s,box-shadow .2s;
+  cursor:default;min-width:0;
+}
+.step-tab.active{border-color:var(--gold-light);box-shadow:0 0 0 2px rgba(184,147,58,.08), var(--shadow-sm)}
+.step-tab.done{cursor:pointer}
+.step-tab.done:hover{border-color:var(--gray-300)}
+.step-tab-icon{display:flex;justify-content:center;margin-bottom:5px;color:var(--gray-400)}
+.step-tab.active .step-tab-icon,.step-tab.done .step-tab-icon{color:var(--gold)}
+.step-tab-label{font-size:10px;color:var(--gray-400);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;letter-spacing:.3px;text-transform:uppercase;font-weight:500}
+.step-tab.active .step-tab-label,.step-tab.done .step-tab-label{color:var(--ink-light);font-weight:600}
+.step-tab-value{font-size:12px;color:var(--ink);font-weight:600;margin-top:2px}
+
+/* ── Summary bar ── */
+.summary-bar{display:none;background:var(--warm-white);border-radius:var(--radius-sm);box-shadow:var(--shadow-sm);overflow:hidden;border:1px solid var(--gray-200)}
+.summary-bar.visible{display:flex}
+.summary-item{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:14px 8px;gap:5px;position:relative}
+.summary-item:not(:last-child)::after{content:'';position:absolute;right:0;top:20%;height:60%;width:1px;background:var(--gray-200)}
+.summary-item svg{width:18px;height:18px;stroke:var(--gold);fill:none;stroke-width:1.8}
+.summary-item span{font-size:12px;font-weight:600;color:var(--ink)}
+.summary-item.pending svg{stroke:var(--gray-300)}
+.summary-item.pending span{color:var(--gray-400)}
+
+/* ── Cards ── */
+.wizard-card{background:var(--warm-white);border-radius:var(--radius-md);padding:20px;box-shadow:var(--shadow-sm);border:1px solid var(--gray-200)}
+
+/* ── Calendar ── */
+.cal-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px}
+.cal-month{font-family:var(--font-display);font-size:17px;font-weight:600;color:var(--ink)}
+.cal-nav{display:flex;gap:8px}
+.cal-nav button{background:var(--gray-100);border:1px solid var(--gray-200);cursor:pointer;padding:6px;color:var(--gold);display:flex;align-items:center;border-radius:8px;transition:background .15s}
+.cal-nav button:hover:not(:disabled){background:var(--gold-pale)}
+.cal-nav button:disabled{opacity:.35;cursor:not-allowed}
+.cal-nav button:focus-visible{outline:2px solid var(--gold);outline-offset:1px}
+.cal-nav svg{width:16px;height:16px;stroke:var(--gold);fill:none;stroke-width:2.5;stroke-linecap:round}
+.cal-weekdays{display:grid;grid-template-columns:repeat(7,1fr);text-align:center;margin-bottom:10px}
+.cal-weekdays span{font-size:10px;font-weight:700;color:var(--gray-400);letter-spacing:1px;text-transform:uppercase}
+.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:3px;text-align:center}
+.cal-day{
+  aspect-ratio:1;display:flex;align-items:center;justify-content:center;font-size:14px;
+  border-radius:8px;cursor:pointer;border:none;background:none;font-family:var(--font-body);
+  color:var(--ink);transition:background .12s,color .12s;font-weight:400;
+}
+.cal-day:hover:not(.disabled):not(.empty){background:var(--gold-pale);color:var(--gold)}
+.cal-day:focus-visible{outline:2px solid var(--gold);outline-offset:1px}
+.cal-day.disabled{color:var(--gray-300);cursor:not-allowed}
+.cal-day.closed{color:var(--gray-300);cursor:not-allowed;text-decoration:line-through;text-decoration-color:var(--gray-300)}
+.cal-day.empty{cursor:default}
+.cal-day.selected{background:var(--gold);color:var(--warm-white);font-weight:600}
+.cal-day.today:not(.selected){font-weight:700;color:var(--gold);background:var(--gold-pale)}
+
+/* ── People grid ── */
+.people-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-bottom:20px}
+.people-btn{
+  padding:12px 6px;border:1px solid var(--gray-200);border-radius:var(--radius-sm);
+  background:var(--warm-white);color:var(--ink);font-size:15px;font-weight:500;cursor:pointer;
+  font-family:var(--font-body);transition:all .15s;
+}
+.people-btn:hover{border-color:var(--gold);color:var(--gold);background:var(--gold-pale)}
+.people-btn:focus-visible{outline:2px solid var(--gold);outline-offset:1px}
+.people-btn.selected{background:var(--gold);color:var(--warm-white);border-color:var(--gold);font-weight:600}
+.people-custom label{display:block;font-size:13px;font-weight:600;margin-bottom:8px;color:var(--ink-light);text-transform:uppercase;letter-spacing:.5px}
+.people-custom-row{display:flex;gap:8px;align-items:stretch}
+.people-custom-row input{
+  flex:1;padding:12px 14px;border:1px solid var(--gray-200);border-radius:var(--radius-sm);
+  font-size:15px;font-family:var(--font-body);outline:none;background:var(--warm-white);color:var(--ink);transition:border-color .15s;
+}
+.people-custom-row input:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(184,147,58,.08)}
+.people-custom-row input::placeholder{color:var(--gray-400)}
+.people-submit{
+  width:44px;min-width:44px;border:1px solid var(--gold);border-radius:var(--radius-sm);
+  background:var(--gold-pale);color:var(--gold);cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0;transition:all .15s;
+}
+.people-submit:hover{background:var(--gold);color:var(--warm-white)}
+.people-submit:focus-visible{outline:2px solid var(--gold);outline-offset:1px}
+.people-submit svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:2.5;stroke-linecap:round}
+
+/* ── Time grid ── */
+.time-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.time-btn{
+  display:flex;flex-direction:column;align-items:center;gap:3px;
+  padding:12px 6px;border:1px solid var(--gray-200);border-radius:var(--radius-sm);
+  background:var(--warm-white);color:var(--ink);font-size:15px;font-weight:600;cursor:pointer;
+  font-family:var(--font-body);transition:all .15s;letter-spacing:.3px;
+}
+.time-btn:hover:not(.full){border-color:var(--gold);color:var(--gold);background:var(--gold-pale)}
+.time-btn:focus-visible{outline:2px solid var(--gold);outline-offset:1px}
+.time-btn.selected{background:var(--gold);color:var(--warm-white);border-color:var(--gold)}
+.time-btn.selected .time-status{color:rgba(255,255,255,.85)}
+/* Fascia piena / non sufficiente → grigia e NON cliccabile */
+.time-btn.full{
+  background:var(--gray-100);color:var(--gray-400);border-color:var(--gray-200);
+  cursor:not-allowed;opacity:.85;
+}
+.time-status{font-size:9.5px;font-weight:600;letter-spacing:.4px;text-transform:uppercase;line-height:1}
+.time-status.last{color:var(--gold)}
+.time-status.full{color:var(--gray-400)}
+
+/* ── Step 4 form ── */
+.summary-form{padding-top:4px}
+.form-field{margin-bottom:20px}
+.form-field label{display:block;font-size:11px;font-weight:700;color:var(--ink-light);margin-bottom:8px;text-transform:uppercase;letter-spacing:.8px}
+.form-field input,.form-field textarea{
+  width:100%;border:none;border-bottom:1.5px solid var(--gray-200);padding:8px 0;
+  font-size:16px;font-family:var(--font-body);outline:none;background:transparent;color:var(--ink);transition:border-color .15s;
+}
+.form-field input:focus,.form-field textarea:focus{border-bottom-color:var(--gold)}
+.form-field textarea{resize:none;min-height:56px}
+.field-error{display:block;font-size:11px;color:var(--rust,#c0392b);margin-top:6px;font-weight:500;min-height:0}
+
+/* ── Consenso privacy ── */
+.privacy-field{margin:4px 0 8px}
+.privacy-check{display:flex;align-items:flex-start;gap:10px;cursor:pointer;font-size:12.5px;line-height:1.5;color:var(--ink-light)}
+.privacy-check input[type="checkbox"]{
+  flex-shrink:0;appearance:none;-webkit-appearance:none;
+  width:20px;height:20px;margin-top:1px;border:1.5px solid var(--gray-300);border-radius:6px;
+  background:var(--warm-white);cursor:pointer;position:relative;transition:background .15s,border-color .15s;
+}
+.privacy-check input[type="checkbox"]:hover{border-color:var(--gold)}
+.privacy-check input[type="checkbox"]:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+.privacy-check input[type="checkbox"]:checked{background:var(--gold);border-color:var(--gold)}
+.privacy-check input[type="checkbox"]:checked::after{
+  content:'';position:absolute;left:6px;top:2px;width:5px;height:10px;
+  border:solid var(--warm-white);border-width:0 2px 2px 0;transform:rotate(45deg);
+}
+.privacy-text a{color:var(--gold);text-decoration:underline}
+.btn-conferma{
+  width:100%;padding:16px;border:none;border-radius:var(--radius-sm);
+  background:var(--gray-200);color:var(--gray-400);font-size:15px;font-weight:700;cursor:not-allowed;
+  font-family:var(--font-body);margin-top:12px;transition:background .25s,color .25s,transform .1s,box-shadow .2s;
+  letter-spacing:.5px;text-transform:uppercase;
+}
+.btn-conferma:disabled{background:var(--gray-200)!important;color:var(--gray-400)!important;cursor:not-allowed!important}
+.btn-conferma.ready:not(:disabled){background:var(--cta-bg);color:var(--cta-text);cursor:pointer;box-shadow:var(--shadow-md)}
+.btn-conferma.ready:not(:disabled):hover{filter:brightness(1.04);box-shadow:var(--shadow-lg)}
+.btn-conferma.ready:not(:disabled):active{transform:scale(.99)}
+.btn-conferma.sending{opacity:.7;cursor:wait!important}
+
+/* ── Success ── */
+.success-screen{text-align:center;padding:28px 20px 32px;background:var(--warm-white);border-radius:var(--radius-md);border:1px solid var(--gray-200);width:100%}
+.success-icon{
+  width:72px;height:72px;border-radius:50%;
+  background:linear-gradient(135deg,rgba(184,147,58,.12),rgba(184,147,58,.06));
+  border:1.5px solid rgba(184,147,58,.3);display:flex;align-items:center;justify-content:center;margin:0 auto 20px;
+}
+.success-icon svg{width:32px;height:32px;stroke:var(--gold);fill:none;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round}
+.success-screen h3{font-family:var(--font-display);font-size:22px;font-weight:700;margin-bottom:10px;color:var(--ink)}
+.success-screen p{font-size:14px;color:var(--ink-light);line-height:1.65;margin-bottom:6px}
+.success-details{margin-top:20px;padding:16px 18px;background:var(--gray-100);border-radius:var(--radius-sm);text-align:left;border:1px solid var(--gray-200)}
+.success-details p{font-size:13px;color:var(--ink);margin-bottom:6px;line-height:1.5}
+.success-details p:last-child{margin-bottom:0}
+.btn-new-booking{
+  margin-top:20px;padding:12px 24px;border:1.5px solid var(--gold);border-radius:var(--radius-sm);
+  background:transparent;color:var(--gold);font-size:13px;font-weight:600;cursor:pointer;
+  font-family:var(--font-body);letter-spacing:.5px;text-transform:uppercase;transition:all .15s;
+}
+.btn-new-booking:hover{background:var(--gold);color:var(--warm-white)}
+
+/* ── Step visibility ── */
+.step-panel{display:none}
+.step-panel.active{display:block}
+
+/* ── Trust footer ── */
+.trust-footer{margin-top:24px;display:flex;align-items:center;justify-content:center;gap:6px;font-size:11px;color:var(--gray-400);font-weight:500;text-align:center}
+.trust-footer svg{width:12px;height:12px;stroke:var(--gray-400);fill:none;stroke-width:2;flex-shrink:0}
+
+
+/* ── Widget prenotazione: responsive ── */
+@media (max-width:480px){
+  .booking-card{border-radius:var(--radius-md)}
+  .wizard-frame{padding:12px;min-height:430px}
+  .people-grid{grid-template-columns:repeat(4,1fr);gap:7px}
+  .people-btn{padding:10px 4px;font-size:14px}
+  .time-grid{gap:8px}
+  .time-btn{padding:11px 4px;font-size:14px}
+  .step-tab{padding:10px 6px}
+  .step-tab-label{font-size:9px}
+  .step-tab-value{font-size:11px}
+}
+@media (max-width:360px){
+  .wizard-frame{padding:10px;min-height:420px}
+  .wizard-card{padding:16px}
+  .people-grid{gap:6px}
+  .people-btn{padding:9px 3px;font-size:13px}
+  .time-grid{gap:6px}
+  .time-btn{padding:10px 3px;font-size:13px}
+  .time-status{font-size:9px}
+  .step-tab{padding:9px 4px}
+  .step-tab-label{font-size:8.5px}
+  .summary-item{padding:12px 4px}
+  .summary-item span{font-size:11px}
+  .success-screen{padding:24px 14px 26px}
+  .cal-day{font-size:13px}
+}
+@media (max-height:480px) and (orientation:landscape){
+  .wizard-frame{min-height:auto}
+  .wizard-content{min-height:auto}
+}
+
 </style>
 </head>
 <body id="top">
@@ -590,24 +859,169 @@ src="https://www.facebook.com/tr?id=1011565005220041&ev=PageView&noscript=1"
   <div class="wrap">
     <div class="rule"></div>
     <div class="eyebrow">Prenotazione</div>
-    <h2 class="title" style="font-size:clamp(28px,4vw,40px);margin:14px 0 20px">Prenota il tuo tavolo</h2>
-    <div class="booking-proof">
+    <div class="booking-proof" style="margin-top:14px">
       <div class="rating">★ 4,3 / 5 &nbsp;·&nbsp; oltre 600 recensioni</div>
       <p class="scarcity"><span class="dot"></span>Restano 3 tavoli per sabato sera</p>
     </div>
-    <div class="booking-embed">
-      <iframe
-        src="https://app.lasagna.marketing/v2/prenotazione/?key=6a54f6e64fd5bd46130c2400"
-        title="Prenotazione tavolo — Antica Trattoria Cirio"
-        width="100%"
-        height="600"
-        frameborder="0"
-        scrolling="no"
-        style="border:0;overflow:hidden;display:block;width:100%"
-        allow="clipboard-write"
-        loading="lazy"></iframe>
+    <div id="fmlHidden" style="display:none" aria-hidden="true">
+      <div id="logoWrap"></div><div id="brandEyebrow"></div>
+      <div id="heroHeadline"></div><div id="heroSubtitle"></div>
+      <div id="footerName"></div><div id="footerContact"></div>
+      <div id="footerHours"></div><div id="footerSocial"></div>
     </div>
-    <p class="reassure">✓&nbsp; Nessun pagamento anticipato · confermiamo noi per telefono</p>
+    <!-- ═══ Widget di prenotazione ═══ -->
+      <div class="booking-card" id="bookingCard">
+        <div class="booking-wizard" id="bookingWizard">
+    
+          <div class="booking-header">
+            <button type="button" class="booking-back" id="btnBack" aria-label="Torna al passaggio precedente">
+              <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>
+            </button>
+            <div class="booking-header-inner">
+              <span class="booking-brand" id="wizardBrand"></span>
+              <span class="booking-title" id="bookingTitle"></span>
+            </div>
+            <div class="booking-progress" id="bookingProgress">
+              <div class="booking-progress-fill" id="bookingProgressFill"></div>
+            </div>
+          </div>
+    
+          <div class="booking-body">
+            <div class="wizard-frame">
+    
+              <!-- Toolbar: tabs / summary -->
+              <div class="wizard-toolbar">
+                <div class="step-tabs" id="stepTabs" role="tablist" aria-label="Passaggi prenotazione">
+                  <div class="step-tab active" data-step="1" id="tabDate" role="tab" tabindex="0">
+                    <div class="step-tab-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></div>
+                    <div class="step-tab-label" id="tabDateLabel"></div>
+                    <div class="step-tab-value" id="tabDateValue" style="display:none"></div>
+                  </div>
+                  <div class="step-tab" data-step="2" id="tabPeople" role="tab" tabindex="0">
+                    <div class="step-tab-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></div>
+                    <div class="step-tab-label" id="tabPeopleLabel"></div>
+                    <div class="step-tab-value" id="tabPeopleValue" style="display:none"></div>
+                  </div>
+                  <div class="step-tab" data-step="3" id="tabTime" role="tab" tabindex="0">
+                    <div class="step-tab-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
+                    <div class="step-tab-label" id="tabTimeLabel"></div>
+                    <div class="step-tab-value" id="tabTimeValue" style="display:none"></div>
+                  </div>
+                </div>
+    
+                <div class="summary-bar" id="summaryBar">
+                  <div class="summary-item">
+                    <svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+                    <span id="summaryDate">—</span>
+                  </div>
+                  <div class="summary-item">
+                    <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                    <span id="summaryPeople">—</span>
+                  </div>
+                  <div class="summary-item" id="summaryTimeItem">
+                    <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                    <span id="summaryTime">Ora</span>
+                  </div>
+                </div>
+              </div>
+    
+              <!-- Steps -->
+              <div class="wizard-content">
+    
+                <!-- Step 1: Calendario -->
+                <div class="step-panel active" id="step1">
+                  <div class="wizard-card">
+                    <div class="cal-header">
+                      <div class="cal-month" id="calMonthLabel"></div>
+                      <div class="cal-nav">
+                        <button type="button" id="calPrev" aria-label="Mese precedente"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg></button>
+                        <button type="button" id="calNext" aria-label="Mese successivo"><svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg></button>
+                      </div>
+                    </div>
+                    <div class="cal-weekdays"><span>D</span><span>L</span><span>M</span><span>M</span><span>G</span><span>V</span><span>S</span></div>
+                    <div class="cal-grid" id="calGrid"></div>
+                  </div>
+                </div>
+    
+                <!-- Step 2: Persone -->
+                <div class="step-panel" id="step2">
+                  <div class="wizard-card">
+                    <div class="people-grid" id="peopleGrid"></div>
+                    <div class="people-custom">
+                      <label for="peopleCustom">Numero personalizzato</label>
+                      <div class="people-custom-row">
+                        <input type="number" id="peopleCustom" min="1" placeholder="Es. 12 persone" inputmode="numeric">
+                        <button type="button" class="people-submit" id="peopleSubmit" aria-label="Conferma numero persone">
+                          <svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg>
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+    
+                <!-- Step 3: Orario -->
+                <div class="step-panel" id="step3">
+                  <div class="wizard-card">
+                    <div class="time-grid" id="timeGrid" aria-live="polite"></div>
+                  </div>
+                </div>
+    
+                <!-- Step 4: Contatti -->
+                <div class="step-panel" id="step4">
+                  <div class="summary-form">
+                    <div class="form-field">
+                      <label for="inputNome" id="labelNome"></label>
+                      <input type="text" id="inputNome" autocomplete="name" placeholder="Mario Rossi" required>
+                    </div>
+                    <div class="form-field">
+                      <label for="inputTelefono" id="labelTelefono"></label>
+                      <input type="tel" id="inputTelefono" autocomplete="tel" placeholder="+39 000 000 0000" required>
+                      <span class="field-error" id="errTelefono"></span>
+                    </div>
+                    <div class="form-field">
+                      <label for="inputEmail" id="labelEmail"></label>
+                      <input type="email" id="inputEmail" autocomplete="email" placeholder="mario.rossi@email.it" required>
+                      <span class="field-error" id="errEmail"></span>
+                    </div>
+                    <div class="form-field">
+                      <label for="inputRichieste" id="labelRichieste"></label>
+                      <textarea id="inputRichieste" rows="2" placeholder="Allergie, seggiolone, tavolo esterno…"></textarea>
+                    </div>
+    
+                    <!-- Consenso privacy obbligatorio: sblocca il bottone quando spuntato -->
+                    <div class="privacy-field">
+                      <label class="privacy-check">
+                        <input type="checkbox" id="inputPrivacy" aria-required="true">
+                        <span class="privacy-text" id="privacyText"></span>
+                      </label>
+                    </div>
+    
+                    <button type="button" class="btn-conferma" id="btnConferma" disabled></button>
+                  </div>
+                </div>
+    
+                <!-- Step 5: Conferma -->
+                <div class="step-panel" id="step5">
+                  <div class="success-screen">
+                    <div class="success-icon"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>
+                    <h3 id="successTitolo"></h3>
+                    <p id="successMsg"></p>
+                    <div class="success-details" id="successDetails"></div>
+                    <button type="button" class="btn-new-booking" id="btnNewBooking">Nuova prenotazione</button>
+                  </div>
+                </div>
+    
+              </div><!-- wizard-content -->
+            </div><!-- wizard-frame -->
+          </div><!-- booking-body -->
+        </div><!-- booking-wizard -->
+      </div><!-- booking-card -->
+      <!-- Trust -->
+      <div class="trust-footer">
+        <svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+        Prenotazione sicura · Nessun pagamento anticipato
+      </div>
+    <p class="form-note" style="margin-top:16px">Preferisci prenotare a voce? Chiamaci al <a href="tel:+390112764475">011 276 4475</a>.</p>
     <p class="form-note" style="margin-top:8px">Problemi con il modulo? Chiamaci al <a href="tel:+390112764475">011 276 4475</a>.</p>
   </div>
 </section>
@@ -781,43 +1195,747 @@ src="https://www.facebook.com/tr?id=1011565005220041&ev=PageView&noscript=1"
 })();
 </script>
 
-<!-- Meta Pixel: eventi funnel prenotazione -->
+<!-- ═══ Widget prenotazione: configurazione + motore (da Landig-Page) ═══ -->
 <script>
-(function(){
-  function fire(ev, data){ if(typeof window.fbq==='function'){ data?window.fbq('track',ev,data):window.fbq('track',ev); } }
+/* ╔═══════════════════════════════════════════════════════════════════════╗
+   ║  ⚙️  BLOCCO DI CONFIGURAZIONE — l'UNICA parte da modificare per cliente ║
+   ╚═══════════════════════════════════════════════════════════════════════╝
+   Tutto il resto della pagina legge da qui: non toccare il codice sotto.   */
+const CONFIG = {
 
-  // InitiateCheckout: prima interazione reale col modulo di prenotazione.
-  // Il form è un iframe cross-origin (Lasagna): non possiamo leggerne l'interno,
-  // ma quando l'utente clicca DENTRO l'iframe la finestra perde il focus e
-  // document.activeElement diventa l'iframe — segnale affidabile di "ha iniziato".
-  var started=false;
-  function initiate(){
-    if(started) return; started=true;
-    fire('InitiateCheckout');
+  /* ─── 1. BRAND / IDENTITÀ ───────────────────────────────────────────── */
+  brand: {
+    nome:     "Antica Trattoria Cirio",  // nome del ristorante
+    tagline:  "Cucina piemontese · Torino",  // piccola scritta sopra il titolo
+    logo:     "",             // path immagine logo (mostrato senza riquadro); se "" usa le iniziali
+    iniziali: "AC",                   // fallback mostrato nel cerchio se manca il logo
+    // Logo TESTUALE (wordmark) senza riquadro: ha priorità su logo/iniziali. "" per non usarlo.
+    logoWordmark: '',
+  },
+
+  /* ─── 2. COLORI BRAND (default nero / bianco / oro Food Media Lab) ───── */
+  colori: {
+    oro:        "#b8933a",  // colore accento principale
+    oroChiaro:  "#e8d5a3",
+    oroPale:    "#fdf6e3",
+    nero:       "#1a1612",  // testo e sfondi scuri
+    inkLight:   "#4a4540",
+    crema:      "#faf8f4",  // sfondo pagina
+    bianco:     "#ffffff",
+    ctaBg:      "#b8933a",  // sfondo del bottone CTA (default oro)
+    ctaText:    "#1a1612",  // testo del bottone CTA (default nero)
+  },
+
+  /* ─── 3. HERO (headline + sottotitolo, unica sezione di testo) ───────── */
+  hero: {
+    // Usa <em> per evidenziare una parola in oro corsivo
+    headline:    "Vivi l'esperienza della<br><em>vera cucina piemontese</em> a Torino",
+    sottotitolo: "Piatti autentici della tradizione, preparati come una volta: da Cirio ritrovi sapori che altrove non troverai più. Prenota il tuo tavolo e lasciati sorprendere.",
+  },
+
+  /* ─── 4. CONTATTI / FOOTER ──────────────────────────────────────────── */
+  contatti: {
+    indirizzo: "Corso Moncalieri 216/F, 10133 Torino",
+    telefono:  "011 276 4475",
+    email:     "info@trattoriacirio.it",   // "" = non mostrata nel footer
+    linkMappe: "https://www.google.com/maps/search/?api=1&query=Corso+Moncalieri+216%2FF+10133+Torino",
+    social: {
+      instagram: "",   // metti l'URL per mostrare l'icona Instagram; "" = nascosta
+      facebook:  "",   // metti l'URL per mostrare l'icona Facebook; "" = nascosta
+    },
+    // Orari mostrati nel footer (testo libero, aggiungi/rimuovi righe a piacere)
+    orari: [
+      { giorno: "Lunedì – Domenica", orario: "12:30 – 14:30 · 19:30 – 22:30" },
+    ],
+  },
+
+  /* ─── 5. PRENOTAZIONI — LOGICA DISPONIBILITÀ ★ CUORE DEL TEMPLATE ★ ──── */
+  prenotazioni: {
+    capienzaCoperti: 60,   // ← coperti totali disponibili per OGNI fascia oraria
+
+    // Fasce orarie selezionabili dall'utente (pranzo 12:30–14:30, cena 19:30–22:30, ogni 15 min)
+    fasceOrarie: [
+      "12:30","12:45","13:00","13:15","13:30","13:45","14:00","14:15","14:30",
+      "19:30","19:45","20:00","20:15","20:30","20:45","21:00","21:15","21:30","21:45","22:00","22:15","22:30"
+    ],
+
+    // Giorni di chiusura settimanale (0=Domenica, 1=Lunedì … 6=Sabato)
+    giorniChiusura: [],   // aperto tutti i giorni
+
+    maxPersonePrenotazione: 50,  // limite persone per singola prenotazione
+    sogliaUltimiPosti:      8,   // sotto N coperti liberi mostra "Ultimi posti"
+    giorniPrenotabili:      60,  // finestra prenotabile in giorni a partire da oggi
+
+    // COPERTI GIÀ OCCUPATI: vuoto in produzione (i conteggi arrivano dallo Sheet / localStorage).
+    // Chiave = data "YYYY-MM-DD" → { "HH:MM": coperti_gia_prenotati }
+    occupatiDemo: {},
+    ancoraDemo: false,
+  },
+
+  /* ─── 6. INTEGRAZIONE GOOGLE SHEETS (una diversa per ogni ristorante) ── */
+  integrazione: {
+    // URL della Web App di Google Apps Script collegata allo Sheet del cliente.
+    // Ogni landing → uno Sheet diverso → basta incollare qui l'URL giusto.
+    // Lascialo "" per lavorare solo in locale (demo).
+    // 👉 Come crearlo: vedi il README (sezione "Collegare Google Sheets").
+    googleSheetsWebAppUrl: "https://script.google.com/macros/s/AKfycbzP7HAstenwOEODmJz8ifNz3CJFFhRdH8YMYp9DaipRJ9Nz1NslzSljF3SMJQfkyNYfhw/exec",
+
+    // Se true, all'apertura la pagina prova a leggere i coperti occupati reali
+    // dallo Sheet (richiede la Web App configurata per rispondere ai GET).
+    leggiOccupatiDaSheets: false,
+  },
+
+  /* ─── 7. TESTI FISSI (di norma non serve toccarli) ──────────────────── */
+  testi: {
+    formTitolo:     "Prenota il tuo tavolo",
+    stepData:       "Data",
+    stepPersone:    "Persone",
+    stepOrario:     "Orario",
+    labelNome:      "Nome e cognome",
+    labelTelefono:  "Numero di telefono",
+    labelEmail:     "Email",
+    labelRichieste: "Richieste speciali",
+    btnConferma:    "Conferma prenotazione",
+    successTitolo:  "Prenotazione confermata!",
+    successMsg:     "Grazie per aver scelto la nostra tavola. Ti aspettiamo!",
+  },
+
+  /* ─── 8. CONSENSO PRIVACY (checkbox obbligatoria prima di confermare) ─── */
+  privacy: {
+    // Testo mostrato accanto alla checkbox. La parola indicata in "linkTesto"
+    // diventa un link cliccabile verso "linkUrl" (se compilato).
+    testo:     "Ho letto e accetto l'informativa sulla privacy e acconsento al trattamento dei miei dati personali per la gestione della prenotazione.",
+    linkTesto: "informativa sulla privacy",   // parola da trasformare in link ("" per nessun link)
+    linkUrl:   "privacy.html",                 // URL dell'informativa completa (pagina inclusa nel template)
+  },
+
+  /* ─── 9. TRACKING (Meta Pixel) ──────────────────────────────────────── */
+  tracking: {
+    metaPixelId:       "1011565005220041",  // ID del Meta Pixel; "" = tracciamento disattivato
+    eventoConversione: "Lead",              // evento standard inviato a prenotazione confermata (es. "Lead" o "Schedule")
+  },
+};
+</script>
+
+<script>
+/* ╔═══════════════════════════════════════════════════════════════════════╗
+   ║  MOTORE DELLA LANDING — non serve modificarlo per customizzare.        ║
+   ║  Tutto legge da CONFIG. Le funzioni di disponibilità sono isolate e    ║
+   ║  documentate (getPostiOccupati / getDisponibilita / isFasciaDisponibile).║
+   ╚═══════════════════════════════════════════════════════════════════════╝ */
+(function(){
+  'use strict';
+
+  const C = CONFIG;
+  const P = C.prenotazioni;
+  const MONTHS_IT = ['gennaio','febbraio','marzo','aprile','maggio','giugno','luglio','agosto','settembre','ottobre','novembre','dicembre'];
+  const LS_KEY = 'fml_bookings_' + slug(C.brand.nome);  // chiave localStorage per-ristorante
+
+  /* Cache in memoria dei coperti occupati per data+ora.
+     Struttura: { "YYYY-MM-DD": { "HH:MM": copertiOccupati } }
+     Popolata da: (1) occupatiDemo di CONFIG, (2) localStorage, (3) [opzionale] Sheets. */
+  let occupatiCache = {};
+
+  const state = {
+    step: 1,
+    date: null,
+    people: null,
+    time: null,
+    calYear: new Date().getFullYear(),
+    calMonth: new Date().getMonth(),
+    sending: false,
+    fbCheckout: false,   // per non inviare InitiateCheckout più volte
+  };
+
+  // Invia un evento al Meta Pixel (se attivo). Isolato così è facile da estendere.
+  function trackFB(evento, parametri){
+    try { if(window.fbq) fbq('track', evento, parametri || {}); } catch(e){}
   }
-  var iframe=document.querySelector('.booking-embed iframe');
-  if(iframe){
-    window.addEventListener('blur', function(){
-      if(document.activeElement===iframe) initiate();
+
+  /* ─────────────────────────────────────────────────────────────────────
+     UTILITY DATE
+     ───────────────────────────────────────────────────────────────────── */
+  function startOfDay(d){ return new Date(d.getFullYear(), d.getMonth(), d.getDate()); }
+  function isSameDay(a,b){ return a.getFullYear()===b.getFullYear() && a.getMonth()===b.getMonth() && a.getDate()===b.getDate(); }
+  function addDays(d,n){ const x=new Date(d); x.setDate(x.getDate()+n); return x; }
+  function slug(s){ return String(s).toLowerCase().replace(/[^a-z0-9]+/g,'_').replace(/^_|_$/g,''); }
+
+  // Chiave canonica "YYYY-MM-DD" (usata come identificativo giorno ovunque)
+  function keyData(d){
+    const mm = String(d.getMonth()+1).padStart(2,'0');
+    const dd = String(d.getDate()).padStart(2,'0');
+    return d.getFullYear() + '-' + mm + '-' + dd;
+  }
+  function formatData(d){
+    const days = ['dom','lun','mar','mer','gio','ven','sab'];
+    const dd = String(d.getDate()).padStart(2,'0');
+    const mm = String(d.getMonth()+1).padStart(2,'0');
+    return days[d.getDay()] + ' ' + dd + '/' + mm;
+  }
+  // Giorno di chiusura settimanale?
+  function isGiornoChiuso(d){ return P.giorniChiusura.indexOf(d.getDay()) !== -1; }
+  // Data prenotabile? (non passata, non chiusa, entro la finestra)
+  function isDataValida(d){
+    const oggi = startOfDay(new Date());
+    const limite = addDays(oggi, P.giorniPrenotabili);
+    return d >= oggi && d <= limite && !isGiornoChiuso(d);
+  }
+
+  /* ═══════════════════════════════════════════════════════════════════════
+     🔑 LOGICA DISPONIBILITÀ — cuore del template (isolata e documentata)
+     ═══════════════════════════════════════════════════════════════════════
+     Sorgente dati coperti occupati, in ordine di priorità:
+       1. CONFIG.prenotazioni.occupatiDemo  → dati finti per la demo
+       2. localStorage                       → prenotazioni fatte dall'utente
+       3. [PRODUZIONE] Google Sheets / DB    → vedi caricaOccupatiDaSheets()
+
+     👉 QUANDO PASSERAI A SUPABASE/DB REALE:
+        sostituisci il contenuto di getPostiOccupati() con una query del tipo
+        SELECT COALESCE(SUM(coperti),0) FROM bookings WHERE data=? AND ora=?;
+        e mantieni identica la firma della funzione: tutto il resto continua
+        a funzionare senza modifiche.
+     ═══════════════════════════════════════════════════════════════════════ */
+
+  // Legge le prenotazioni salvate localmente (array di oggetti prenotazione).
+  function getPrenotazioniLocali(){
+    try { return JSON.parse(localStorage.getItem(LS_KEY)) || []; }
+    catch(e){ return []; }
+  }
+
+  // Ricostruisce occupatiCache unendo demo + localStorage (+ eventuale remoto già caricato).
+  function ricostruisciCache(remoto){
+    const cache = {};
+    // 1) Dati demo da CONFIG
+    Object.keys(P.occupatiDemo || {}).forEach(function(k){
+      const realKey = ancoraChiaveDemo(k);
+      cache[realKey] = Object.assign({}, cache[realKey], P.occupatiDemo[k]);
+    });
+    // 2) Prenotazioni salvate in localStorage
+    getPrenotazioniLocali().forEach(function(b){
+      if(!cache[b.data]) cache[b.data] = {};
+      cache[b.data][b.ora] = (cache[b.data][b.ora] || 0) + Number(b.persone || 0);
+    });
+    // 3) Dati remoti già scaricati (Sheets) — sommati sopra i precedenti
+    if(remoto){
+      Object.keys(remoto).forEach(function(data){
+        Object.keys(remoto[data]).forEach(function(ora){
+          if(!cache[data]) cache[data] = {};
+          cache[data][ora] = Math.max(cache[data][ora] || 0, Number(remoto[data][ora] || 0));
+        });
+      });
+    }
+    occupatiCache = cache;
+  }
+
+  // Converte una chiave demo tipo "GIORNO+1" in una data reale (oggi + N giorni).
+  function ancoraChiaveDemo(k){
+    if(P.ancoraDemo && /^GIORNO\+\d+$/.test(k)){
+      const n = parseInt(k.split('+')[1], 10);
+      return keyData(addDays(startOfDay(new Date()), n));
+    }
+    return k;
+  }
+
+  /**
+   * Coperti GIÀ OCCUPATI in una certa data + fascia oraria.
+   * @param {string} dataKey  "YYYY-MM-DD"
+   * @param {string} ora      "HH:MM"
+   * @returns {number} coperti già prenotati (0 se nessuno).
+   * ⬅️ IN PRODUZIONE: qui va la query allo Sheet/DB (vedi blocco sopra).
+   */
+  function getPostiOccupati(dataKey, ora){
+    return (occupatiCache[dataKey] && occupatiCache[dataKey][ora]) || 0;
+  }
+
+  /**
+   * Coperti ANCORA LIBERI in una data + fascia oraria.
+   * @returns {number} capienzaCoperti - occupati (min 0).
+   */
+  function getDisponibilita(dataKey, ora){
+    return Math.max(0, P.capienzaCoperti - getPostiOccupati(dataKey, ora));
+  }
+
+  /**
+   * La fascia può accogliere una prenotazione di `persone` coperti?
+   * Tiene conto sia della capienza sia delle persone della prenotazione in corso.
+   * @returns {boolean}
+   */
+  function isFasciaDisponibile(dataKey, ora, persone){
+    return getDisponibilita(dataKey, ora) >= persone;
+  }
+
+  /**
+   * Salva una nuova prenotazione: (1) in localStorage per coerenza demo,
+   * (2) sullo Google Sheet del cliente (se configurato).
+   * @returns {Promise} risolta a invio completato (o subito, in solo-locale).
+   */
+  function salvaPrenotazione(prenotazione){
+    // (1) Persistenza locale → aggiorna subito i conteggi/il grigetto
+    const arr = getPrenotazioniLocali();
+    arr.push(prenotazione);
+    try { localStorage.setItem(LS_KEY, JSON.stringify(arr)); } catch(e){}
+    ricostruisciCache();
+    // (2) Invio allo Sheet del ristorante (una Web App diversa per ogni cliente)
+    return inviaASheets(prenotazione);
+  }
+
+  /* ─────────────────────────────────────────────────────────────────────
+     GOOGLE SHEETS — invio prenotazione (POST) e lettura occupati (GET)
+     Ogni landing punta a uno Sheet diverso via CONFIG.integrazione.googleSheetsWebAppUrl.
+     Setup della Web App: vedi README.
+     ───────────────────────────────────────────────────────────────────── */
+  function inviaASheets(prenotazione){
+    const url = C.integrazione.googleSheetsWebAppUrl;
+    if(!url) return Promise.resolve({ ok:true, locale:true });  // solo-locale (demo)
+    // mode:'no-cors' + text/plain evita il preflight CORS con Apps Script.
+    // Non possiamo leggere la risposta, ma la riga viene scritta sullo Sheet.
+    return fetch(url, {
+      method: 'POST',
+      mode: 'no-cors',
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+      body: JSON.stringify(prenotazione),
+    }).then(function(){ return { ok:true }; })
+      .catch(function(err){ console.warn('Invio Sheets fallito:', err); return { ok:false }; });
+  }
+
+  // [OPZIONALE] Legge i coperti occupati reali dallo Sheet all'avvio.
+  // Richiede una Web App che risponda ai GET con JSON: { "YYYY-MM-DD": { "HH:MM": n } }
+  function caricaOccupatiDaSheets(){
+    const url = C.integrazione.googleSheetsWebAppUrl;
+    if(!url || !C.integrazione.leggiOccupatiDaSheets) return Promise.resolve(null);
+    return fetch(url + '?action=occupati')
+      .then(function(r){ return r.json(); })
+      .catch(function(){ return null; });  // fallback silenzioso su demo+localStorage
+  }
+
+  /* ═══════════════════════════════════════════════════════════════════════
+     RENDERING UI
+     ═══════════════════════════════════════════════════════════════════════ */
+  const wizard = document.getElementById('bookingWizard');
+  const els = {};
+  ['btnBack','stepTabs','summaryBar','summaryDate','summaryPeople','summaryTime','summaryTimeItem',
+   'tabDate','tabPeople','tabTime','tabDateLabel','tabDateValue','tabPeopleLabel','tabPeopleValue',
+   'tabTimeLabel','tabTimeValue','calMonthLabel','calGrid','calPrev','calNext','peopleGrid',
+   'peopleCustom','peopleSubmit','timeGrid','inputNome','inputTelefono','inputEmail','inputRichieste',
+   'inputPrivacy','btnConferma','btnNewBooking','successDetails','bookingProgressFill','errTelefono','errEmail']
+    .forEach(function(id){ els[id] = document.getElementById(id); });
+
+  // Applica CONFIG.colori alle variabili CSS
+  function applicaColori(){
+    const r = document.documentElement.style;
+    const c = C.colori;
+    r.setProperty('--gold', c.oro);
+    r.setProperty('--gold-light', c.oroChiaro);
+    r.setProperty('--gold-pale', c.oroPale);
+    r.setProperty('--ink', c.nero);
+    r.setProperty('--ink-light', c.inkLight);
+    r.setProperty('--cream', c.crema);
+    r.setProperty('--warm-white', c.bianco);
+    r.setProperty('--cta-bg', c.ctaBg);
+    r.setProperty('--cta-text', c.ctaText);
+  }
+
+  // Popola hero, testi form, footer da CONFIG
+  function popolaContenuti(){
+    // Logo
+    const logoWrap = document.getElementById('logoWrap');
+    if(C.brand.logoWordmark){
+      logoWrap.classList.add('is-wordmark');
+      logoWrap.innerHTML = C.brand.logoWordmark;
+    } else if(C.brand.logo){
+      logoWrap.classList.add('is-logo-img');
+      logoWrap.innerHTML = '<img src="'+C.brand.logo+'" alt="Logo '+esc(C.brand.nome)+'">';
+    } else {
+      logoWrap.innerHTML = '<span class="logo-initials">'+esc(C.brand.iniziali)+'</span>';
+    }
+    document.getElementById('brandEyebrow').textContent = C.brand.tagline;
+    document.getElementById('heroHeadline').innerHTML = C.hero.headline;      // <em> ammesso
+    document.getElementById('heroSubtitle').textContent = C.hero.sottotitolo;
+    document.getElementById('wizardBrand').textContent = C.brand.nome;
+    document.getElementById('bookingTitle').textContent = C.testi.formTitolo;
+
+    // Etichette step / form
+    els.tabDateLabel.textContent = C.testi.stepData;
+    els.tabPeopleLabel.textContent = C.testi.stepPersone;
+    els.tabTimeLabel.textContent = C.testi.stepOrario;
+    document.getElementById('labelNome').textContent = C.testi.labelNome;
+    document.getElementById('labelTelefono').textContent = C.testi.labelTelefono;
+    document.getElementById('labelEmail').textContent = C.testi.labelEmail;
+    document.getElementById('labelRichieste').innerHTML = C.testi.labelRichieste +
+      ' <span style="font-weight:400;color:var(--gray-400);font-style:italic">(facoltativo)</span>';
+    document.getElementById('privacyText').innerHTML = buildPrivacyText();
+    els.btnConferma.textContent = C.testi.btnConferma;
+    document.getElementById('successTitolo').textContent = C.testi.successTitolo;
+    document.getElementById('successMsg').textContent = C.testi.successMsg;
+    els.peopleCustom.max = P.maxPersonePrenotazione;
+
+    // Footer
+    document.getElementById('footerName').textContent = C.brand.nome;
+    const ct = C.contatti;
+    document.getElementById('footerContact').innerHTML =
+      '<a href="'+ct.linkMappe+'" target="_blank" rel="noopener">📍 '+esc(ct.indirizzo)+'</a>' +
+      '<a href="tel:'+ct.telefono.replace(/\s/g,'')+'">📞 '+esc(ct.telefono)+'</a>' +
+      (ct.email ? '<a href="mailto:'+ct.email+'">✉️ '+esc(ct.email)+'</a>' : '');
+    document.getElementById('footerHours').innerHTML = (ct.orari||[]).map(function(o){
+      return '<div class="footer-hours-row"><span>'+esc(o.giorno)+'</span><span>'+esc(o.orario)+'</span></div>';
+    }).join('');
+    const soc = ct.social || {};
+    let socHtml = '';
+    if(soc.instagram) socHtml += '<a href="'+soc.instagram+'" target="_blank" rel="noopener" aria-label="Instagram"><svg viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><line x1="17.5" y1="6.5" x2="17.5" y2="6.5"/></svg></a>';
+    if(soc.facebook)  socHtml += '<a href="'+soc.facebook+'" target="_blank" rel="noopener" aria-label="Facebook"><svg viewBox="0 0 24 24"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg></a>';
+    document.getElementById('footerSocial').innerHTML = socHtml;
+  }
+
+  function esc(s){ return String(s).replace(/[&<>"]/g, function(m){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[m]; }); }
+
+  // Costruisce il testo del consenso privacy, rendendo "linkTesto" un link se c'è "linkUrl".
+  function buildPrivacyText(){
+    const pv = C.privacy || {};
+    let txt = esc(pv.testo || '');
+    if(pv.linkTesto && pv.linkUrl){
+      const parola = esc(pv.linkTesto);
+      const link = '<a href="'+esc(pv.linkUrl)+'" target="_blank" rel="noopener">'+parola+'</a>';
+      txt = txt.replace(parola, link);
+    }
+    return txt;
+  }
+
+  /* ── Calendario ── */
+  function renderCalendar(){
+    const oggi = startOfDay(new Date());
+    els.calMonthLabel.textContent = MONTHS_IT[state.calMonth] + ' ' + state.calYear;
+
+    // Disabilita navigazione oltre i limiti prenotabili
+    const primoGiornoMese = new Date(state.calYear, state.calMonth, 1);
+    const ultimoGiornoMese = new Date(state.calYear, state.calMonth + 1, 0);
+    const limite = addDays(oggi, P.giorniPrenotabili);
+    els.calPrev.disabled = (primoGiornoMese <= oggi);
+    els.calNext.disabled = (ultimoGiornoMese >= limite);
+
+    const startOffset = primoGiornoMese.getDay();
+    const daysInMonth = ultimoGiornoMese.getDate();
+    els.calGrid.innerHTML = '';
+
+    for(let i = 0; i < startOffset; i++){
+      const empty = document.createElement('button');
+      empty.className = 'cal-day empty'; empty.disabled = true; empty.tabIndex = -1;
+      els.calGrid.appendChild(empty);
+    }
+    for(let day = 1; day <= daysInMonth; day++){
+      const date = new Date(state.calYear, state.calMonth, day);
+      const btn = document.createElement('button');
+      btn.className = 'cal-day'; btn.textContent = day; btn.type = 'button';
+
+      const passata = date < oggi;
+      const oltreLimite = date > limite;
+      const chiusa = isGiornoChiuso(date);
+
+      if(passata || oltreLimite){
+        btn.classList.add('disabled'); btn.disabled = true;
+      } else if(chiusa){
+        btn.classList.add('closed'); btn.disabled = true;
+        btn.setAttribute('aria-label', day + ' — giorno di chiusura');
+      } else {
+        if(isSameDay(date, oggi)) btn.classList.add('today');
+        if(state.date && isSameDay(date, state.date)) btn.classList.add('selected');
+        btn.setAttribute('aria-label', 'Seleziona ' + formatData(date));
+        btn.addEventListener('click', function(){
+          state.date = date;
+          renderCalendar();
+          renderTimeGrid();      // disponibilità dipende dalla data
+          updateTabs();
+          setTimeout(function(){ goToStep(2); }, 180);
+        });
+      }
+      els.calGrid.appendChild(btn);
+    }
+  }
+
+  /* ── Persone ── */
+  function renderPeopleGrid(){
+    els.peopleGrid.innerHTML = '';
+    for(let i = 1; i <= 10; i++){
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'people-btn' + (state.people === i ? ' selected' : '');
+      btn.textContent = i;
+      btn.setAttribute('aria-label', i + (i===1?' persona':' persone'));
+      btn.addEventListener('click', function(){ selezionaPersone(i); });
+      els.peopleGrid.appendChild(btn);
+    }
+  }
+  function selezionaPersone(n){
+    state.people = n;
+    els.peopleCustom.value = '';
+    renderPeopleGrid();
+    renderTimeGrid();   // 🔁 ricalcola disponibilità in base alle persone
+    updateTabs();
+    // Se l'orario scelto prima non regge più le nuove persone, azzeralo
+    if(state.time && state.date && !isFasciaDisponibile(keyData(state.date), state.time, state.people)){
+      state.time = null;
+    }
+    setTimeout(function(){ goToStep(3); }, 180);
+  }
+
+  /* ── Orario (con logica capienza) ── */
+  function renderTimeGrid(){
+    els.timeGrid.innerHTML = '';
+    const dataKey = state.date ? keyData(state.date) : null;
+    const persone = state.people || 1;
+
+    P.fasceOrarie.forEach(function(slot){
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.setAttribute('role', 'option');
+
+      const disponibili = dataKey ? getDisponibilita(dataKey, slot) : P.capienzaCoperti;
+      const ok = disponibili >= persone;
+
+      let statoHtml = '';
+      if(disponibili <= 0){
+        // Fascia completamente piena
+        statoHtml = '<span class="time-status full">Completo</span>';
+      } else if(!ok){
+        // Ci sono posti ma non abbastanza per questa prenotazione
+        statoHtml = '<span class="time-status full">Solo '+disponibili+' '+(disponibili===1?'posto':'posti')+'</span>';
+      } else if(disponibili <= P.sogliaUltimiPosti){
+        // Disponibile ma quasi pieno
+        statoHtml = '<span class="time-status last">Ultimi posti</span>';
+      } else {
+        statoHtml = '<span class="time-status" style="color:var(--gray-400)">Disponibile</span>';
+      }
+
+      btn.innerHTML = '<span>'+slot+'</span>' + statoHtml;
+      btn.className = 'time-btn' + (state.time === slot ? ' selected' : '');
+
+      if(!ok){
+        // 🔒 NON selezionabile → grigio, disabilitato
+        btn.classList.add('full');
+        btn.disabled = true;
+        btn.setAttribute('aria-disabled', 'true');
+        btn.setAttribute('aria-label', slot + ' non disponibile');
+      } else {
+        btn.setAttribute('aria-label', 'Seleziona ' + slot);
+        btn.addEventListener('click', function(){
+          state.time = slot;
+          renderTimeGrid();
+          updateTabs();
+          updateSummaries();
+          setTimeout(function(){ goToStep(4); }, 180);
+        });
+      }
+      els.timeGrid.appendChild(btn);
     });
   }
 
-  // Conversione (prenotazione completata): best-effort.
-  // Scatta SOLO se il widget Lasagna invia un messaggio di conferma alla pagina.
-  // Se Lasagna non lo invia, questo evento non parte: in quel caso la
-  // conversione va configurata dentro Lasagna con lo stesso Pixel ID.
-  var converted=false;
-  window.addEventListener('message', function(e){
-    if(!e || typeof e.origin!=='string' || e.origin.indexOf('lasagna.marketing')===-1) return;
-    var d=e.data;
-    var s=(typeof d==='string')?d:(function(){try{return JSON.stringify(d);}catch(_){return '';}})();
-    if(!s) return;
-    if(/success|confirm|complete|thank|prenotat|booked|reserv|schedul/i.test(s) && !converted){
-      converted=true;
-      fire('Schedule');   // prenotazione confermata
-      fire('Purchase', {value:0, currency:'EUR'});
+  /* ── Summary + tabs + navigazione (logica UI del wizard) ── */
+  function updateSummaries(){
+    els.summaryDate.textContent = state.date ? formatData(state.date) : '—';
+    els.summaryPeople.textContent = state.people ? state.people + ' pers.' : '—';
+    if(state.time){
+      els.summaryTime.textContent = state.time;
+      els.summaryTimeItem.classList.remove('pending');
+    } else {
+      els.summaryTime.textContent = 'Ora';
+      els.summaryTimeItem.classList.add('pending');
+    }
+  }
+  function updateToolbar(n){
+    const showTabs = n <= 2;
+    const showSummary = n === 3 || n === 4;
+    if(els.stepTabs) els.stepTabs.style.display = showTabs ? 'flex' : 'none';
+    els.summaryBar.classList.toggle('visible', showSummary);
+    wizard.classList.toggle('success-mode', n === 5);
+    if(els.bookingProgressFill){
+      els.bookingProgressFill.style.width = Math.round(((n-1)/4)*100) + '%';
+    }
+    if(showSummary) updateSummaries();
+  }
+  function updateTabs(){
+    const tabs = [els.tabDate, els.tabPeople, els.tabTime];
+    tabs.forEach(function(tab, idx){
+      const stepNum = idx + 1;
+      tab.classList.remove('active','done');
+      if(state.step === stepNum) tab.classList.add('active');
+      else if((stepNum===1&&state.date)||(stepNum===2&&state.people)||(stepNum===3&&state.time)){
+        tab.classList.add('done');
+      }
+    });
+    setTabValue(els.tabDateLabel, els.tabDateValue, state.date ? formatData(state.date) : null);
+    setTabValue(els.tabPeopleLabel, els.tabPeopleValue, state.people ? state.people + ' pers.' : null);
+    setTabValue(els.tabTimeLabel, els.tabTimeValue, state.time);
+  }
+  function setTabValue(labelEl, valueEl, value){
+    if(value){ labelEl.style.display='none'; valueEl.style.display='block'; valueEl.textContent=value; }
+    else { labelEl.style.display='block'; valueEl.style.display='none'; }
+  }
+  function goToStep(n){
+    state.step = n;
+    document.querySelectorAll('.step-panel').forEach(function(p){ p.classList.remove('active'); });
+    document.getElementById('step' + n).classList.add('active');
+    updateToolbar(n);
+    els.btnBack.classList.toggle('hidden', n === 1 || n === 5);
+    wizard.classList.toggle('summary-mode', n === 4);
+    updateTabs();
+    validateForm();
+    // Funnel: l'utente ha scelto data/persone/ora ed è arrivato ai contatti
+    if(n === 4 && !state.fbCheckout){
+      state.fbCheckout = true;
+      trackFB('InitiateCheckout', { content_name: C.brand.nome });
+    }
+  }
+
+  /* ── Validazione form contatti ── */
+  function validaTelefono(tel){
+    // Almeno 7 cifre; ammette +, spazi, trattini, parentesi
+    const cifre = tel.replace(/[^\d]/g,'');
+    return cifre.length >= 7;
+  }
+  function validaEmail(email){
+    // Formato base valido: qualcosa@qualcosa.dominio
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+  }
+  function validateForm(){
+    const nome = els.inputNome.value.trim();
+    const tel = els.inputTelefono.value.trim();
+    const email = els.inputEmail.value.trim();
+    const privacyOk = els.inputPrivacy.checked;          // ← consenso obbligatorio
+    const bookingComplete = !!(state.date && state.people && state.time);
+    const telOk = validaTelefono(tel);
+    const emailOk = validaEmail(email);
+    const formComplete = !!(nome && telOk && emailOk);
+    // messaggi d'errore (solo se l'utente ha già scritto qualcosa)
+    els.errTelefono.textContent = (tel && !telOk) ? 'Inserisci un numero di telefono valido' : '';
+    els.errEmail.textContent = (email && !emailOk) ? 'Inserisci un indirizzo email valido' : '';
+    // Il bottone si accende solo con prenotazione completa, contatti validi E privacy spuntata
+    const isReady = state.step === 4 && bookingComplete && formComplete && privacyOk && !state.sending;
+    els.btnConferma.classList.toggle('ready', isReady);
+    els.btnConferma.disabled = !isReady;
+  }
+
+  /* ── Conferma prenotazione ── */
+  function confirmBooking(){
+    if(els.btnConferma.disabled || state.sending) return;
+
+    const dataKey = keyData(state.date);
+    // Doppio controllo capienza al momento dell'invio (anti-race lato demo)
+    if(!isFasciaDisponibile(dataKey, state.time, state.people)){
+      alert('Spiacenti, questa fascia oraria si è appena riempita. Scegli un altro orario.');
+      goToStep(3); renderTimeGrid(); return;
+    }
+
+    const prenotazione = {
+      ristorante: C.brand.nome,
+      data:       dataKey,                 // "YYYY-MM-DD"
+      dataLabel:  formatData(state.date),
+      ora:        state.time,
+      persone:    state.people,
+      nome:       els.inputNome.value.trim(),
+      telefono:   els.inputTelefono.value.trim(),
+      email:      els.inputEmail.value.trim(),
+      richieste:  els.inputRichieste.value.trim(),
+      privacy:    els.inputPrivacy.checked ? 'Sì' : 'No',   // consenso registrato
+      creata:     new Date().toISOString(),
+    };
+
+    state.sending = true;
+    els.btnConferma.classList.add('sending');
+    els.btnConferma.textContent = 'Invio in corso…';
+
+    salvaPrenotazione(prenotazione).then(function(){
+      state.sending = false;
+      mostraSuccesso(prenotazione);
+    });
+  }
+  function mostraSuccesso(b){
+    els.successDetails.innerHTML =
+      '<p><strong>📅 Data:</strong> ' + esc(b.dataLabel) + '</p>' +
+      '<p><strong>👥 Persone:</strong> ' + esc(String(b.persone)) + '</p>' +
+      '<p><strong>🕐 Orario:</strong> ' + esc(b.ora) + '</p>' +
+      '<p><strong>👤 Nome:</strong> ' + esc(b.nome) + '</p>' +
+      '<p><strong>📞 Telefono:</strong> ' + esc(b.telefono) + '</p>' +
+      '<p><strong>✉️ Email:</strong> ' + esc(b.email) + '</p>' +
+      (b.richieste ? '<p><strong>📝 Richieste:</strong> ' + esc(b.richieste) + '</p>' : '');
+    // 🎯 CONVERSIONE: prenotazione confermata → evento al Meta Pixel
+    trackFB((C.tracking && C.tracking.eventoConversione) || 'Lead', {
+      content_name: C.brand.nome,
+      num_people: b.persone
+    });
+    goToStep(5);
+  }
+
+  /* ── Reset ── */
+  function resetBooking(){
+    state.step=1; state.date=null; state.people=null; state.time=null; state.sending=false;
+    state.fbCheckout=false;
+    state.calYear=new Date().getFullYear(); state.calMonth=new Date().getMonth();
+    els.inputNome.value=''; els.inputTelefono.value=''; els.inputEmail.value='';
+    els.inputRichieste.value=''; els.peopleCustom.value='';
+    els.inputPrivacy.checked=false;
+    els.errEmail.textContent=''; els.errTelefono.textContent='';
+    els.btnConferma.classList.remove('ready','sending');
+    els.btnConferma.textContent = C.testi.btnConferma;
+    renderCalendar(); renderPeopleGrid(); renderTimeGrid();
+    goToStep(1);
+    document.getElementById('prenota').scrollIntoView({behavior:'smooth', block:'start'});
+  }
+
+  /* ═══════════════════════════════════════════════════════════════════════
+     EVENT LISTENERS
+     ═══════════════════════════════════════════════════════════════════════ */
+  els.calPrev.addEventListener('click', function(){
+    if(els.calPrev.disabled) return;
+    state.calMonth--; if(state.calMonth<0){state.calMonth=11;state.calYear--;}
+    renderCalendar();
+  });
+  els.calNext.addEventListener('click', function(){
+    if(els.calNext.disabled) return;
+    state.calMonth++; if(state.calMonth>11){state.calMonth=0;state.calYear++;}
+    renderCalendar();
+  });
+  els.peopleSubmit.addEventListener('click', function(){
+    const val = parseInt(els.peopleCustom.value, 10);
+    if(val >= 1 && val <= P.maxPersonePrenotazione){
+      selezionaPersone(val);
+    } else {
+      els.peopleCustom.focus();
     }
   });
+  els.peopleCustom.addEventListener('keydown', function(e){
+    if(e.key === 'Enter'){ e.preventDefault(); els.peopleSubmit.click(); }
+  });
+  els.btnBack.addEventListener('click', function(){ if(state.step>1) goToStep(state.step-1); });
+  els.tabDate.addEventListener('click', function(){ if(state.date && state.step!==1) goToStep(1); });
+  els.tabPeople.addEventListener('click', function(){ if(state.people && state.step!==2) goToStep(2); });
+  els.tabTime.addEventListener('click', function(){ if(state.time && state.step!==3) goToStep(3); });
+  // Tab navigabili da tastiera
+  [els.tabDate, els.tabPeople, els.tabTime].forEach(function(t){
+    t.addEventListener('keydown', function(e){ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); t.click(); } });
+  });
+  els.inputNome.addEventListener('input', validateForm);
+  els.inputTelefono.addEventListener('input', validateForm);
+  els.inputEmail.addEventListener('input', validateForm);
+  els.inputPrivacy.addEventListener('change', validateForm);
+  els.btnConferma.addEventListener('click', confirmBooking);
+  els.btnNewBooking.addEventListener('click', resetBooking);
+
+  /* ═══════════════════════════════════════════════════════════════════════
+     AVVIO
+     ═══════════════════════════════════════════════════════════════════════ */
+  function init(){
+    applicaColori();
+    popolaContenuti();
+    ricostruisciCache();                 // demo + localStorage
+    renderCalendar();
+    renderPeopleGrid();
+    renderTimeGrid();
+    goToStep(1);
+    // [Opzionale] carica occupati reali dallo Sheet e ridisegna gli orari
+    caricaOccupatiDaSheets().then(function(remoto){
+      if(remoto){ ricostruisciCache(remoto); renderTimeGrid(); }
+    });
+  }
+  init();
 })();
 </script>
 
