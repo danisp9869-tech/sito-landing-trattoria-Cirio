@@ -1203,6 +1203,11 @@ src="https://www.facebook.com/tr?id=1011565005220041&ev=PageView&noscript=1"
    Tutto il resto della pagina legge da qui: non toccare il codice sotto.   */
 const CONFIG = {
 
+  /* ─── 0. PROVENIENZA (per A/B test tra le due landing) ──────────────── */
+  // Etichetta scritta nello Sheet per distinguere da quale landing arriva
+  // la prenotazione. L'ALTRA landing usa un valore diverso ("Landing B").
+  origine: "Landing A",
+
   /* ─── 1. BRAND / IDENTITÀ ───────────────────────────────────────────── */
   brand: {
     nome:     "Antica Trattoria Cirio",  // nome del ristorante
@@ -1857,6 +1862,8 @@ const CONFIG = {
       email:      els.inputEmail.value.trim(),
       richieste:  els.inputRichieste.value.trim(),
       privacy:    els.inputPrivacy.checked ? 'Sì' : 'No',   // consenso registrato
+      origine:    (C.origine || ''),                        // A/B: da quale landing arriva
+      sorgente:   (typeof location !== 'undefined' ? location.hostname : ''),  // dominio reale
       creata:     new Date().toISOString(),
     };
 
