@@ -1,5 +1,12 @@
 # Deploy su VPS (Nginx + SSL)
 
+> **⚠️ Sistema superato.** Il deploy in produzione ora si fa con `push deploy`
+> dal Mac (script in `Food Media Lab/.deploy/`), che pubblica a release
+> atomiche in `/var/www/<sito>/releases` con symlink `current` e attivazione
+> via systemd. Il workflow GitHub Actions descritto qui sotto è stato messo in
+> **avvio solo manuale** per non generare due deploy concorrenti su percorsi
+> diversi. Questa cartella resta come ripiego di emergenza e per riferimento.
+
 Questa cartella contiene tutto il necessario per pubblicare la landing su un
 tuo server (VPS con Debian/Ubuntu + Nginx). Il **primo deploy** configura da
 solo il virtual server Nginx e il certificato SSL Let's Encrypt; i deploy

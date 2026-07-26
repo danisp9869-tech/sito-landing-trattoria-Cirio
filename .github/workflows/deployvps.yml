@@ -1,12 +1,22 @@
 name: Deploy landing su VPS (Nginx + SSL via SSH)
 
-# Pubblica il sito su un VPS con Nginx via SSH+rsync ad ogni push su main.
+# Pubblica il sito su un VPS con Nginx via SSH+rsync.
 # Al PRIMO deploy crea anche il virtual server Nginx e il certificato SSL
 # (Let's Encrypt) in automatico, tramite deploy/provision-server.sh.
+#
+# ⚠️  AVVIO AUTOMATICO DISATTIVATO — il deploy in produzione ora passa da
+#     `push deploy` (script .deploy/push-deploy.sh sul Mac), che pubblica con
+#     un sistema a release atomiche in /var/www/<sito>/releases + symlink
+#     `current`. Questo workflow scrive invece direttamente in VPS_TARGET_DIR:
+#     lasciarlo partire ad ogni push su main significherebbe due deploy
+#     concorrenti su percorsi diversi.
+#     Resta avviabile a mano da Actions → Run workflow come ripiego di
+#     emergenza (es. Mac non disponibile). Per riattivarlo in automatico,
+#     rimetti il blocco `push:` qui sotto e allinea VPS_TARGET_DIR.
 on:
-  push:
-    branches: [main]
-  workflow_dispatch:   # avvio manuale dalla tab "Actions"
+  # push:
+  #   branches: [main]
+  workflow_dispatch:   # solo avvio manuale dalla tab "Actions"
 
 # Evita deploy sovrapposti sullo stesso server
 concurrency:
