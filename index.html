@@ -551,6 +551,10 @@ src="https://www.facebook.com/tr?id=1011565005220041&ev=PageView&noscript=1"
 
 /* ── Consenso privacy ── */
 .privacy-field{margin:4px 0 8px}
+/* Il secondo consenso è facoltativo: staccato e un filo più tenue, così non
+   si confonde con quello obbligatorio sopra. */
+.marketing-field{margin-top:12px;padding-top:12px;border-top:1px solid rgba(26,22,18,.10)}
+.marketing-field .privacy-check{opacity:.85}
 .privacy-check{display:flex;align-items:flex-start;gap:10px;cursor:pointer;font-size:12.5px;line-height:1.5;color:var(--ink-light)}
 .privacy-check input[type="checkbox"]{
   flex-shrink:0;appearance:none;-webkit-appearance:none;
@@ -645,7 +649,7 @@ src="https://www.facebook.com/tr?id=1011565005220041&ev=PageView&noscript=1"
 <header>
   <div class="wrap nav">
     <div class="brand">Antica Trattoria Cirio
-      <small>CORSO MONCALIERI 216 · 10133 TORINO</small>
+      <small>CORSO MONCALIERI 216/F · 10133 TORINO</small>
     </div>
     <nav class="links">
       <a href="#cucina" class="nav-txt">Cucina</a>
@@ -1020,6 +1024,14 @@ src="https://www.facebook.com/tr?id=1011565005220041&ev=PageView&noscript=1"
                         <span class="privacy-text" id="privacyText"></span>
                       </label>
                     </div>
+
+                    <!-- Consenso marketing FACOLTATIVO: non entra nella validazione -->
+                    <div class="privacy-field marketing-field" id="marketingField" style="display:none">
+                      <label class="privacy-check">
+                        <input type="checkbox" id="inputMarketing">
+                        <span class="privacy-text" id="marketingText"></span>
+                      </label>
+                    </div>
     
                     <button type="button" class="btn-conferma" id="btnConferma" disabled></button>
                   </div>
@@ -1055,7 +1067,7 @@ src="https://www.facebook.com/tr?id=1011565005220041&ev=PageView&noscript=1"
     <div class="info info-single">
       <div class="eyebrow">Dove siamo</div>
       <h2 class="title" style="margin:14px 0 24px">Torino: a due passi dal centro.</h2>
-      <div class="big">Corso Moncalieri 216<br>10133 Torino</div>
+      <div class="big">Corso Moncalieri 216/F<br>10133 Torino</div>
       <h3 class="sub">Telefono</h3>
       <div class="big"><a href="tel:+390112764475">011 276 4475</a></div>
       <h3 class="sub">Orari</h3>
@@ -1088,7 +1100,7 @@ src="https://www.facebook.com/tr?id=1011565005220041&ev=PageView&noscript=1"
   <div class="wrap">
     <div>
       <strong>Antica Trattoria Cirio</strong><br>
-      Corso Moncalieri 216, 10133 Torino &nbsp;·&nbsp; <a href="tel:+390112764475">011 276 4475</a>
+      Corso Moncalieri 216/F, 10133 Torino &nbsp;·&nbsp; <a href="tel:+390112764475">011 276 4475</a>
     </div>
     <div>Cucina piemontese classica, nella sua essenza.</div>
   </div>
@@ -1226,10 +1238,11 @@ src="https://www.facebook.com/tr?id=1011565005220041&ev=PageView&noscript=1"
    Tutto il resto della pagina legge da qui: non toccare il codice sotto.   */
 const CONFIG = {
 
-  /* ─── 0. PROVENIENZA (per A/B test tra le due landing) ──────────────── */
-  // Etichetta scritta nello Sheet per distinguere da quale landing arriva
-  // la prenotazione. L'ALTRA landing usa un valore diverso ("Landing B").
-  origine: "Landing A",
+  /* ─── 0. OFFERTA (colonna "Offerta" sullo Sheet e riga nella mail) ──── */
+  // Etichetta che dice al ristoratore da quale proposta arriva la prenotazione.
+  // Valori in uso: "Degustazione" (menu degustazione) e "Prenotazione normale"
+  // (prenotazione dal sito e dalla landing generica). Lo Sheet è lo stesso.
+  origine: "Prenotazione normale",
 
   /* ─── 1. BRAND / IDENTITÀ ───────────────────────────────────────────── */
   brand: {
@@ -1335,6 +1348,14 @@ const CONFIG = {
     testo:     "Ho letto e accetto l'informativa sulla privacy e acconsento al trattamento dei miei dati personali per la gestione della prenotazione.",
     linkTesto: "informativa sulla privacy",   // parola da trasformare in link ("" per nessun link)
     linkUrl:   "privacy.html",                 // URL dell'informativa completa (pagina inclusa nel template)
+
+    /* Secondo consenso, FACOLTATIVO: non blocca mai l'invio della prenotazione.
+       Serve per poter ricontattare il cliente con offerte e novità.
+       Metti attivo:false per non mostrarlo. */
+    marketing: {
+      attivo: true,
+      testo:  "Desidero ricevere offerte e novità dalla trattoria via email. Facoltativo, posso disiscrivermi quando voglio.",
+    },
   },
 
   /* ─── 9. TRACKING (Meta Pixel) ──────────────────────────────────────── */
@@ -1573,7 +1594,8 @@ const CONFIG = {
    'tabDate','tabPeople','tabTime','tabDateLabel','tabDateValue','tabPeopleLabel','tabPeopleValue',
    'tabTimeLabel','tabTimeValue','calMonthLabel','calGrid','calPrev','calNext','peopleGrid',
    'peopleCustom','peopleSubmit','timeGrid','inputNome','inputTelefono','inputEmail','inputRichieste',
-   'inputPrivacy','btnConferma','btnNewBooking','successDetails','bookingProgressFill','errTelefono','errEmail']
+   'inputPrivacy','inputMarketing','marketingField','marketingText',
+   'btnConferma','btnNewBooking','successDetails','bookingProgressFill','errTelefono','errEmail']
     .forEach(function(id){ els[id] = document.getElementById(id); });
 
   // Applica CONFIG.colori alle variabili CSS
@@ -1620,6 +1642,12 @@ const CONFIG = {
     document.getElementById('labelRichieste').innerHTML = C.testi.labelRichieste +
       ' <span style="font-weight:400;color:var(--gray-400);font-style:italic">(facoltativo)</span>';
     document.getElementById('privacyText').innerHTML = buildPrivacyText();
+    // Consenso marketing: compare solo se configurato
+    const mk = (C.privacy || {}).marketing;
+    if(mk && mk.attivo && mk.testo){
+      els.marketingText.textContent = mk.testo;
+      els.marketingField.style.display = '';
+    }
     els.btnConferma.textContent = C.testi.btnConferma;
     document.getElementById('successTitolo').textContent = C.testi.successTitolo;
     document.getElementById('successMsg').textContent = C.testi.successMsg;
@@ -1913,6 +1941,7 @@ const CONFIG = {
       email:      els.inputEmail.value.trim(),
       richieste:  els.inputRichieste.value.trim(),
       privacy:    els.inputPrivacy.checked ? 'Sì' : 'No',   // consenso registrato
+      marketing:  els.inputMarketing.checked ? 'Sì' : 'No',  // facoltativo, per le offerte
       origine:    (C.origine || ''),                        // A/B: da quale landing arriva
       sorgente:   (typeof location !== 'undefined' ? location.hostname : ''),  // dominio reale
       creata:     formatDataOraRoma(new Date()),   // gg/mm/aaaa hh:mm:ss, ora di Roma
@@ -1951,7 +1980,7 @@ const CONFIG = {
     state.calYear=adessoRoma().getFullYear(); state.calMonth=adessoRoma().getMonth();
     els.inputNome.value=''; els.inputTelefono.value=''; els.inputEmail.value='';
     els.inputRichieste.value=''; els.peopleCustom.value='';
-    els.inputPrivacy.checked=false;
+    els.inputPrivacy.checked=false; els.inputMarketing.checked=false;
     els.errEmail.textContent=''; els.errTelefono.textContent='';
     els.btnConferma.classList.remove('ready','sending');
     els.btnConferma.textContent = C.testi.btnConferma;
