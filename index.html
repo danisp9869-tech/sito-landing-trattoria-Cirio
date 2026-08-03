@@ -1369,8 +1369,8 @@ const CONFIG = {
     date: null,
     people: null,
     time: null,
-    calYear: new Date().getFullYear(),
-    calMonth: new Date().getMonth(),
+    calYear: adessoRoma().getFullYear(),
+    calMonth: adessoRoma().getMonth(),
     sending: false,
     fbCheckout: false,   // per non inviare InitiateCheckout più volte
   };
@@ -1398,13 +1398,41 @@ const CONFIG = {
     const days = ['dom','lun','mar','mer','gio','ven','sab'];
     const dd = String(d.getDate()).padStart(2,'0');
     const mm = String(d.getMonth()+1).padStart(2,'0');
-    return days[d.getDay()] + ' ' + dd + '/' + mm;
+    return days[d.getDay()] + ' ' + dd + '/' + mm + '/' + d.getFullYear();
+  }
+
+  /* ── Fuso orario del ristorante ──────────────────────────────────────────
+     "Oggi" e "adesso" sono sempre quelli di Roma, non quelli del visitatore:
+     chi prenota dall'estero deve vedere il calendario della trattoria. */
+  // NB: fuso scritto inline, non in una const — queste funzioni vengono usate
+  // anche in cima all'IIFE (inizializzazione di `state`), prima che una const
+  // dichiarata qui sia inizializzata.
+  function partiRoma(d){
+    const p = new Intl.DateTimeFormat('it-IT', {
+      timeZone: 'Europe/Rome', hourCycle: 'h23',
+      year:'numeric', month:'2-digit', day:'2-digit',
+      hour:'2-digit', minute:'2-digit', second:'2-digit'
+    }).formatToParts(d || new Date()).reduce(function(o,x){ o[x.type]=x.value; return o; }, {});
+    return { anno:+p.year, mese:+p.month, giorno:+p.day,
+             ore:+p.hour, minuti:+p.minute, secondi:+p.second };
+  }
+  // "Adesso" a Roma, come Date locale: stesso schema new Date(a,m,g,…) usato ovunque
+  function adessoRoma(){
+    const r = partiRoma();
+    return new Date(r.anno, r.mese-1, r.giorno, r.ore, r.minuti, r.secondi);
+  }
+  // Timbro all'italiana: "02/08/2026 14:24:23" (ora di Roma)
+  function formatDataOraRoma(d){
+    const r = partiRoma(d);
+    const due = function(n){ return String(n).padStart(2,'0'); };
+    return due(r.giorno) + '/' + due(r.mese) + '/' + r.anno + ' ' +
+           due(r.ore) + ':' + due(r.minuti) + ':' + due(r.secondi);
   }
   // Giorno di chiusura settimanale?
   function isGiornoChiuso(d){ return P.giorniChiusura.indexOf(d.getDay()) !== -1; }
   // Data prenotabile? (non passata, non chiusa, entro la finestra)
   function isDataValida(d){
-    const oggi = startOfDay(new Date());
+    const oggi = startOfDay(adessoRoma());
     const limite = addDays(oggi, P.giorniPrenotabili);
     return d >= oggi && d <= limite && !isGiornoChiuso(d);
   }
@@ -1459,7 +1487,7 @@ const CONFIG = {
   function ancoraChiaveDemo(k){
     if(P.ancoraDemo && /^GIORNO\+\d+$/.test(k)){
       const n = parseInt(k.split('+')[1], 10);
-      return keyData(addDays(startOfDay(new Date()), n));
+      return keyData(addDays(startOfDay(adessoRoma()), n));
     }
     return k;
   }
@@ -1630,7 +1658,7 @@ const CONFIG = {
 
   /* ── Calendario ── */
   function renderCalendar(){
-    const oggi = startOfDay(new Date());
+    const oggi = startOfDay(adessoRoma());
     els.calMonthLabel.textContent = MONTHS_IT[state.calMonth] + ' ' + state.calYear;
 
     // Disabilita navigazione oltre i limiti prenotabili
@@ -1711,7 +1739,7 @@ const CONFIG = {
   // giorni futuri restituisce sempre false (tutti gli orari disponibili).
   function isSlotPassato(date, slot){
     if(!date) return false;
-    const now = new Date();
+    const now = adessoRoma();
     if(!isSameDay(date, now)) return false;
     const parts = String(slot).split(':');
     const slotMin = parseInt(parts[0],10)*60 + parseInt(parts[1],10);
@@ -1887,7 +1915,7 @@ const CONFIG = {
       privacy:    els.inputPrivacy.checked ? 'Sì' : 'No',   // consenso registrato
       origine:    (C.origine || ''),                        // A/B: da quale landing arriva
       sorgente:   (typeof location !== 'undefined' ? location.hostname : ''),  // dominio reale
-      creata:     new Date().toISOString(),
+      creata:     formatDataOraRoma(new Date()),   // gg/mm/aaaa hh:mm:ss, ora di Roma
     };
 
     state.sending = true;
@@ -1920,7 +1948,7 @@ const CONFIG = {
   function resetBooking(){
     state.step=1; state.date=null; state.people=null; state.time=null; state.sending=false;
     state.fbCheckout=false;
-    state.calYear=new Date().getFullYear(); state.calMonth=new Date().getMonth();
+    state.calYear=adessoRoma().getFullYear(); state.calMonth=adessoRoma().getMonth();
     els.inputNome.value=''; els.inputTelefono.value=''; els.inputEmail.value='';
     els.inputRichieste.value=''; els.peopleCustom.value='';
     els.inputPrivacy.checked=false;
