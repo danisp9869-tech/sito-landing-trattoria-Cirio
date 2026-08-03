@@ -1072,8 +1072,12 @@ src="https://www.facebook.com/tr?id=1011565005220041&ev=PageView&noscript=1"
       <div class="big"><a href="tel:+390112764475">011 276 4475</a></div>
       <h3 class="sub">Orari</h3>
       <div class="hours-line">
-        <span class="days">Lunedì – Domenica</span>
-        <span class="times"><span class="t">12:30 – 15:00</span><span class="sep">&nbsp;·&nbsp;</span><span class="t">19:30 – 22:30</span></span>
+        <span class="days">Lunedì – Venerdì</span>
+        <span class="times"><span class="t">19:30 – 22:30</span></span>
+      </div>
+      <div class="hours-line">
+        <span class="days">Sabato e Domenica</span>
+        <span class="times"><span class="t">12:30 – 14:30</span><span class="sep">&nbsp;·&nbsp;</span><span class="t">19:30 – 22:30</span></span>
       </div>
     </div>
   </div>
@@ -1083,8 +1087,8 @@ src="https://www.facebook.com/tr?id=1011565005220041&ev=PageView&noscript=1"
 <section class="final">
   <div class="bg">
     <div class="photo">
-      <img src="assets/images/atmosfera.jpg" alt="Atmosfera serale da Cirio" onerror="this.style.display='none'">
-      <div class="ph">Foto atmosfera serale / dettaglio tavola con candela</div>
+      <img src="assets/images/atmosfera.jpg" alt="La sala dell'Antica Trattoria Cirio" onerror="this.style.display='none'">
+      <div class="ph">La sala della trattoria</div>
     </div>
   </div>
   <div class="scrim"></div>
@@ -1286,7 +1290,8 @@ const CONFIG = {
     },
     // Orari mostrati nel footer (testo libero, aggiungi/rimuovi righe a piacere)
     orari: [
-      { giorno: "Lunedì – Domenica", orario: "12:30 – 14:30 · 19:30 – 22:30" },
+      { giorno: "Lunedì – Venerdì",   orario: "19:30 – 22:30" },
+      { giorno: "Sabato e Domenica",  orario: "12:30 – 14:30 · 19:30 – 22:30" },
     ],
   },
 
@@ -1302,6 +1307,18 @@ const CONFIG = {
 
     // Giorni di chiusura settimanale (0=Domenica, 1=Lunedì … 6=Sabato)
     giorniChiusura: [],   // aperto tutti i giorni
+
+    /* Pranzo a servizio ridotto in certi mesi: il locale resta aperto 7 giorni
+       su 7, ma a pranzo solo nel fine settimana. La cena non è mai toccata.
+       Ad agosto 2026: pranzo solo sabato e domenica. Per togliere la regola
+       basta attivo:false (o svuotare `mesi` a settembre). */
+    pranzoRidotto: {
+      attivo: true,
+      mesi:   [7],        // 0=gennaio … 7=agosto
+      giorni: [6, 0],     // giorni in cui il pranzo RESTA attivo (6=sab, 0=dom)
+      fasce:  ["12:30","12:45","13:00","13:15","13:30","13:45","14:00","14:15","14:30"],
+      nota:   "Ad agosto il pranzo è servito solo sabato e domenica. La cena tutti i giorni.",
+    },
 
     maxPersonePrenotazione: 50,  // limite persone per singola prenotazione
     sogliaUltimiPosti:      8,   // sotto N coperti liberi mostra "Ultimi posti"
@@ -1765,6 +1782,15 @@ const CONFIG = {
   // Orario già trascorso? Vale SOLO per la data odierna: se il giorno scelto è
   // oggi, gli slot precedenti all'ora attuale non sono selezionabili. Per i
   // giorni futuri restituisce sempre false (tutti gli orari disponibili).
+  /* Pranzo non servito in questa data? Vale solo nei mesi indicati in
+     CONFIG.prenotazioni.pranzoRidotto e solo sulle fasce di pranzo. */
+  function isPranzoChiuso(date, slot){
+    const r = P.pranzoRidotto;
+    if(!r || !r.attivo || !date) return false;
+    if(r.mesi.indexOf(date.getMonth()) === -1) return false;   // mese non interessato
+    if(r.fasce.indexOf(slot) === -1) return false;             // è una fascia di cena
+    return r.giorni.indexOf(date.getDay()) === -1;             // giorno senza pranzo
+  }
   function isSlotPassato(date, slot){
     if(!date) return false;
     const now = adessoRoma();
@@ -1780,7 +1806,11 @@ const CONFIG = {
     const dataKey = state.date ? keyData(state.date) : null;
     const persone = state.people || 1;
 
+    let pranzoNascosto = false;
+
     P.fasceOrarie.forEach(function(slot){
+      // Fasce di pranzo non servite: fuori dalla griglia, non disabilitate
+      if(isPranzoChiuso(state.date, slot)){ pranzoNascosto = true; return; }
       const btn = document.createElement('button');
       btn.type = 'button';
       btn.setAttribute('role', 'option');
@@ -1920,6 +1950,10 @@ const CONFIG = {
 
     const dataKey = keyData(state.date);
     // Orario nel frattempo trascorso (oggi)? Rimanda alla scelta orario.
+    if(isPranzoChiuso(state.date, state.time)){
+      alert('A pranzo siamo aperti solo sabato e domenica. Scegli un altro orario.');
+      goToStep(3); renderTimeGrid(); return;
+    }
     if(isSlotPassato(state.date, state.time)){
       alert('Questo orario è appena passato. Scegli un altro orario.');
       goToStep(3); renderTimeGrid(); return;
