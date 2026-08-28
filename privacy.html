@@ -24,6 +24,10 @@
 <script>
 const DATI = {
   ristorante:  "Antica Trattoria Cirio",
+  // Soggetto giuridico che gestisce il ristorante: è LUI il Titolare del
+  // trattamento e compare nell'omonimo box. Il nome del ristorante resta
+  // usato per il titolo della pagina e i riferimenti nel testo.
+  titolare:    "Italian Foodish S.r.l.",
   indirizzo:   "Corso Moncalieri 216/F, 10133 Torino",
   email:       "info@trattoriacirio.it",          // email di contatto per la privacy
   telefono:    "011 276 4475",
@@ -100,6 +104,7 @@ a{color:var(--gold)}
 }
 .data-box p{margin-bottom:4px;color:var(--ink)}
 .data-box p:last-child{margin-bottom:0}
+.titolare-gestisce{font-style:italic;opacity:.85}
 .svc{
   background:var(--cream);border:1px solid var(--gray-200);border-radius:12px;
   padding:16px 18px;margin:12px 0;
@@ -135,6 +140,7 @@ a{color:var(--gold)}
     <p>Il Titolare del trattamento dei dati personali raccolti tramite questo sito è:</p>
     <div class="data-box">
       <p><strong id="tName"></strong></p>
+      <p id="tGestisce" class="titolare-gestisce"></p>
       <p id="tAddr"></p>
       <p id="tPivaLine">P.IVA: <span id="tPiva"></span></p>
       <p id="tEmailLine">Email: <a id="tEmail"></a></p>
@@ -328,7 +334,10 @@ a{color:var(--gold)}
   document.title = 'Informativa sulla Privacy · ' + DATI.ristorante;
   document.getElementById('restaurantEyebrow').textContent = DATI.ristorante;
   document.getElementById('docUpdated').textContent = 'Ultimo aggiornamento: ' + DATI.aggiornamento;
-  document.getElementById('tName').textContent = DATI.ristorante;
+  document.getElementById('tName').textContent = DATI.titolare || DATI.ristorante;
+  if(DATI.titolare && DATI.titolare !== DATI.ristorante){
+    document.getElementById('tGestisce').textContent = 'società che gestisce ' + DATI.ristorante;
+  } else { document.getElementById('tGestisce').remove(); }
   document.getElementById('tAddr').textContent = DATI.indirizzo;
   document.getElementById('tPhone').textContent = 'Tel: ' + DATI.telefono;
 
