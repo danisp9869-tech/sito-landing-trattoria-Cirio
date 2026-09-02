@@ -898,8 +898,18 @@ src="https://www.facebook.com/tr?id=1011565005220041&ev=PageView&noscript=1"
         src="https://api.test.dinevo.it/embed/r/est_b5111762-79f8-459d-b234-26b2d5cf6218"
         title="Prenota un tavolo"
         height="900"
-        style="width: 100%; border: 0"
+        style="width: 100%; border: 0; border-radius: 22px; overflow: hidden"
       ></iframe>
+      <script>
+        window.addEventListener('message', function (event) {
+          if (!event.data || event.data.type !== 'dinevo:booking-height') return;
+          var frame = document.getElementById('dinevo-booking');
+          if (!frame) return;
+          var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+          if (!reduce) frame.style.transition = 'height 0.2s ease';
+          frame.style.height = event.data.height + 'px';
+        });
+      </script>
       <!-- Trust -->
       <div class="trust-footer">
         <svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
