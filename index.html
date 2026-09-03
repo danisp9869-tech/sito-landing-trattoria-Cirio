@@ -112,9 +112,6 @@ src="https://www.facebook.com/tr?id=1011565005220041&ev=PageView&noscript=1"
   .hero p.lead{ font-size:clamp(17px,2.1vw,21px); max-width:600px; color:#EAE0C7; margin-bottom:34px; }
   .hero .eyebrow{ color:#C9A15A; }
   .hero-cta{ display:flex; gap:16px; flex-wrap:wrap; align-items:center; }
-  .hero-note{ display:inline-flex; align-items:center; gap:9px; margin:2px 0 22px; font-size:14px;
-              color:#F5E9E7; background:rgba(0,0,0,.32); border:1px solid rgba(214,52,42,.75);
-              border-radius:999px; padding:9px 18px; backdrop-filter:blur(4px); }
   .dot{ width:8px; height:8px; border-radius:50%; background:#e0342a; flex:0 0 auto;
         box-shadow:0 0 0 0 rgba(224,52,42,.6); animation:cirio-pulse 2s infinite; }
   @keyframes cirio-pulse{ 0%{box-shadow:0 0 0 0 rgba(224,52,42,.6)} 70%{box-shadow:0 0 0 8px rgba(224,52,42,0)} 100%{box-shadow:0 0 0 0 rgba(224,52,42,0)} }
@@ -676,9 +673,67 @@ src="https://www.facebook.com/tr?id=1011565005220041&ev=PageView&noscript=1"
     <div class="eyebrow">La vera cucina piemontese a Torino</div>
     <h1>Un rifugio al ritmo<br>di sapori autentici.</h1>
     <p class="lead">La cucina classica, nella sua essenza: verità in ogni piatto, ospitalità che non si forza. Il posto dove si torna, in ogni momento della vita.</p>
-    <div class="hero-note"><span class="dot"></span>Restano 3 tavoli per sabato sera</div>
     <div class="hero-cta">
       <a href="#prenota" class="btn btn-gold">Prenota il tuo tavolo</a>
+    </div>
+  </div>
+</section>
+
+<!-- FORM PRENOTAZIONE -->
+<section id="prenota" class="pad prenota-sec">
+  <div class="wrap">
+    <div class="rule"></div>
+    <div class="eyebrow">Prenotazione</div>
+    <h2 class="title" style="margin:14px 0 14px">Riserva il tuo posto da Cirio</h2>
+    <p class="scarcity" style="margin-bottom:24px"><span class="dot"></span>Di solito è tutto pieno</p>
+    <!-- ═══ Widget di prenotazione ═══ -->
+      <iframe
+        id="dinevo-booking"
+        src="https://api.test.dinevo.it/embed/r/est_b5111762-79f8-459d-b234-26b2d5cf6218"
+        title="Prenota un tavolo"
+        height="900"
+        style="width: 100%; border: 0; border-radius: 22px; overflow: hidden"
+      ></iframe>
+      <script>
+        window.addEventListener('message', function (event) {
+          if (!event.data || event.data.type !== 'dinevo:booking-height') return;
+          var frame = document.getElementById('dinevo-booking');
+          if (!frame) return;
+          var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+          if (!reduce) frame.style.transition = 'height 0.2s ease';
+          frame.style.height = event.data.height + 'px';
+        });
+      </script>
+      <!-- Trust -->
+      <div class="trust-footer">
+        <svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+        Prenotazione sicura · Nessun pagamento anticipato
+      </div>
+  </div>
+</section>
+
+<!-- RECENSIONI -->
+<section class="pad reviews-sec">
+  <div class="wrap">
+    <div class="eyebrow">Non lo diciamo noi</div>
+    <h2 class="title" style="margin-bottom:26px">Le parole di chi è già stato a tavola.</h2>
+    <div class="rating">★ 4,3 / 5 &nbsp;·&nbsp; oltre 600 recensioni</div>
+    <div class="reviews">
+      <div class="review">
+        <div class="stars">★★★★★</div>
+        <blockquote>«I piatti della tradizione, dimenticati dagli altri ristoranti. E la cordialità di altri tempi.»</blockquote>
+        <cite>Recensione su TripAdvisor</cite>
+      </div>
+      <div class="review">
+        <div class="stars">★★★★★</div>
+        <blockquote>«Sembra di essere a casa. Cucina autentica e servizio che ti fa sentire atteso.»</blockquote>
+        <cite>Recensione su TripAdvisor</cite>
+      </div>
+      <div class="review">
+        <div class="stars">★★★★★</div>
+        <blockquote>«Porzioni generose e piatti veri. Il posto giusto per la vera cucina piemontese a Torino.»</blockquote>
+        <cite>Recensione su Google</cite>
+      </div>
     </div>
   </div>
 </section>
@@ -693,8 +748,7 @@ src="https://www.facebook.com/tr?id=1011565005220041&ev=PageView&noscript=1"
     <p>Non cerchiamo di stupirti con piatti complicati o impiattamenti da laboratorio. Facciamo il contrario: togliamo il superfluo e lasciamo parlare il sapore. Perché la vera difficoltà, in cucina, non è aggiungere. È saper togliere.</p>
     <p>Il ragù che riposa a fuoco basso per ore. I tajarin tirati a mano ogni mattina. Gesti semplici solo all'apparenza, che chiedono tempo e mestiere. È questa la nostra idea di essenza: non economia, ma cura.</p>
     <div class="cta-inline">
-      <a href="#prenota" class="btn btn-gold">Prenota il tuo tavolo</a>
-      <span class="note">Prenotazione in meno di un minuto · nessun pagamento anticipato</span>
+      <a href="#menu" class="btn btn-gold">Scopri il menu</a>
     </div>
   </div>
 </section>
@@ -854,67 +908,6 @@ src="https://www.facebook.com/tr?id=1011565005220041&ev=PageView&noscript=1"
         <a href="#prenota" class="btn btn-gold">Prenota il tuo tavolo</a>
       </div>
     </div>
-  </div>
-</section>
-
-<!-- RECENSIONI -->
-<section class="pad reviews-sec">
-  <div class="wrap">
-    <div class="eyebrow">Non lo diciamo noi</div>
-    <h2 class="title" style="margin-bottom:26px">Le parole di chi è già stato a tavola.</h2>
-    <div class="rating">★ 4,3 / 5 &nbsp;·&nbsp; oltre 600 recensioni</div>
-    <div class="reviews">
-      <div class="review">
-        <div class="stars">★★★★★</div>
-        <blockquote>«I piatti della tradizione, dimenticati dagli altri ristoranti. E la cordialità di altri tempi.»</blockquote>
-        <cite>Recensione su TripAdvisor</cite>
-      </div>
-      <div class="review">
-        <div class="stars">★★★★★</div>
-        <blockquote>«Sembra di essere a casa. Cucina autentica e servizio che ti fa sentire atteso.»</blockquote>
-        <cite>Recensione su TripAdvisor</cite>
-      </div>
-      <div class="review">
-        <div class="stars">★★★★★</div>
-        <blockquote>«Porzioni generose e piatti veri. Il posto giusto per la vera cucina piemontese a Torino.»</blockquote>
-        <cite>Recensione su Google</cite>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- FORM PRENOTAZIONE -->
-<section id="prenota" class="pad prenota-sec">
-  <div class="wrap">
-    <div class="rule"></div>
-    <div class="eyebrow">Prenotazione</div>
-    <div class="booking-proof" style="margin-top:14px">
-      <div class="rating">★ 4,3 / 5 &nbsp;·&nbsp; oltre 600 recensioni</div>
-      <p class="scarcity"><span class="dot"></span>Restano 3 tavoli per sabato sera</p>
-    </div>
-    <!-- ═══ Widget di prenotazione ═══ -->
-      <iframe
-        id="dinevo-booking"
-        src="https://api.test.dinevo.it/embed/r/est_b5111762-79f8-459d-b234-26b2d5cf6218"
-        title="Prenota un tavolo"
-        height="900"
-        style="width: 100%; border: 0; border-radius: 22px; overflow: hidden"
-      ></iframe>
-      <script>
-        window.addEventListener('message', function (event) {
-          if (!event.data || event.data.type !== 'dinevo:booking-height') return;
-          var frame = document.getElementById('dinevo-booking');
-          if (!frame) return;
-          var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-          if (!reduce) frame.style.transition = 'height 0.2s ease';
-          frame.style.height = event.data.height + 'px';
-        });
-      </script>
-      <!-- Trust -->
-      <div class="trust-footer">
-        <svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
-        Prenotazione sicura · Nessun pagamento anticipato
-      </div>
   </div>
 </section>
 
