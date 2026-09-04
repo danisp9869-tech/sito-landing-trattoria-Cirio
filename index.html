@@ -10,6 +10,11 @@
 <meta property="og:type" content="website">
 <meta name="theme-color" content="#241B12">
 
+<!-- Banner cookie iubenda: va prima di pixel e analytics, altrimenti quelli
+     partirebbero comunque e il consenso non servirebbe a nulla. -->
+<!-- Banner cookie iubenda -->
+<script type="text/javascript" src="https://embeds.iubenda.com/widgets/ece78718-e773-496d-a858-069b11bffcbb.js"></script>
+
 <!-- Meta Pixel Code -->
 <script>
 !function(f,b,e,v,n,t,s)
@@ -350,6 +355,9 @@ src="https://www.facebook.com/tr?id=1011565005220041&ev=PageView&noscript=1"
   footer a:hover{ text-decoration:underline; }
 
   /* Sticky mobile CTA */
+  .footer-legale{ margin-top:6px; display:flex; gap:10px; flex-wrap:wrap; align-items:center; }
+  .footer-legale a{ font-size:13px; color:#C9A15A; text-decoration:none; border-bottom:1px solid rgba(201,161,90,.4); }
+  .footer-legale a:hover{ color:#F3E7CE; border-bottom-color:#F3E7CE; }
   .sticky-cta{ display:none; position:fixed; left:0; right:0; bottom:0; z-index:30; padding:12px 16px;
                background:rgba(26,19,12,.96); backdrop-filter:blur(6px); -webkit-backdrop-filter:blur(6px); }
   .sticky-cta a{ display:block; text-align:center; background:#c0281f; color:#fff; font-weight:700;
@@ -1115,6 +1123,11 @@ src="https://www.facebook.com/tr?id=1011565005220041&ev=PageView&noscript=1"
       Corso Moncalieri 216/F, 10133 Torino &nbsp;·&nbsp; <a href="tel:+390112764475">011 276 4475</a>
     </div>
     <div>Cucina piemontese classica, nella sua essenza.</div>
+    <div class="footer-legale">
+      <a href="https://www.iubenda.com/privacy-policy/60173128" class="iubenda-white iubenda-noiframe iubenda-embed" title="Privacy Policy ">Privacy Policy</a>
+      <a href="https://www.iubenda.com/privacy-policy/60173128/cookie-policy" class="iubenda-white iubenda-noiframe iubenda-embed" title="Cookie Policy ">Cookie Policy</a>
+      <script type="text/javascript">(function (w,d) {var loader = function () {var s = d.createElement("script"), tag = d.getElementsByTagName("script")[0]; s.src="https://cdn.iubenda.com/iubenda.js"; tag.parentNode.insertBefore(s,tag);}; if(w.addEventListener){w.addEventListener("load", loader, false);}else if(w.attachEvent){w.attachEvent("onload", loader);}else{w.onload = loader;}})(window, document);</script>
+    </div>
   </div>
 </footer>
 
@@ -1375,7 +1388,7 @@ const CONFIG = {
     // diventa un link cliccabile verso "linkUrl" (se compilato).
     testo:     "Ho letto e accetto l'informativa sulla privacy e acconsento al trattamento dei miei dati personali per la gestione della prenotazione.",
     linkTesto: "informativa sulla privacy",   // parola da trasformare in link ("" per nessun link)
-    linkUrl:   "privacy.html",                 // URL dell'informativa completa (pagina inclusa nel template)
+    linkUrl:   "https://www.iubenda.com/privacy-policy/60173128",   // informativa gestita su iubenda
 
     /* Secondo consenso, FACOLTATIVO: non blocca mai l'invio della prenotazione.
        Serve per poter ricontattare il cliente con offerte e novità.
